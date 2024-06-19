@@ -9,36 +9,51 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-import HomePage from './pages/Home/HomePage.jsx'
+import { Navigate } from 'react-router-dom'
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { lime, purple } from '@mui/material/colors';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#12422C', // Verde oscuro
+      contrastText: '#FFFFFF' // Blanco
+    },
+    secondary: {
+      main: '#FFFFFF', // Blanco
+      contrastText: '#12422C' // Verde oscuro
+    },
+  },
+});
+
+
 
 const router = createBrowserRouter([
   {
     path: '/',
+    element: <Navigate to='/login' />
+  },
+  {
     element: <Base />,
-    children:[
+    children: [
       {
         path: '/login',
         element: <LoginPage />
-      }, 
-      {
-        path: '/map',
-        element: <MapPage/>
       },
       {
-        path: '/home',
-        element: <HomePage/>
+        path: '/map',
+        element: <MapPage />
       }
     ],
-    
   }
 ])
 
 
-
-
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <CssBaseline />
-    <RouterProvider router={router} />
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <RouterProvider router={router} />
+    </ThemeProvider>
   </React.StrictMode>,
 )
