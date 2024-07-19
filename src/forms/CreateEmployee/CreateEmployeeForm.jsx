@@ -1,9 +1,6 @@
 import {
-  Alert, AlertTitle, Box, FormControl, Typography 
+  Box, Typography 
 } from '@mui/material';
-import {
-  Controller 
-} from 'react-hook-form';
 import {
   InputForm 
 } from '../../components/InputForm';
@@ -39,7 +36,7 @@ const turnos = [
 
 
 export const CreateEmployeeForm = ({
-  control, errors 
+  control, errors
 }) => {
   return (
     <>
@@ -81,24 +78,10 @@ export const CreateEmployeeForm = ({
                 height: '40px',
               }}
             >
-              <Controller
+              <InputForm 
                 name='lastName'
+                label='Apellido'
                 control={control}
-                render={({ 
-                  field 
-                }) => (
-                  <FormControl 
-                    fullWidth
-                  >
-                    <InputForm 
-                      name='lastName'
-                      label='Apellido'
-                      control={control}
-                      errors={errors}
-                      {...field} 
-                    />
-                  </FormControl>
-                )}
               />
             </Box>
             <Box
@@ -111,7 +94,6 @@ export const CreateEmployeeForm = ({
                 control={control}
                 name={'firstName'}
                 label={'Nombre'}
-                errors={errors}
               />
             </Box>
           </Box>
@@ -133,7 +115,6 @@ export const CreateEmployeeForm = ({
                 control={control}
                 name={'phone'}
                 label={'Teléfono personal'}
-                errors={errors}
               />
             </Box>
             <Box
@@ -146,7 +127,6 @@ export const CreateEmployeeForm = ({
                 control={control}
                 name={'personalEmail'}
                 label={'Email personal'}
-                errors={errors}
               />
             </Box>
           </Box>
@@ -231,7 +211,6 @@ export const CreateEmployeeForm = ({
                 control={control}
                 name={'enterprisePhone'}
                 label={'Teléfono de la empresa'}
-                errors={errors}
               />
             </Box>
             <Box
@@ -244,28 +223,10 @@ export const CreateEmployeeForm = ({
                 control={control}
                 name={'enterpriseEmail'}
                 label={'Email de la empresa'}
-                errors={errors}
               />
             </Box>
           </Box>
         </Box>
-      </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          width: '100%',
-          gap: '16px',
-          paddingLeft: '24px',
-          paddingRight: '24px'
-        }}
-      >  
-        <Alert
-          severity='error'
-        >
-          <AlertTitle>Error</AlertTitle>
-          El apellido es obligatorio
-        </Alert>
       </Box>
     </>
   );

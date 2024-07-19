@@ -1,5 +1,5 @@
 import {
-  FormControl, TextField, Typography 
+  FormControl, TextField 
 } from '@mui/material';
 import {
   Controller 
@@ -22,7 +22,7 @@ export const InputForm = ({
         required: true,
       }}
       render={({
-        field 
+        field,
       }) => (
         <FormControl
           size={size}
@@ -36,15 +36,6 @@ export const InputForm = ({
             {...field}
             helperText={helperText}
           />
-          {errors[name] && (
-            <Typography
-              fontSize={'0.85rem'}
-              paddingLeft={1.5}
-              color={'red'}
-            >
-              {errors[name].message}
-            </Typography>
-          )}
         </FormControl>
       )}
     />

@@ -1,6 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close';
 import {
-  Box, Button, Divider, Modal, Typography
+  Alert, AlertTitle, Box, Button, Divider, Modal, Typography
 } from '@mui/material';
 
 const style = {
@@ -14,8 +14,29 @@ const style = {
 };
 
 export const ModalCreateResource = ({
-  title, description, open, handleClose, form, buttonSubmitMessage = 'CREAR'
+  title, description, open, handleClose, form, buttonSubmitMessage = 'CREAR', onSubmit=null, errors=null
 }) => {
+
+  const errorMessages = errors ? (
+    Object.values(errors).map((error, index) => (
+      <li 
+        key={index}
+      >
+        {error.message}
+      </li>
+    ))
+  ) : null;
+
+  const handleSubmit = (event) => {
+    if (onSubmit) {
+      event.preventDefault(); // Prevent the default form submission
+      onSubmit(event);
+    } else {
+      // Optional: You can add any fallback behavior if needed
+      console.warn('No onSubmit handler provided.');
+    }
+  };
+
   return (
     <Modal
       open={open}
@@ -77,52 +98,80 @@ export const ModalCreateResource = ({
             </Typography>
           </Box></>)}
         <Divider />
-        {form}
-        <Box
-          sx={{
-            width: '100%',
-            height: '68px',
-            padding: '16px 24px',
-          }}
+        <form
+          onSubmit={handleSubmit}
         >
+          {form}
+          {Object.keys(errors).length > 0 && (
+            <Box
+              sx={{
+                paddingInline: '24px'
+              }}
+            >  
+              <Alert
+                severity='error'
+              >
+                <AlertTitle>Error con los datos ingresados</AlertTitle>
+                <Box
+                  component='ul'
+                  sx={{
+                    paddingLeft: '16px',
+                    margin: 0,
+                    wordWrap: 'break-word',
+                  }}
+                >
+                  {errorMessages}
+                </Box>
+              </Alert>
+            </Box>
+          )}
+
           <Box
             sx={{
-              display: 'flex',
-              justifyContent: 'end',
-              gap: '8px',
+              width: '100%',
+              height: '68px',
+              padding: '16px 24px',
             }}
           >
-            <Button
-              color='secondary'
+            <Box
               sx={{
-                backgroundColor: 'secondary.main',
-                color: 'secondary.contrastText',
-                padding: '8px',
-                '&:hover': {
-                  backgroundColor: 'secondary.dark',
-                },
+                display: 'flex',
+                justifyContent: 'end',
+                gap: '8px',
               }}
-              onClick={handleClose}
-              type='submit'
             >
-              Cancelar
-            </Button>
-            <Button
-              sx={{
-                backgroundColor: '#12422C',
-                color: 'white',
-                paddingLeft: '16px',
-                paddingRight: '16px',
-                '&:hover': {
-                  backgroundColor: '#0a2e1f', // Color verde oscuro al hacer hover
-                },
-              }}
-              type='submit'
-            >
-              {buttonSubmitMessage}
-            </Button>
+              <Button
+                color='secondary'
+                sx={{
+                  backgroundColor: 'secondary.main',
+                  color: 'secondary.contrastText',
+                  padding: '8px',
+                  '&:hover': {
+                    backgroundColor: 'secondary.dark',
+                  },
+                }}
+                onClick={handleClose}
+                type='submit'
+              >
+                Cancelar
+              </Button>
+              <Button
+                sx={{
+                  backgroundColor: '#12422C',
+                  color: 'white',
+                  paddingLeft: '16px',
+                  paddingRight: '16px',
+                  '&:hover': {
+                    backgroundColor: '#0a2e1f', // Color verde oscuro al hacer hover
+                  },
+                }}
+                type='submit'
+              >
+                {buttonSubmitMessage}
+              </Button>
+            </Box>
           </Box>
-        </Box>
+        </form>
       </Box>
     </Modal>
   );

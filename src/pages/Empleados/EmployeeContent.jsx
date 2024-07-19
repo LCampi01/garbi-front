@@ -196,14 +196,24 @@ const newEmployeeSchema = object({
     .matches(/^[a-zA-Z\s]+$/, 'El apellido no puede contener números o caracteres especiales')
     .min(2, 'El apellido debe tener al menos 2 caracteres')
     .max(50, 'El apellido no debe exceder 50 caracteres'),
-  firstName: string().required('El nombre es obligatorio'),
-  phone: string().required('El teléfono es obligatorio'),
-  personalEmail: string().email('El email personal no es válido')
+  firstName: string()
+    .required('El nombre es obligatorio')
+    .matches(/^[a-zA-Z\s]+$/, 'El nombre no puede contener números o caracteres especiales')
+    .min(2, 'El nombre debe tener al menos 2 caracteres')
+    .max(50, 'El nombre no debe exceder 50 caracteres'),
+  phone: string()
+    .matches(/^\+?\d{10,12}$/, 'El teléfono personal no es válido')
+    .required('El teléfono personal es obligatorio'),
+  personalEmail: string()
+    .email('El email personal no es un email válido')
     .required('El email personal es obligatorio'),
   jobPosition: string().required('El cargo es obligatorio'),
   timeShift: string().required('El turno es obligatorio'),
-  enterprisePhone: string().required('El teléfono de la empresa es obligatorio'),
-  enterpriseEmail: string().email('El email de la empresa no es válido')
+  enterprisePhone: string()
+    .matches(/^\+?\d{10,12}$/, 'El teléfono de la empresa no es válido')
+    .required('El teléfono de la empresa es obligatorio'),
+  enterpriseEmail: string()
+    .email('El email de la empresa no es válido')
     .required('El email de la empresa es obligatorio')
 }).required();
 
@@ -280,6 +290,7 @@ export const EmployeeContent = () => {
           errors={errors}
         />}
         onSubmit={handleSubmit(onSubmit)}
+        errors={errors}
       />
       <Paper
         sx={{
