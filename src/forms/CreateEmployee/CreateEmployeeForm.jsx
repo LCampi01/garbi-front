@@ -1,8 +1,8 @@
 import {
-  Box, Typography 
+  Alert, AlertTitle, Box, FormControl, Typography 
 } from '@mui/material';
 import {
-  useForm 
+  Controller 
 } from 'react-hook-form';
 import {
   InputForm 
@@ -37,21 +37,12 @@ const turnos = [
   },
 ];
 
-export const CreateEmployeeForm = () => {
-  const {
-    control,
-    formState: {
-      errors 
-    },
-  } = useForm({
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-  });
 
+export const CreateEmployeeForm = ({
+  control, errors 
+}) => {
   return (
-    <form>
+    <>
       <Box
         sx={{
           width: '100%',
@@ -90,11 +81,24 @@ export const CreateEmployeeForm = () => {
                 height: '40px',
               }}
             >
-              <InputForm
+              <Controller
+                name='lastName'
                 control={control}
-                name={'lastName'}
-                label={'Apellido'}
-                errors={errors}
+                render={({ 
+                  field 
+                }) => (
+                  <FormControl 
+                    fullWidth
+                  >
+                    <InputForm 
+                      name='lastName'
+                      label='Apellido'
+                      control={control}
+                      errors={errors}
+                      {...field} 
+                    />
+                  </FormControl>
+                )}
               />
             </Box>
             <Box
@@ -225,7 +229,7 @@ export const CreateEmployeeForm = () => {
             >
               <InputForm
                 control={control}
-                name={'phoneCompany'}
+                name={'enterprisePhone'}
                 label={'Teléfono de la empresa'}
                 errors={errors}
               />
@@ -246,6 +250,23 @@ export const CreateEmployeeForm = () => {
           </Box>
         </Box>
       </Box>
-    </form>
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
+          gap: '16px',
+          paddingLeft: '24px',
+          paddingRight: '24px'
+        }}
+      >  
+        <Alert
+          severity='error'
+        >
+          <AlertTitle>Error</AlertTitle>
+          El apellido es obligatorio
+        </Alert>
+      </Box>
+    </>
   );
 };

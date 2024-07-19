@@ -1,4 +1,10 @@
 import {
+  yupResolver 
+} from '@hookform/resolvers/yup';
+import {
+  object, string 
+} from 'yup';
+import {
   Box, Paper, 
   TableCell, 
   TableRow,
@@ -7,6 +13,9 @@ import {
 import {
   useState 
 } from 'react';
+import {
+  useForm 
+} from 'react-hook-form';
 import {
   SearcherAndButton 
 } from '../../components/SearcherAndButton';
@@ -181,7 +190,22 @@ const EmployeeRowRender = (employee) => {
 }
 
 
-
+const newEmployeeSchema = object({
+  lastName: string()
+    .required('El apellido es obligatorio')
+    .matches(/^[a-zA-Z\s]+$/, 'El apellido no puede contener números o caracteres especiales')
+    .min(2, 'El apellido debe tener al menos 2 caracteres')
+    .max(50, 'El apellido no debe exceder 50 caracteres'),
+  firstName: string().required('El nombre es obligatorio'),
+  phone: string().required('El teléfono es obligatorio'),
+  personalEmail: string().email('El email personal no es válido')
+    .required('El email personal es obligatorio'),
+  jobPosition: string().required('El cargo es obligatorio'),
+  timeShift: string().required('El turno es obligatorio'),
+  enterprisePhone: string().required('El teléfono de la empresa es obligatorio'),
+  enterpriseEmail: string().email('El email de la empresa no es válido')
+    .required('El email de la empresa es obligatorio')
+}).required();
 
 export const EmployeeContent = () => {
   const [employees, setEmployees] = useState(employeesInitial)
@@ -200,6 +224,46 @@ export const EmployeeContent = () => {
     setOpenModifyEmployeeModal(false)
     setEmployeeToModify(null);
   };
+
+  const {
+    control,
+    handleSubmit,
+    formState: {
+      errors 
+    },
+  } = useForm({
+    defaultValues: {
+      lastName: '',
+      firstName: '',
+      phone: '',
+      personalEmail: '',
+      jobPosition:  '',
+      timeShift: '',
+      enterprisePhone: '',
+      enterpriseEmail: ''
+    },
+    resolver: yupResolver(newEmployeeSchema),
+  });
+
+  const onSubmit = async (data) => {
+    /*const response = await login({
+      email: data.email,
+      password: data.password,
+    });
+
+    if (response.success) {
+      localStorage.setItem('token', response.token);
+      const user = jwtDecode(response.token).user;
+      localStorage.setItem('user', JSON.stringify(user));
+
+      if (!response.termsAndConditions) {
+        setIsFlipped(true);
+      } else {
+        navigate('/home');
+      }
+    }*/
+  };
+
   return (
     <Box
       sx={{
@@ -211,7 +275,11 @@ export const EmployeeContent = () => {
         description={'Complete los siguientes campos para agregar un nuevo empleado a la empresa'}
         open={openCreateEmployeeModal}
         handleClose={handleCloseCreateEmployeeModal}
-        form={<CreateEmployeeForm />}
+        form={<CreateEmployeeForm
+          control={control}
+          errors={errors}
+        />}
+        onSubmit={handleSubmit(onSubmit)}
       />
       <Paper
         sx={{
