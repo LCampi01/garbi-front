@@ -10,6 +10,14 @@ import {
   ReportDetails 
 } from '../ReportDetails/ReportDetails';
 
+import {
+  ReportDetailsDescriptionHeader
+} from '../../pages/ReportDetails/ReportDetailsDescriptionHeader';
+import {
+  ReportDetailsDescriptionContent
+} from '../../pages/ReportDetails/ReportDetailsDescriptionContent';
+
+
 export const ReportDetailsPage = ({
   content = [
     {
@@ -118,7 +126,7 @@ export const ReportDetailsPage = ({
             >
               <Box
                 sx={{
-                  backgroundColor: 'orange',
+                  backgroundColor: 'white',
                   height: '4rem',
                 }}
               >
@@ -129,7 +137,7 @@ export const ReportDetailsPage = ({
               </Box>
               <Box
                 sx={{
-                  backgroundColor: 'red',
+                  backgroundColor: 'white',
                   height: '21.875rem',
                   padding: '0 24px',
                   mb: '1.5rem',

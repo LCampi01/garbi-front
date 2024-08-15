@@ -4,6 +4,13 @@ import {
 import {
   BreadcrumbsComponent
 } from '../../components/BreadcrumbsComponent';
+import {
+  HomeFilters
+} from '../../pages/Home/HomeFilters'
+import SelectAreaBox from '../../pages/Home/SideBar/Utils/SelectAreaBox';
+
+
+const titles = ['Capacidad', 'Nivel de batería']
 
 export const FilterSideComponent = ({
   title, component, prefix, subtitle, titleLink, renderFilters
@@ -43,7 +50,15 @@ export const FilterSideComponent = ({
           >
             Filtros
           </Typography>
-          {renderFilters}
+          <SelectAreaBox />
+
+          {titles.map((t, index) => (
+            <HomeFilters
+              key={index}
+              title={t}
+            />
+          ))}
+ 
         </Box>
         <Button
           variant='contained'

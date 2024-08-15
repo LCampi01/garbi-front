@@ -2,93 +2,70 @@ import {
   Typography 
 } from '@mui/material';
 import Box from '@mui/material/Box';
-import SelectAreaBox from './Utils/SelectAreaBox';
-import TextFieldBox from './Utils/TextFieldBox';
+import TextFieldBox from '../../pages/Home/SideBar/Utils/TextFieldBox';
 
-export const HomeFilters = () => {
+export const HomeFilters = ({
+  title 
+}) => {
   return (
     <Box>
-      <SelectAreaBox />
-      <Typography
-        width='68px'
-        height='21px'
-        top='293px'
-        left='17px'
-        fontFamily='Roboto'
-        fontSize='14px'
-        fontWeight='500'
-        lineHeight='21px'
-        letterSpacing='0.15000000596046448px'
-        textAlign='left'
-        paddingLeft='15px'
+      <Box
         sx={{
-          color: 'var(--text-secondary, #00000099)',
+          width: '100%',
+          padding: '8px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          marginBottom: '20px'
         }}
       >
-        Capacidad
-      </Typography>
-      <TextFieldBox
-        text='Mínimo'
-        sx={{
-          width: '80px',
-          height: '28px',
-          top: '3120px',
-          left: '16px',
-          gap: '0px',
-          opacity: '0px',
-        }}
-      />
-      <TextFieldBox
-        text='Máximo'
-        sx={{
-          width: '80px',
-          height: '28px',
-          top: '318px',
-          left: '116px',
-          gap: '0px',
-          opacity: '0px',
-        }}
-      />
-      <Typography
-        width='200px'
-        height='21px'
-        top='378px'
-        left='17px'
-        fontFamily='Roboto'
-        fontSize='14px'
-        fontWeight='500'
-        lineHeight='21px'
-        letterSpacing='0.15000000596046448px'
-        textAlign='left'
-        paddingLeft='15px'
-        sx={{
-          color: 'var(--text-secondary, #00000099)',
-        }}
-      >
-        Nivel de batería
-      </Typography>
-      <TextFieldBox
-        text='Mínimo'
-        sx={{
-          width: '80px',
-          height: '28px',
-          top: '3120px',
-          left: '16px',
-          gap: '0px',
-          opacity: '0px',
-        }}
-      />
-      <TextFieldBox
-        text='Máximo'
-        sx={{
-          width: '80px',
-          height: '28px',
-          top: '318px',
-          left: '116px',
-          gap: '0px',
-          opacity: '0px',
-        }}
-      />
+        <Typography
+          fontFamily='Roboto'
+          fontSize='14px'
+          fontWeight='500'
+          lineHeight='21px'
+          letterSpacing='0.15px'
+          textAlign='left'
+          sx={{
+            color: '#000000DE',
+          }}
+        >
+          {title}
+        </Typography>
+        <Box
+          sx={{
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            marginTop: '8px',
+            gap: '8px',
+          }}
+        >
+          <TextFieldBox
+            text='Mínimo'
+            sx={{
+              width: '80px',
+              height: '28px',
+            }}
+          />
+
+          <Box
+            sx={{
+              flex: 1,
+              height: '1px',
+              backgroundColor: '#2121213B',
+              margin: '0 8px',
+            }}
+          />
+          <TextFieldBox
+            text='Máximo'
+            sx={{
+              width: '80px',
+              height: '28px',
+            }}
+          />
+        </Box>
+      </Box>
     </Box>
   );
 };

@@ -6,6 +6,7 @@ import {
   ReportDetailsSideComponent 
 } from '../../components/ReportDetailsSideComponent/ReportDetailsSideComponent';
 
+
 const colors = {
   NEW: '#EF6C0080',
   REVIEW: '#2196F3',
