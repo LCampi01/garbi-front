@@ -1,19 +1,24 @@
 import {
-  Box, Button, Divider, Typography
+  Box, Button, Typography, Divider 
 } from '@mui/material';
 import {
-  BreadcrumbsComponent
+  BreadcrumbsComponent 
 } from '../../components/BreadcrumbsComponent';
 import {
-  HomeFilters
-} from '../../pages/Home/HomeFilters'
+  HomeFilters 
+} from '../../pages/Home/HomeFilters';
 import SelectAreaBox from '../../pages/Home/SideBar/Utils/SelectAreaBox';
 
-
-const titles = ['Capacidad', 'Nivel de batería']
+const titles = ['Capacidad', 'Nivel de batería'];
 
 export const FilterSideComponent = ({
-  title, control, component, prefix, subtitle, titleLink, renderFilters
+  title,
+  control,
+  component,
+  prefix,
+  subtitle,
+  titleLink,
+  renderFilters,
 }) => {
   return (
     <Box
@@ -35,8 +40,8 @@ export const FilterSideComponent = ({
         }}
       >
         <Box
-          sx = {{
-            flex: 1
+          sx={{
+            flex: 1 
           }}
         >
           <Typography
@@ -57,10 +62,9 @@ export const FilterSideComponent = ({
             <HomeFilters
               key={index}
               title={t}
-              control={control}
+              control={control} // Pasar control a HomeFilters
             />
           ))}
- 
         </Box>
         <Button
           variant='contained'
@@ -77,7 +81,7 @@ export const FilterSideComponent = ({
       <Box
         sx={{
           flexGrow: 1,
-          overflow: 'hidden'
+          overflow: 'hidden',
         }}
       >
         <Box

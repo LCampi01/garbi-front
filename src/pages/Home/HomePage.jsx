@@ -1,18 +1,19 @@
 import {
+  useForm 
+} from 'react-hook-form';
+import {
   FilterSideComponent 
 } from '../../components/FilterSideComponent';
 import HomeMainContent from './HomeMainContent';
-import {
-  useForm 
-} from 'react-hook-form';
 
 export default function HomePage() {
   const {
     control 
   } = useForm({
     defaultValues: {
-      test: ''
-    }
+      minimo: '',
+      maximo: '',
+    },
   });
 
   return (
