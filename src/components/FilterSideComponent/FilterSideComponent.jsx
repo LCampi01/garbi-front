@@ -13,7 +13,7 @@ import SelectAreaBox from '../../pages/Home/SideBar/Utils/SelectAreaBox';
 const titles = ['Capacidad', 'Nivel de batería']
 
 export const FilterSideComponent = ({
-  title, component, prefix, subtitle, titleLink, renderFilters
+  title, control, component, prefix, subtitle, titleLink, renderFilters
 }) => {
   return (
     <Box
@@ -48,6 +48,7 @@ export const FilterSideComponent = ({
               color: 'var(--text-secondary, #00000099)',
             }}
           >
+            {renderFilters}
             Filtros
           </Typography>
           <SelectAreaBox />
@@ -56,6 +57,7 @@ export const FilterSideComponent = ({
             <HomeFilters
               key={index}
               title={t}
+              control={control}
             />
           ))}
  

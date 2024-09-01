@@ -2,10 +2,12 @@ import {
   Typography 
 } from '@mui/material';
 import Box from '@mui/material/Box';
-import TextFieldBox from '../../pages/Home/SideBar/Utils/TextFieldBox';
+import {
+  InputForm 
+} from '../../components/InputForm';
 
 export const HomeFilters = ({
-  title 
+  title, control 
 }) => {
   return (
     <Box>
@@ -16,7 +18,7 @@ export const HomeFilters = ({
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'flex-start',
-          marginBottom: '20px'
+          marginBottom: '20px',
         }}
       >
         <Typography
@@ -41,28 +43,31 @@ export const HomeFilters = ({
             gap: '8px',
           }}
         >
-          <TextFieldBox
-            text='Mínimo'
-            sx={{
-              width: '80px',
-              height: '28px',
-            }}
+          <InputForm
+            name='minimo'
+            label='Mínimo %'
+            control={control}
           />
 
           <Box
             sx={{
-              flex: 1,
-              height: '1px',
-              backgroundColor: '#2121213B',
-              margin: '0 8px',
+              width: '50px',
+              padding: '1px' 
             }}
-          />
-          <TextFieldBox
-            text='Máximo'
-            sx={{
-              width: '80px',
-              height: '28px',
-            }}
+          >
+            <Box
+              sx={{
+                height: '1px',
+                backgroundColor: '#2121213B' 
+              }}
+            />
+          </Box>
+
+          <InputForm
+            name='maximo'
+            label='Máximo %'
+            control={control}
+
           />
         </Box>
       </Box>

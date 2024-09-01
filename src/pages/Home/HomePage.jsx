@@ -2,12 +2,25 @@ import {
   FilterSideComponent 
 } from '../../components/FilterSideComponent';
 import HomeMainContent from './HomeMainContent';
+import {
+  useForm 
+} from 'react-hook-form';
 
 export default function HomePage() {
-  
-  return <FilterSideComponent
-    title={'Mapa'}
-    component={() => <HomeMainContent />}
-    renderFilters={<></>}
-  />;
+  const {
+    control 
+  } = useForm({
+    defaultValues: {
+      test: ''
+    }
+  });
+
+  return (
+    <FilterSideComponent
+      title='Mapa'
+      control={control}
+      component={() => <HomeMainContent />}
+      renderFilters={<></>}
+    />
+  );
 }
