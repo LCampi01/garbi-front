@@ -5,6 +5,12 @@ import {
   FilterSideComponent 
 } from '../../components/FilterSideComponent';
 import HomeMainContent from './HomeMainContent';
+import {
+  HomeFilters 
+} from '../../pages/Home/HomeFilters';
+import SelectAreaBox from '../../pages/Home/SideBar/Utils/SelectAreaBox'; // Asegúrate de que esta importación es correcta
+
+const titles = ['Capacidad', 'Nivel de batería'];
 
 export default function HomePage() {
   const {
@@ -16,12 +22,25 @@ export default function HomePage() {
     },
   });
 
+  const renderFilters = (
+    <>
+      <SelectAreaBox />
+      {titles.map((title, index) => (
+        <HomeFilters
+          key={index}
+          title={title}
+          control={control}
+        />
+      ))}
+    </>
+  );
+
   return (
     <FilterSideComponent
       title='Mapa'
       control={control}
       component={() => <HomeMainContent />}
-      renderFilters={<></>}
+      renderFilters={renderFilters}
     />
   );
 }
