@@ -48,6 +48,8 @@ import {
   RightSidePanelOptimalRouteIinfo 
 } from '../../components/RightSidePanelOptimalRouteInfo';
 
+import SettingsIcon from '@mui/icons-material/Settings';
+
 const icons = [
   Battery0BarIcon,
   Battery1BarIcon,
@@ -77,6 +79,7 @@ const colors = {
   MEDIUM_CAPACITY: '#EF6C00',
   HIGH_CAPACITY: '#2E7D32',
 };
+
 
 const HtmlTooltip = styled(({
   className, ...props
@@ -109,27 +112,30 @@ const getColorPoint = (capacity) => {
   }
 };
 
-export default function HomeMainContent() {
+export default function HomeMainContent({
+  information, settingsEnabled 
+}) { 
 
-  const [openGenerateOptimalRouteModal, setOpenGenerateOptimalRouteModal] = useState(false)
-  const [openGenerateOptimalRouteRightSideInfo, setOpenGenerateOptimalRouteRightSideInfo] = useState(false)
+  const [openGenerateOptimalRouteModal, setOpenGenerateOptimalRouteModal] = useState(false);
+  const [openGenerateOptimalRouteRightSideInfo, setOpenGenerateOptimalRouteRightSideInfo] = useState(false);
 
   const [containers, setContainers] = useState([]);
   const [containerSelected, setContainerSeleted] = useState(null);
 
-  const handleOpenGenerateOptimalRouteModal = () => setOpenGenerateOptimalRouteModal(true)
-  const handleCloseOpenGenerateOptimalRouteModal = () => setOpenGenerateOptimalRouteModal(false)
-  const handleCloseRightSidePanelContainerInfo = () => setContainerSeleted(null)
-  const handleCloseRightSidePanelOptimalRouteInfo = () => setOpenGenerateOptimalRouteRightSideInfo(false)
+  const handleOpenGenerateOptimalRouteModal = () => setOpenGenerateOptimalRouteModal(true);
+  const handleCloseOpenGenerateOptimalRouteModal = () => setOpenGenerateOptimalRouteModal(false);
+  const handleCloseRightSidePanelContainerInfo = () => setContainerSeleted(null);
+  const handleCloseRightSidePanelOptimalRouteInfo = () => setOpenGenerateOptimalRouteRightSideInfo(false);
   const handleOpenRightSidePanelOptimalRouteInfo = () => {
-    handleCloseOpenGenerateOptimalRouteModal()
-    setOpenGenerateOptimalRouteRightSideInfo(true)
-  }
+    handleCloseOpenGenerateOptimalRouteModal();
+    setOpenGenerateOptimalRouteRightSideInfo(true);
+  };
 
   const position = {
     lat: -34.5893,
     lng: -58.3974,
   };
+
   const {
     getContainers: {
       getContainers: getContainers
@@ -137,7 +143,6 @@ export default function HomeMainContent() {
   } = useContainers();
 
   const apiKeyGoogleMaps = import.meta.env.VITE_REACT_APP_API_KEY_GOOGLE_MAPS;
-
 
   const formatContainers = (containers) => {
     return containers.documents.map((container) => {
@@ -158,18 +163,17 @@ export default function HomeMainContent() {
 
   useEffect(() => {
     const retrieveContainers = async () => {
-      const containersUnformated = await getContainers();
-      const containersFormated = formatContainers(containersUnformated);
-
-      setContainers(containersFormated);
+      try {
+        const containersUnformated = await getContainers();
+        const containersFormated = formatContainers(containersUnformated);
+        setContainers(containersFormated);
+      } catch (e) {
+        console.log(e);
+      }
     };
 
-    try {
-      retrieveContainers();
-    } catch (e) {
-      console.log(e);
-    }
-  }, []);
+    retrieveContainers();
+  }, [getContainers]);
 
   return (
     <>
@@ -181,10 +185,12 @@ export default function HomeMainContent() {
           title={'Generar ruta óptima'}
           open={openGenerateOptimalRouteModal}
           handleClose={handleCloseOpenGenerateOptimalRouteModal}
-          form={<GenerateOptimalRouteForm
-            handleClose={handleCloseOpenGenerateOptimalRouteModal}
-            handleOpenRightSideOptimalRouteInfo={handleOpenRightSidePanelOptimalRouteInfo}
-          />}
+          form={
+            <GenerateOptimalRouteForm
+              handleClose={handleCloseOpenGenerateOptimalRouteModal}
+              handleOpenRightSideOptimalRouteInfo={handleOpenRightSidePanelOptimalRouteInfo}
+            />
+          }
         />
         <Box
           sx={{
@@ -201,7 +207,7 @@ export default function HomeMainContent() {
             sx={{
               color: '#0000008F',
             }}
-            widht='24px'
+            width='24px'
             height='24px'
             top='2px'
             left='2px'
@@ -226,7 +232,7 @@ export default function HomeMainContent() {
         <Box
           width='100%'
           sx={{
-            height: 'calc(100% - 140px)'
+            height: 'calc(100% - 140px)',
           }}
           padding={'24px 32px 12px'}
           position={'relative'}
@@ -237,10 +243,10 @@ export default function HomeMainContent() {
             height={'110%'}
           >
             <MapWithContainers
-              apiKey = {apiKeyGoogleMaps}
-              zoom = {12}
-              centerPosition = {position}
-              containers = {containers.map((p) => (
+              apiKey={apiKeyGoogleMaps}
+              zoom={12}
+              centerPosition={position}
+              containers={containers.map((p) => (
                 <Marker
                   setContainerSeleted={setContainerSeleted}
                   key={p._id}
@@ -256,20 +262,17 @@ export default function HomeMainContent() {
                 <RightSidePanelContainerInfo
                   containerSelected={containerSelected}
                   getBatteryIcon={getBatteryIcon}
-
                 />
               }
             />
           )}
-          {
-            openGenerateOptimalRouteRightSideInfo && (
-              <RightSidePanel
-                disablePadding={true}
-                handleClose={handleCloseRightSidePanelOptimalRouteInfo}
-                componentToRender={<RightSidePanelOptimalRouteIinfo />}
-              />
-            )
-          }
+          {openGenerateOptimalRouteRightSideInfo && (
+            <RightSidePanel
+              disablePadding={true}
+              handleClose={handleCloseRightSidePanelOptimalRouteInfo}
+              componentToRender={<RightSidePanelOptimalRouteIinfo />}
+            />
+          )}
         </Box>
         <Paper
           elevation={6}
@@ -287,75 +290,35 @@ export default function HomeMainContent() {
             zIndex: 1,
           }}
         >
-          <Box
-            sx={{
-              display: 'flex',
-            }}
-          >
-            <CircleIcon
+          {information.map((i, index) => (
+            <Box
+              key={index}
               sx={{
-                color: colors.LOW_CAPACITY,
-                mr: '16px',
-              }}
-            />
-            <Typography
-              sx={{
-                fontSize: '16px',
-                fontWeight: 'bold',
-                lineHeight: '24px',
-                color: '#000000',
+                display: 'flex',
+                alignItems: 'center',
               }}
             >
-              {' '}
-              +75%
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-            }}
-          >
-            <CircleIcon
-              sx={{
-                color: colors.MEDIUM_CAPACITY,
-                mr: '16px',
-              }}
-            />
-            <Typography
-              sx={{
-                fontSize: '16px',
-                fontWeight: 'bold',
-                lineHeight: '24px',
-                color: '#000000',
-              }}
-            >
-              {' '}
-              25% - 75%
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-            }}
-          >
-            <CircleIcon
-              sx={{
-                color: colors.HIGH_CAPACITY,
-                mr: '16px',
-              }}
-            />
-            <Typography
-              sx={{
-                fontSize: '16px',
-                fontWeight: 'bold',
-                lineHeight: '24px',
-                color: '#000000',
-              }}
-            >
-              {' '}
-              -25%
-            </Typography>
-          </Box>
+              <CircleIcon
+                sx={{
+                  color: i.color,
+                  mr: '16px',
+                }}
+              />
+              <Typography
+                sx={{
+                  fontSize: '16px',
+                  fontWeight: 'bold',
+                  lineHeight: '24px',
+                  color: '#000000',
+                }}
+              >
+                {i.valor}
+              </Typography>
+            </Box>
+          ))}
+          {settingsEnabled && (
+            <SettingsIcon />
+          )}
         </Paper>
       </Box>
     </>
