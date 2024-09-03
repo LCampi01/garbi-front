@@ -11,7 +11,6 @@ import {
 
 export const FilterSideComponent = ({
   title,
-  control,
   component,
   prefix,
   subtitle,

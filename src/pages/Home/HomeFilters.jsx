@@ -47,11 +47,24 @@ export const HomeFilters = ({
             name='minimo'
             label='Mínimo %'
             control={control}
+            styleInput={ {
+              fontFamily:'Roboto',
+              fontSize:'14px',
+              fontWeight:'300',
+              lineHeight:'20px',
+              letterSpacing:'0.15000000596046448px',
+              textAlign:'left',
+              '& .MuiFormLabel-root': {
+                fontSize:'14px'
+              }
+            }}
+
+            
           />
 
           <Box
             sx={{
-              width: '50px',
+              width: '12px',
               padding: '1px' 
             }}
           >
@@ -67,6 +80,18 @@ export const HomeFilters = ({
             name='maximo'
             label='Máximo %'
             control={control}
+            styleInput={ {
+              fontFamily:'Roboto',
+              fontSize:'14px',
+              fontWeight:'300',
+              lineHeight:'20px',
+              letterSpacing:'0.15000000596046448px',
+              textAlign:'left',
+              '& .MuiFormLabel-root': {
+                fontSize:'14px'
+              }
+
+            }}
 
           />
         </Box>

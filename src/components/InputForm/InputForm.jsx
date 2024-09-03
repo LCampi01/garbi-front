@@ -9,6 +9,7 @@ export const InputForm = ({
   name,
   label,
   control,
+  styleInput,
   errors,
   variant = 'outlined',
   size = 'small',
@@ -38,6 +39,7 @@ export const InputForm = ({
             helperText={helperText}
             disabled={disabled}
             sx={{
+              ...styleInput,
               '& .MuiInputBase-input:-webkit-autofill': { //added this to prevent weird look when the browser autofills the field
                 '-webkit-box-shadow': '0 0 0 1000px white inset',
                 '-webkit-text-fill-color': 'black',

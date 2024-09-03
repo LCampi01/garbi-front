@@ -10,7 +10,7 @@ import {
 } from '../../pages/Home/HomeFilters';
 import SelectAreaBox from '../../pages/Home/SideBar/Utils/SelectAreaBox'; // Asegúrate de que esta importación es correcta
 
-const titles = ['Capacidad', 'Nivel de batería'];
+const titles = ['Nivel de llenado', 'Nivel de batería'];
 
 export default function HomePage() {
   const {
@@ -38,7 +38,6 @@ export default function HomePage() {
   return (
     <FilterSideComponent
       title='Mapa'
-      control={control}
       component={() => <HomeMainContent />}
       renderFilters={renderFilters}
     />
