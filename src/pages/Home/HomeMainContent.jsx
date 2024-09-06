@@ -316,9 +316,18 @@ export default function HomeMainContent({
               </Typography>
             </Box>
           ))}
-          {settingsEnabled && (
-            <SettingsIcon />
-          )}
+          <Button
+            sx={{
+              borderRadius: '50%',
+              minWidth: '40px',
+              width: '40px',
+              height: '40px',
+            }}
+          >
+            {settingsEnabled && (
+              <SettingsIcon />
+            )}
+          </Button>
         </Paper>
       </Box>
     </>
