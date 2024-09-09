@@ -316,18 +316,20 @@ export default function HomeMainContent({
               </Typography>
             </Box>
           ))}
-          <Button
-            sx={{
-              borderRadius: '50%',
-              minWidth: '40px',
-              width: '40px',
-              height: '40px',
-            }}
-          >
-            {settingsEnabled && (
+          
+          {settingsEnabled && (
+            <Button
+              sx={{
+                borderRadius: '50%',
+                minWidth: '40px',
+                width: '40px',
+                height: '40px',
+              }}
+            >
               <SettingsIcon />
-            )}
-          </Button>
+            </Button>
+
+          )}
         </Paper>
       </Box>
     </>
