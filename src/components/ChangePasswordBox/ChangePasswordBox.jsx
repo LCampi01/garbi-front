@@ -42,7 +42,7 @@ const passwordStatusInitial = {
 const passwordValidationRegex = {
   uppercase: /(?=.*[A-Z])/,
   number: /(?=.*\d)/,
-  specialChar: /(?=.*[!@#$%^&//*])/,
+  specialChar: /(?=.*[.,!@#$%^&//*])/,
 };
 
 export const ChangePasswordBox = () => {
@@ -50,6 +50,7 @@ export const ChangePasswordBox = () => {
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showRepeatedPassword, setShowRepeatedPassword] = useState(false);
   const [passwordStatus, setPasswordStatus] = useState(passwordStatusInitial);
+  const [passwordChecked, setPasswordChecked] = useState(false);
 
   const {
     changePassword: {
@@ -57,8 +58,6 @@ export const ChangePasswordBox = () => {
     },
   } = useAuth();
   const navigate = useNavigate();
-
-  let passwordChecked = false;
 
   const {
     control,
@@ -69,9 +68,9 @@ export const ChangePasswordBox = () => {
     watch,
   } = useForm({
     defaultValues: {
-      password: 'admin1234',
-      passwordRepeated: 'admin1234',
-      oldPassword: 'admin1234',
+      password: '',
+      passwordRepeated: '',
+      oldPassword: '',
     },
   });
 
@@ -106,14 +105,12 @@ export const ChangePasswordBox = () => {
 
   useEffect(() => {
     // Verificar si todos los valores son true
-    const passwordStatusArray = Object.values(passwordStatus);
-
-    passwordChecked = passwordStatusArray.every((status) => status);
+    const allValid = Object.values(passwordStatus).every((status) => status);
+    setPasswordChecked(allValid);
   }, [passwordStatus]);
 
   const onSubmit = async (data) => {
-    // TODO: borrar la segunda parte del condicional
-    if (!passwordChecked && passwordWatched != 'admin1234') return;
+    if (!passwordChecked) return;
 
     console.log(data);
 
@@ -123,9 +120,9 @@ export const ChangePasswordBox = () => {
     const user = await JSON.parse(userString);
 
     const response = await changePassword({
-      email: user.email,
+      email: user.personalEmail,
       newPassword: passwordDebounced,
-      oldPassword: data.oldPassword,
+      password: data.oldPassword,
     });
 
     if (response.success) {
@@ -502,8 +499,7 @@ export const ChangePasswordBox = () => {
                     color: (theme) => theme.palette.grey[900], // Color de texto gris más oscuro
                   },
                 }}
-                // TODO: borrar la segunda parte del condicional
-                disabled={!passwordChecked && passwordWatched != 'admin1234'}
+                disabled={!passwordChecked}
                 fullWidth
                 type='submit'
               >

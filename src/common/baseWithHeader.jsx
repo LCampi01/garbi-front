@@ -7,6 +7,9 @@ import {
 import {
   Header 
 } from '../components/Header/Header';
+import {
+  HEIGHT_HEADER 
+} from '../config';
 
 const BaseWithHeader = (props) => {
   return (
@@ -14,10 +17,9 @@ const BaseWithHeader = (props) => {
       <Header
         logoOnly={props.logoOnly}
       />
-      {/* todo: reveer height, por minHeight pero si lo cambio rompen los componentes, por ahora todo funciona OK */}
       <Box
         marginTop={'64px'}
-        height={'calc(100vh - 64px)'}
+        minHeight={`calc(100vh - ${HEIGHT_HEADER})`}
       >
         <Outlet />
       </Box>

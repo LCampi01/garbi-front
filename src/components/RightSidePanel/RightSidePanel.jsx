@@ -12,8 +12,8 @@ export const RightSidePanel = ({
     <Paper
       elevation={4}
       sx={{
-        width: '320px',
-        height: 'calc(100% - 28px)',
+        width: '20rem',
+        height: 'calc(100% - 1.75rem)',
         backgroundColor: 'white',
         position: 'absolute',
         top: '26px',
@@ -23,7 +23,7 @@ export const RightSidePanel = ({
       <Box
         position='relative'
         sx={{
-          padding: disablePadding ? '0' : '24px 40px',
+          padding: disablePadding ? '0' : '1.5rem 2.5rem',
           height: '100%'
         }}
       >

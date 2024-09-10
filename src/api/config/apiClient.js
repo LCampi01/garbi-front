@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+export const baseIntegrationUri = '/integration'
+
 // Configura la instancia de axios
 const apiClient = axios.create({
   baseURL: 'https://1r9y6bh0g9.execute-api.us-east-1.amazonaws.com',

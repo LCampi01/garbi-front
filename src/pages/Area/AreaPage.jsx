@@ -38,6 +38,9 @@ import {
 import {
   DeleteAreaForm 
 } from '../../forms/DeleteArea/DeleteAreaForm';
+import {
+  HEIGHT_HEADER 
+} from '../../config';
 
 const slideIn = keyframes`
   from {
@@ -168,7 +171,7 @@ const AreaPage = () => {
       sx={{
         width: '100%',
         display: 'flex',
-        height: '100%',
+        height: `calc(100vh - ${HEIGHT_HEADER})`,
         flexDirection: 'column',
       }}
     >

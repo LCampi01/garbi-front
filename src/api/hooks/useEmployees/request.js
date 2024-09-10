@@ -1,39 +1,28 @@
 import {
   useFetch 
 } from '../../../hooks/useFetch';
+import {
+  baseIntegrationUri 
+} from '../../config/apiClient';
+import {
+  HTTPMethods 
+} from '../../config/HTTPMethods';
+import QueryBuilder from '../../queryBuilder/QueryBuilder';
 
-export const useGetEmployees = () => {
-  const {
-    commonFetch, isLoading 
-  } = useFetch({
-    url: '/integration/user',
-  });
-
-  const getEmployees = () => {
-    return commonFetch({
-      method: 'GET',
-    });
-  };
-
-  return {
-    getEmployees,
-    isLoadingGetEmployees: isLoading,
-  };
-};
+const baseEmployeesUri = baseIntegrationUri + '/user'
 
 export const useCreateEmployee = () => {
   const {
-    commonFetch, isLoading 
+    commonFetch, isLoading
   } = useFetch({
-    url: '/api/user',
+    baseUri: baseEmployeesUri,
   });
 
   const createEmployee = ({
     companyId, name, surname, personalPhone, personalEmail, companyPhone, companyEmail, workingShift, role 
   }) => {
     return commonFetch({
-      uri: '/register',
-      method: 'POST',
+      method: HTTPMethods.POST,
       body: {
         companyId,
         name, 
@@ -42,7 +31,6 @@ export const useCreateEmployee = () => {
         personalEmail, 
         companyPhone,
         companyEmail,
-        password: '', //TODO: delete when BE is ready
         workingShift,
         role
       },
@@ -54,3 +42,29 @@ export const useCreateEmployee = () => {
     isLoading,
   };
 };
+
+export const useFetchEmployees = () => {
+  const {
+    commonFetch, isLoading 
+  } = useFetch({
+    baseUri: baseEmployeesUri,
+  });
+
+  const fetchEmployees = (lastKey = null) => {
+    const queryBuilder = new QueryBuilder()
+
+    const uri = queryBuilder
+      .addParam('lastKey', lastKey)
+      .build()
+
+    return commonFetch({
+      uri,
+      method: HTTPMethods.GET
+    })
+  }
+
+  return {
+    fetchEmployees,
+    isLoading
+  }
+}

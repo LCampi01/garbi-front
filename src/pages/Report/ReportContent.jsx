@@ -6,26 +6,32 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TablePagination,
   TableRow,
   Typography,
 } from '@mui/material';
 import {
-  ModalReportResolved 
+  ModalReportResolved
 } from '../../modales/ModalReportResolved/ModalReportResolved';
 import {
-  useState 
+  useEffect,
+  useState
 } from 'react';
 import {
-  ResolveReportForm 
+  ResolveReportForm
 } from '../../forms/ResolveReport/ResolveReportForm';
 import {
-  ReportStatusSelect 
+  ReportStatusSelect
 } from '../../components/ReportStatusSelect';
 import {
-  AvatarWithTooltip 
+  AvatarWithTooltip
 } from '../../components/AvatarWithTooltip';
 import profilePicture from '../../assets/profile_picture.jpg';
+import {
+  useReports 
+} from '../../api/hooks/useReports/useReports';
+import {
+  TimestampUtil 
+} from '../../utils/timestampUtil';
 
 
 const rows = [
@@ -83,10 +89,46 @@ const rows = [
   },
 ];
 
+const mapper = (reports) => {
+
+
+
+  return reports.map(
+    r => {
+      const {
+        date, time 
+      } = TimestampUtil.convertToDateAndHour(r.timestamp)
+      const state = r.status[r.status.length - 1]
+
+      return {
+        id: r.id,
+        date: date,
+        time: time,
+        state: state.status,
+        // recolector o ciudadano,
+        description: r.description,
+        reportType: r.type.replace('_',' '),
+        // falta lugar
+        // falta area,
+        // falta nombre del que report,
+        // falta foto
+      }
+    }
+  )
+}
+
 export const ReportContent = () => {
   const [openModalReportResolved, setOpenModalReportResolved] = useState(false);
   const [selectedReportId, setSelectedReportId] = useState(null);
+  const [reports, setReports] = useState([])
   const [modalReportResolvedTitle, setModalReportResolvedTitle] = useState('');
+  const [lastKey, setLastKey] = useState(null)
+  const {
+    fetchReports: {
+      fetchReports,
+      isLoadingFetchReports
+    }
+  } = useReports();
 
   const handleOpenModalReportResolved = (reportId, title) => {
     setSelectedReportId(reportId);
@@ -94,7 +136,23 @@ export const ReportContent = () => {
     setOpenModalReportResolved(true);
   };
   const handleCloseModalReportResolved = () => setOpenModalReportResolved(false);
-  
+
+
+  useEffect(() => {
+    const asyncFetchReports = async () => {
+      try {
+        const reportsReponse = await fetchReports();
+        console.log('🚀 ~ asyncFetchReports ~ reportsReponse:', reportsReponse)
+        const reportsMapped = mapper(reportsReponse.result)
+
+        setReports(reportsMapped)
+      } catch (error) {
+        console.error('Error fetching reports:', error);
+      }
+    };
+
+    asyncFetchReports();
+  }, []);
 
   return (
     <Box
@@ -107,7 +165,7 @@ export const ReportContent = () => {
         open={openModalReportResolved}
         handleClose={handleCloseModalReportResolved}
         form={<ResolveReportForm
-          handleClose = {handleCloseModalReportResolved}
+          handleClose={handleCloseModalReportResolved}
           reportId={selectedReportId}
         />}
       />
@@ -125,15 +183,15 @@ export const ReportContent = () => {
             }}
             aria-label='simple table'
           >
-            <TableBody>
-              {rows.map((row) => (
+            <TableBody >
+              {reports.map((row) => (
                 <TableRow
                   key={row.id}
                 >
                   <TableCell
                     sx={{
                       width: '1%',
-                      padding: '16px' 
+                      padding: '16px'
                     }}
                   >
                     <Box>
@@ -146,7 +204,7 @@ export const ReportContent = () => {
                           color: '#00000099',
                         }}
                       >
-                        {row.fecha}
+                        {row.date}
                       </Typography>
                       <Typography
                         sx={{
@@ -157,7 +215,7 @@ export const ReportContent = () => {
                           color: '#00000099',
                         }}
                       >
-                        {row.hora}
+                        {row.time}
                       </Typography>
                     </Box>
                   </TableCell>
@@ -176,7 +234,7 @@ export const ReportContent = () => {
                         color: '#00000099',
                       }}
                     >
-                      {row.recolector}
+                      {row.typeOfUser}
                     </Typography>
                     <Typography
                       sx={{
@@ -191,7 +249,7 @@ export const ReportContent = () => {
                         WebkitLineClamp: 2,
                       }}
                     >
-                      {row.descripcion}
+                      {row.description}
                     </Typography>
                   </TableCell>
                   <TableCell
@@ -202,7 +260,7 @@ export const ReportContent = () => {
                   >
                     <Chip
                       size='small'
-                      label={row.tipoDeReporte}
+                      label={row.reportType}
                       variant='outlined'
                     />
                   </TableCell>
@@ -220,7 +278,7 @@ export const ReportContent = () => {
                         color: '#00000099',
                       }}
                     >
-                      {row.lugar}
+                      {row.place}
                     </Typography>
                     <Typography
                       sx={{
@@ -241,7 +299,8 @@ export const ReportContent = () => {
                     }}
                   >
                     <ReportStatusSelect
-                      row={row}
+                      reportId={row.id}
+                      reportState={row.state}
                       handleOpenModalReportResolved={handleOpenModalReportResolved}
                     />
                   </TableCell>
@@ -253,21 +312,14 @@ export const ReportContent = () => {
                     }}
                   >
                     <AvatarWithTooltip
-                      name={row.creadorNombre}
-                      profilePicture={row.creadorFoto}
+                      name={row.creatorName}
+                      profilePicture={row.creatorPhoto}
                     />
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-          <TablePagination
-            rowsPerPageOptions={[5, 10, 25]}
-            component='div'
-            count={3}
-            rowsPerPage={3}
-            page={6}
-          />
         </TableContainer>
       </Paper>
     </Box>

@@ -7,20 +7,22 @@ const defaultHeaders = {
   'Content-Type': 'application/json',
 }
 
-
 export function useFetch({
-  url 
+  baseUri 
 }) {
   const [isLoading, setIsLoading] = useState(false);
 
   const commonFetch = async ({
-    uri = '', body, method, headers = defaultHeaders
+    uri = '', 
+    body,
+    method,
+    headers = defaultHeaders
   }) => {
     setIsLoading(true);
 
     try {
       const response = await apiClient.request({
-        url: url + uri,
+        url: baseUri + uri,
         data: body,
         method,
         headers,

@@ -30,6 +30,4 @@ export function useDrawingOverlays(map, state, stateDraw) {
       stateDraw.polygon.setMap(null)
     }
   }, [map, stateDraw]);
-
-
 }

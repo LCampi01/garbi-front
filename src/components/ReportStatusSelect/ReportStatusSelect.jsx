@@ -23,18 +23,18 @@ const SmallKeyboardArrowDownIcon = (color) =>
   }));
 
 export const ReportStatusSelect = ({
-  row, handleOpenModalReportResolved 
+  reportId, reportState, handleOpenModalReportResolved 
 }) => {
-  const [selectedValue, setSelectedValue] = useState(row.estado);
+  const [selectedValue, setSelectedValue] = useState(reportState);
 
   const handleChange = (event) => {
     const newValue = event.target.value;
     setSelectedValue(newValue);
 
     if (newValue === reportStates.RECHAZADO.text) {
-      handleOpenModalReportResolved(row.id, 'Cambiar a Rechazado');
+      handleOpenModalReportResolved(reportId, 'Cambiar a Rechazado');
     } else if (newValue === reportStates.RESUELTO.text) {
-      handleOpenModalReportResolved(row.id, 'Cambiar a Resuelto');
+      handleOpenModalReportResolved(reportId, 'Cambiar a Resuelto');
     }
   };
 

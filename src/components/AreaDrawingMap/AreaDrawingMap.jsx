@@ -16,10 +16,6 @@ import {
   DrawingActionType
 } from '../../reducers/drawReducer';
 
-
-
-
-
 export const AreaDrawingMap = ({
   areas, setAreas, areaActionStates, setOpenDeleteAreaForm, selectedColor, setSelectedColor, areaSelected, setAreaSelected, setIsAddingNewArea, state, dispatch, stateDraw, dispatchDraw
 }) => {

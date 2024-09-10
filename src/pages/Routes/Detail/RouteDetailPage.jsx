@@ -22,6 +22,9 @@ import {
 import {
   PaperDetailWorkersOnATrip 
 } from '../../../components/PaperDetailWorkersOnATrip';
+import {
+  HEIGHT_HEADER 
+} from '../../../config';
 
 const routesDetailArray = [
   {
@@ -78,7 +81,7 @@ export const RouteDetailPage = () => {
     <Box
       sx={{
         width: '100%',
-        height: '100%',
+        height: `calc(100vh - ${HEIGHT_HEADER})`,
         display: 'flex',
         flexDirection: 'column'
       }}

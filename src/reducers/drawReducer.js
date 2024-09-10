@@ -15,7 +15,7 @@ export function drawReducer(state, action) {
       overlay: polyline
     } = action.payload
 
-    completePath(polyline);
+    completePathByPolyline(polyline);
 
     const path = polyline.getPath()?.getArray();
 
@@ -67,8 +67,14 @@ export function completeEditablePath(polyline) {
   }
 }
 
-function completePath(polyline) {
+function completePathByPolyline(polyline) {
   const path = polyline.getPath()?.getArray();
+
+  const newPath = completePath(path)
+  polyline.setPath(newPath);
+}
+
+export function completePath(path) {
 
   if (path.length > 1) {
 
@@ -77,9 +83,10 @@ function completePath(polyline) {
 
     if (!firstPoint.equals(lastPoint)) {
       path.push(firstPoint);
-      polyline.setPath(path);
     }
   }
+
+  return path
 }
 
 function getPathsAsLatLng(overlay) {

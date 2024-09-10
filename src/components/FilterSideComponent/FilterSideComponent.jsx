@@ -4,6 +4,9 @@ import {
 import {
   BreadcrumbsComponent
 } from '../../components/BreadcrumbsComponent';
+import {
+  HEIGHT_HEADER 
+} from '../../config';
 
 export const FilterSideComponent = ({
   title, component, prefix, subtitle, titleLink, renderFilters
@@ -25,6 +28,8 @@ export const FilterSideComponent = ({
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
+          height: `calc(100vh - ${HEIGHT_HEADER})`,
+          position: 'sticky'
         }}
       >
         <Box

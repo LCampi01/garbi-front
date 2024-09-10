@@ -10,9 +10,8 @@ import {
 import {
   useForm 
 } from 'react-hook-form';
-import {
-  jwtDecode 
-} from 'jwt-decode';
+
+
 import {
   InputForm 
 } from '../../components/InputForm';
@@ -50,7 +49,7 @@ const turnos = [
     label: 'Tarde',
   },
   {
-    value: 'Manana',
+    value: 'Mañana',
     label: 'Mañana',
   },
 ];
@@ -83,7 +82,7 @@ const newEmployeeSchema = object({
 }).required();
 
 export const CreateEmployeeForm = ({
-  handleClose
+  handleClose, onSuccess
 }) => {
   const {
     control,
@@ -93,6 +92,7 @@ export const CreateEmployeeForm = ({
     },
   } = useForm({
     defaultValues: {
+      companyId: '',
       lastName: '',
       firstName: '',
       personalPhone: '',
@@ -107,13 +107,13 @@ export const CreateEmployeeForm = ({
 
   const {
     createEmployee: {
-      createEmployee: createEmployee, isLoadingCreateEmployee 
+      createEmployee,
+      isCreateEmployeeLoading 
     },
   } = useEmployees();
 
-  const token = localStorage.getItem('token');
-  const decodedToken = jwtDecode(token);
-  const companyId = decodedToken.user.companyId;
+  const user = JSON.parse(localStorage.getItem('user'));
+  const companyId = user.companyId;
 
   const onSubmit = async (data) => {
     try {
@@ -128,12 +128,10 @@ export const CreateEmployeeForm = ({
         workingShift: data.timeShift,
         role: data.jobPosition //TODO: see what the BE needs here
       });
-  
-      if (response.success) {
-        handleClose();
-      } else {
-        console.error('Failed to submit form', response);
-      }
+
+      //TODO later: validar que la respuesta sea la esperada, y sino tirar error.
+      handleClose();
+      onSuccess();
     } catch (error) {
       console.error('Error submitting form', error);
     }

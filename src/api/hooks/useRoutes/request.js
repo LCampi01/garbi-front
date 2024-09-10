@@ -1,6 +1,14 @@
 import {
   useFetch 
 } from '../../../hooks/useFetch';
+import {
+  baseIntegrationUri 
+} from '../../config/apiClient';
+import {
+  HTTPMethods 
+} from '../../config/HTTPMethods';
+
+const baseIntegrationRoute = baseIntegrationUri + '/route'
 
 export const useGetRoutes = () => {
   const {
@@ -20,3 +28,26 @@ export const useGetRoutes = () => {
     isLoadingGetRoutes: isLoading,
   };
 };
+
+export const useSelectOptimalRoutes = () => {
+  const {
+    isLoading,
+    commonFetch
+  } = useFetch({
+    baseUri: baseIntegrationRoute
+  })
+
+  const selectOptimalRoute = (optimalRouteId) => {
+    return commonFetch({
+      method: HTTPMethods.POST,
+      body: {
+        optimalRouteId
+      }
+    })
+  }
+
+  return {
+    isLoading,
+    selectOptimalRoute
+  }
+}

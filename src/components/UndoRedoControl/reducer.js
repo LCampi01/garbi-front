@@ -5,6 +5,9 @@ import {
   polygonConfig, polylineConfig
 } from '../AreaDrawingMap/drawAreas';
 
+// TODO: MOVER ESTE REDUCER A LA CARPETA DE REDUCERS
+
+
 export const DrawingActionKind = {
   UPDATE_DRAW_OVERLAY: 'UPDATE_DRAW_OVERLAY',
   UPDATE_OVERLAY: 'UPDATE_OVERLAY',

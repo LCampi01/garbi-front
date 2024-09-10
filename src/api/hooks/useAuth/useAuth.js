@@ -1,14 +1,14 @@
 import {
-  useChangePassword, useLogin 
+  useChangePassword, useLogin
 } from './request';
 
 export const useAuth = () => {
   const {
-    login, isLoading: isLoginLoading 
+    login, isLoading: isLoginLoading
   } = useLogin();
 
   const {
-    changePassword, isLoading: isChangePasswordLoading 
+    changePassword, isLoading: isChangePasswordLoading
   } = useChangePassword();
 
   return {
