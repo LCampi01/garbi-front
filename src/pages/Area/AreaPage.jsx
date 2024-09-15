@@ -1,30 +1,191 @@
+import SaveIcon from '@mui/icons-material/Save';
 import {
-  Box, Button, Divider, Paper, Typography 
+  Box, Button, Divider, keyframes, Paper, Typography
 } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import {
-  APIProvider, Map 
+  APIProvider
 } from '@vis.gl/react-google-maps';
 import {
-  BreadcrumbsComponent 
+  AreaDrawingMap
+} from '../../components/AreaDrawingMap';
+import {
+  BreadcrumbsComponent
 } from '../../components/BreadcrumbsComponent';
+import {
+  useEffect,
+  useReducer,
+  useState
+} from 'react';
+import {
+  InputForm
+} from '../../components/InputForm/InputForm';
+import {
+  useForm
+} from 'react-hook-form';
+import reducer, {
+  DrawingActionKind
+} from '../../components/UndoRedoControl/reducer';
+import {
+  DrawingActionType,
+  drawReducer
+} from '../../reducers/drawReducer';
+import {
+  useAreaActionStatesProvider
+} from '../../hooks/useAreaActionProvider';
+import {
+  ModalCreateResource 
+} from '../../modales/ModalCreateResource';
+import {
+  DeleteAreaForm 
+} from '../../forms/DeleteArea/DeleteAreaForm';
+import {
+  HEIGHT_HEADER 
+} from '../../config';
+
+const slideIn = keyframes`
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+`;
 
 const AreaPage = () => {
+  const [areas, setAreas] = useState([]);
+  const {
+    areaActionStates
+  } = useAreaActionStatesProvider();
+  const {
+    enableAddArea,
+    enableEditArea,
+    isAddingArea,
+    enabledAddArea,
+    enabledEditArea,
+    enabledDeleteArea,
+    isEditingArea,
+    resetStates,
+    disableEditArea
+  } = areaActionStates
+  const [isAddingNewArea, setIsAddingNewArea] = useState(false);
+  const [areaSelected, setAreaSelected] = useState(null);
+  const [animationKey, setAnimationKey] = useState(0);
+  const [count, setCount] = useState(0);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [openDeleteAreaForm, setOpenDeleteAreaForm] = useState(false);
+  // TODO RENOMBRAR ESTOS ESTADOS
+  const [state, dispatch] = useReducer(reducer, []);
+  const [stateDraw, dispatchDraw] = useReducer(drawReducer, {
+    polyline: null,
+    polygon: null
+  });
+
+  const {
+    control,
+    handleSubmit,
+    setValue,
+    formState: {
+      errors
+    }
+  } = useForm({
+    defaultValues: {
+      name: '',
+      description: ''
+    },
+  });
+
   const position = {
     lat: 43.64,
     lng: -79.41,
   };
+
   const apiKeyGoogleMaps = import.meta.env.VITE_REACT_APP_API_KEY_GOOGLE_MAPS;
+
+  useEffect(() => {
+    if (areaSelected) {
+      enableEditArea()
+      setValue('name', areaSelected.title);
+      setValue('description', areaSelected.description);
+      setAnimationKey(prevKey => prevKey + 1);
+    } else {
+      disableEditArea()
+    }
+    return () => {
+      setValue('name', '')
+      setValue('description', '')
+    }
+  }, [areaSelected, setValue]);
+
+  const saveArea = (data) => {
+    if (isAddingArea) {
+      // TODO: VALIDAR QUE NO SE PUEDA GUARDAR SIN HABER DIBUJADO
+      const newPolyline = stateDraw.polyline
+      const newPolygon = stateDraw.polygon
+
+      dispatchDraw({
+        type: DrawingActionType.CLEAR_DRAW
+      })
+
+      dispatch({
+        type: DrawingActionKind.ADD_OVERLAY,
+        payload: {
+          id: 'AREA-' + count,
+          title: data.name,
+          description: data.description,
+          polyline: newPolyline,
+          color: selectedColor,
+          polygon: newPolygon
+        }
+      })
+      setCount(prev => prev + 1)
+    } else {
+      dispatch({
+        type: DrawingActionKind.UPDATE_OVERLAY,
+        payload: {
+          id: areaSelected.id,
+          title: data.name,
+          description: data.description
+        }
+      })
+      setAreaSelected(null)
+    }
+    resetStates()
+  }
+
+  const handleDeleteArea = (e) => {
+    e.preventDefault();
+    setAreaSelected(null)
+    setOpenDeleteAreaForm(false)
+    dispatch({
+      type: DrawingActionKind.DELETE_OVERLAY,
+      payload: {
+        id: areaSelected.id
+      }
+    })
+  }
 
   return (
     <Box
       sx={{
         width: '100%',
         display: 'flex',
-        height: '100%',
+        height: `calc(100vh - ${HEIGHT_HEADER})`,
         flexDirection: 'column',
       }}
     >
+      <ModalCreateResource
+        title={'Eliminar área'}
+        open={openDeleteAreaForm}
+        handleClose={() => setOpenDeleteAreaForm(false)}
+        form={<DeleteAreaForm
+          areaName={areaSelected?.title}
+          handleClose={() => setOpenDeleteAreaForm(false)}
+          onSubmit={handleDeleteArea}
+        />}
+      />
+
       <Box
         sx={{
           width: '100%',
@@ -49,31 +210,74 @@ const AreaPage = () => {
           sx={{
             width: '100%',
             display: 'flex',
-            justifyContent: 'end',
+            justifyContent: 'space-between',
+            height: '3.75rem',
           }}
         >
-          <Button
-            size='medium'
-            sx={{
-              backgroundColor: '#12422C',
-              color: 'white',
-              height: '36px',
-              padding: '16px',
-              marginBottom: '24px',
-              '&:hover': {
-                backgroundColor: '#12422C',
-              },
-            }}
-          >
-            Nueva Area
-            <AddIcon
+          {(isAddingArea || areaSelected) && (
+            <Box
+              key={animationKey}
+              component={'form'}
+              onSubmit={handleSubmit(saveArea)}
               sx={{
-                marginLeft: '8px',
-                fontSize: '20px',
+                width: '100%',
+                display: 'flex',
+                justifyContent: 'space-between',
+                animation: (areaSelected || enableAddArea) ? `${slideIn} 0.5s forwards` : 'none',
               }}
-            />
-          </Button>
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  flex: 1,
+                  gap: 2,
+                  pr: 2,
+                }}
+              >
+                <Box
+                  width={0.3}
+                >
+                  <InputForm
+                    control={control}
+                    label={'Nombre'}
+                    name='name'
+                  />
+                </Box>
+                <Box
+                  flex={1}
+                >
+                  <InputForm
+                    control={control}
+                    label={'Breve descripción'}
+                    name='description'
+                  />
+                </Box>
+              </Box>
+              <Button
+                size='medium'
+                type='submit'
+                sx={{
+                  backgroundColor: '#12422C',
+                  color: 'white',
+                  height: '40px',
+                  padding: '16px',
+                  borderRadius: '4px',
+                  '&:hover': {
+                    backgroundColor: '#12422C',
+                  },
+                }}
+              >
+                Guardar Área
+                <SaveIcon
+                  sx={{
+                    marginLeft: '8px',
+                    fontSize: '20px',
+                  }}
+                />
+              </Button>
+            </Box>)}
         </Box>
+
         <Box
           sx={{
             flexGrow: 1,
@@ -82,10 +286,20 @@ const AreaPage = () => {
           <APIProvider
             apiKey={apiKeyGoogleMaps}
           >
-            <Map
-              defaultZoom={9}
-              defaultCenter={position}
-              mapId='658a52589c7a963'
+            <AreaDrawingMap
+              areas={areas}
+              setAreas={setAreas}
+              areaActionStates={areaActionStates}
+              areaSelected={areaSelected}
+              setAreaSelected={setAreaSelected}
+              setIsAddingNewArea={setIsAddingNewArea}
+              setSelectedColor={setSelectedColor}
+              setOpenDeleteAreaForm={setOpenDeleteAreaForm}
+              selectedColor={selectedColor}
+              state={state}
+              dispatch={dispatch}
+              stateDraw={stateDraw}
+              dispatchDraw={dispatchDraw}
             />
           </APIProvider>
         </Box>

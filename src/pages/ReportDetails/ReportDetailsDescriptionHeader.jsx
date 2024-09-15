@@ -17,7 +17,6 @@ export const ReportDetailsDescriptionHeader = ({
       <Typography
         sx={{
           fontFamily: 'Roboto',
-          marginLeft: '24px',
           fontSize: '24px',
           fontWeight: '500',
           lineHeight: '39.84px',

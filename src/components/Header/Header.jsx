@@ -9,7 +9,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import PersonIcon from '@mui/icons-material/Person';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import {
@@ -26,6 +25,9 @@ import {
 import {
   NotificationsMenu 
 } from '../../components/NotificationsMenu';
+import {
+  ProfileIconMenu 
+} from '../../components/ProfileIconMenu';
 
 const pages = {
   Mapa: '/home',
@@ -49,6 +51,7 @@ export const Header = ({
 
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElNotifications, setAnchorElNotifications] = useState(null);
+  const [anchorElProfile, setAnchorElProfile] = useState(null);
   const [anchorElManagement, setAnchorElManagement] = useState(null);
 
   const handleOpenNavMenu = (event) => {
@@ -59,12 +62,20 @@ export const Header = ({
     setAnchorElNotifications(event.currentTarget);
   };
 
+  const handleOpenProfileMenu = (event) => {
+    setAnchorElProfile(event.currentTarget);
+  };
+
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
 
   const handleCloseNotificationsMenu = () => {
     setAnchorElNotifications(null);
+  };
+
+  const handleCloseProfileMenu = () => {
+    setAnchorElProfile(null);
   };
 
   const handleOpenManagementMenu = (event) => {
@@ -368,9 +379,6 @@ export const Header = ({
                   <Box>
                     <IconButton
                       onClick={handleOpenNotificationsMenu}
-                      sx={{
-                        backgroundColor: '#12422c' 
-                      }}
                     >
                       <Badge 
                         badgeContent={notifications.length}
@@ -397,21 +405,19 @@ export const Header = ({
                     />
                   </Box>
                   <Box>
-                    <Tooltip
-                      title='Open settings'
+                    <IconButton
+                      onClick={handleOpenProfileMenu}
                     >
-                      <IconButton
+                      <PersonIcon
                         sx={{
-                          backgroundColor: '#12422c' 
+                          color: 'white' 
                         }}
-                      >
-                        <PersonIcon
-                          sx={{
-                            color: 'white' 
-                          }}
-                        />
-                      </IconButton>
-                    </Tooltip>
+                      />
+                    </IconButton>
+                    <ProfileIconMenu
+                      handleClose={handleCloseProfileMenu}
+                      anchorEl={anchorElProfile}
+                    />
                   </Box>
                 </Box>
               </Box>

@@ -1,23 +1,23 @@
+import CloseIcon from '@mui/icons-material/Close';
+import {
+  useMap
+} from '@vis.gl/react-google-maps';
 import {
   useReducer
 } from 'react';
 import {
-  useMap
-} from '@vis.gl/react-google-maps';
-import CloseIcon from '@mui/icons-material/Close';
-import {
-  useDrawingManagerEvents 
+  useDrawingManagerEvents
 } from '../../hooks/useDrawingManagerEvents';
 import {
-  useDrawingOverlays 
+  useDrawingOverlays
 } from '../../hooks/useDrawingOverlays';
 import reducer, {
-  DrawingActionKind 
+  DrawingActionKind
 } from './reducer';
 
 
 export const UndoRedoControl = ({
-  drawingManager
+  drawingManager,
 }) => {
 
   const map = useMap('garbi-create-area-map');
@@ -29,6 +29,7 @@ export const UndoRedoControl = ({
 
   useDrawingManagerEvents(drawingManager, dispatch);
   useDrawingOverlays(map, state);
+
 
   return (
     <div

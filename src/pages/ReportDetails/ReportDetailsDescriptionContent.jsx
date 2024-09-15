@@ -1,16 +1,16 @@
 import {
-  Typography, Box 
+  Typography, Box
 } from '@mui/material';
 import contenedorRoto from '/src/assets/contenedor-roto.png';
 
 export const ReportDetailsDescriptionContent = ({
-  description 
+  description
 }) => {
   return (
     <Box
       sx={{
-        border: '1px solid var(--divider, #0000001F)', 
-        borderRadius:'4px',
+        border: '1px solid var(--divider, #0000001F)',
+        borderRadius: '4px',
         padding: '12px 24px 16px',
       }}
     >
@@ -18,8 +18,8 @@ export const ReportDetailsDescriptionContent = ({
         sx={{
           display: 'flex',
           alignItems: 'center',
-          height:'100%',
-          width:'100%',
+          height: '100%',
+          width: '100%',
         }}
       >
         <Typography
@@ -50,8 +50,8 @@ export const ReportDetailsDescriptionContent = ({
       </Box>
       <Box
         sx={{
-          width:'368px',
-          height:'272px',
+          width: '368px',
+          height: '272px',
         }}
       >
         <img

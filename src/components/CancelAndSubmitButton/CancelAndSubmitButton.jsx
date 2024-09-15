@@ -3,7 +3,7 @@ import {
 } from '@mui/material'
 
 export const CancelAndSubmitButton = ({
-  handleClose, onSubmit, buttonSubmitMessage = 'CREAR', typeButton = 'submit'
+  handleClose, onSubmit, buttonSubmitMessage = 'CREAR', typeButton = 'submit', secondaryButtonMessage = 'Cancelar'
 }) => {
   return (
     <Box
@@ -32,7 +32,7 @@ export const CancelAndSubmitButton = ({
           }}
           onClick={handleClose}
         >
-          Cancelar
+          {secondaryButtonMessage}
         </Button>
         <Button
           sx={{

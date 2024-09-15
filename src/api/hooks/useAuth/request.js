@@ -1,22 +1,27 @@
 import {
   useFetch 
 } from '../../../hooks/useFetch';
+import {
+  baseIntegrationUri 
+} from '../../config/apiClient';
+
+const baseAuthUri = baseIntegrationUri + '/user'
 
 export const useLogin = () => {
   const {
     commonFetch, isLoading 
   } = useFetch({
-    url: '/public-api',
+    baseUri: baseAuthUri,
   });
 
   const login = ({
-    email, password 
+    personalEmail, password 
   }) => {
     return commonFetch({
-      uri: '/login',
+      uri: '/authenticate',
       method: 'POST',
       body: {
-        email,
+        personalEmail,
         password,
       },
     });
@@ -29,25 +34,23 @@ export const useLogin = () => {
 };
 
 
-
-
 export const useChangePassword = () => {
   const {
-    commonFetch, isLoading 
+    commonFetch, isLoading
   } = useFetch({
-    url: '/public-api',
+    baseUri: baseAuthUri,
   });
 
   const changePassword = ({
-    email, oldPassword, newPassword 
+    email, password, newPassword 
   }) => {
     return commonFetch({
       uri: '/change_password',
-      method: 'POST',
+      method: 'PUT',
       body: {
         email,
-        oldPassword,
         newPassword,
+        password,
       },
     });
   };

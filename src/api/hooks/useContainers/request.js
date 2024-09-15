@@ -1,12 +1,17 @@
 import {
   useFetch 
 } from '../../../hooks/useFetch';
+import {
+  baseIntegrationUri 
+} from '../../config/apiClient';
+
+const baseContainerUri = baseIntegrationUri + '/container'
 
 export const useGetContainers = () => {
   const {
     isLoading, commonFetch 
   } = useFetch({
-    url: '/api/container',
+    baseUri: baseContainerUri,
   });
 
   const getContainers = () => {

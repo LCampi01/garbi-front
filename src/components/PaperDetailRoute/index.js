@@ -1,0 +1,3 @@
+export {
+  PaperDetailRoute 
+} from './PaperDetailRoute'

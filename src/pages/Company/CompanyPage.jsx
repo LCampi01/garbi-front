@@ -17,6 +17,9 @@ import {
   CreateCompanyForm
 } from '../../forms/CreateCompany/CreateCompanyForm';
 import {
+  DeleteCompanyForm
+} from '../../forms/DeleteCompany/DeleteCompanyForm';
+import {
   TableWithEditAndDeleteButtons
 } from '../../components/TableWithEditAndDeleteButtons';
 
@@ -187,17 +190,28 @@ const CompanyPage = () => {
   const [openCreateCompanyModal, setOpenCreateCompanyModal] = useState(false);
   const handleOpenCreateCompanyModal = () => setOpenCreateCompanyModal(true);
   const handleCloseCreateCompanyModal = () => setOpenCreateCompanyModal(false);
+  const [openDeleteCompanyModal, setOpenDeleteCompanyModal] = useState(false);
+  const [companyToDelete, setCompanyToDelete] = useState(false);
 
   const [openModifyCompanyModal, setOpenModifyCompanyModal] = useState(false);
   const [companyToModify, setCompanyToModify] = useState(false);
 
-  const handleOpenModifyContainerModal = (companyToModify) => {
+  const handleOpenModifyCompanyModal = (companyToModify) => {
     setCompanyToModify(companyToModify)
     setCompanyToModify(true)
   };
   const handleCloseModifyCompanyModal = () => {
     setOpenModifyCompanyModal(false)
     setCompanyToModify(null);
+  };
+
+  const handleOpenDeleteCompanyModal = (companyToDelete) => {
+    setCompanyToDelete(companyToDelete)
+    setOpenDeleteCompanyModal(true)
+  };
+  const handleCloseDeleteCompanyModal = () => {
+    setOpenDeleteCompanyModal(false)
+    setCompanyToDelete(null);
   };
 
 
@@ -220,6 +234,15 @@ const CompanyPage = () => {
           handleClose={handleCloseCreateCompanyModal}
         />}
       />
+      <ModalCreateResource
+        title={'Eliminar empresa'}
+        open={openDeleteCompanyModal}
+        handleClose={handleCloseDeleteCompanyModal}
+        form={<DeleteCompanyForm
+          companyToDelete={companyToDelete}
+          handleClose = {handleCloseDeleteCompanyModal}
+        />}
+      />
 
       <Paper
         sx={{
@@ -237,6 +260,7 @@ const CompanyPage = () => {
           rows={companies}
           renderRow={CompanyRowRender}
           handleOnClickEditButton={handleCloseModifyCompanyModal}
+          handleOnClickDeleteButton={handleOpenDeleteCompanyModal}
         />
       </Paper>
     </Box>

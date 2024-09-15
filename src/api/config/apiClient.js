@@ -1,20 +1,22 @@
 import axios from 'axios';
 
+export const baseIntegrationUri = '/integration'
+
 // Configura la instancia de axios
 const apiClient = axios.create({
-  baseURL: 'http://54.152.182.89',
+  baseURL: 'https://1r9y6bh0g9.execute-api.us-east-1.amazonaws.com',
   headers: {
     'Content-Type': 'application/json',
   },
+  
 });
 
 // Interceptores para manejar tokens y errores globales
 apiClient.interceptors.request.use(
   (config) => {
-    // Puedes añadir tokens de autenticación aquí si es necesario
     const token = localStorage.getItem('token');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.token = `Bearer ${token}`;
     }
     return config;
   },

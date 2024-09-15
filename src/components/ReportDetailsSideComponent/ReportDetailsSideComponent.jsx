@@ -22,7 +22,7 @@ export const ReportDetailsSideComponent = ({
         flexDirection: 'column',
         gap: '10px',
         padding: '12px 5px',
-        width: '288px',
+        width: '100%',
         height: 'auto',
       }}
     >

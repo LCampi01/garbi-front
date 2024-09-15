@@ -2,85 +2,58 @@ import {
   Box, Typography, CircularProgress, Select, MenuItem, FormControl, InputLabel
 } from '@mui/material';
 import {
-  Controller, useForm 
+  Controller, useForm
 } from 'react-hook-form';
+
+
 import {
-  OutlinedInputForm
-} from '../../components/OutlinedInputForm';
-import {
-  CancelAndSubmitButton 
+  CancelAndSubmitButton
 } from '../../components/CancelAndSubmitButton/CancelAndSubmitButton';
 
 import {
-  yupResolver 
+  yupResolver
 } from '@hookform/resolvers/yup';
 import {
-  object, string, number 
+  object, string, number
 } from 'yup';
-
-import {
-  useGenerateOptimalRoutes 
-} from '../../api/hooks/useGenerateOptimalRoute/useGenerateOptimalRoutes';
 
 export const GenerateOptimalRouteForm = ({
   handleClose,
-  handleOpenRightSideOptimalRouteInfo
+  handleOpenRightSideOptimalRouteInfo,
+  onGenerateOptimalRoute,
+  areas
 }) => {
-  const areas = ['Area 1', 'Area 2', 'Area 3'];
-  const {
-    createOptimalRoute, isCreateOptimalRouteLoading 
-  } = useGenerateOptimalRoutes();
 
   const createOptimalRouteSchema = object({
-    area: string().required('Debe seleccionar una opción'),
+    areaId: string().required('Debe seleccionar una opción'),
     percentage: number()
       .min(0, 'El valor debe ser al menos 0')
       .max(100, 'El valor debe ser como máximo 100')
       .transform((value) => (isNaN(value) || value === '' ? undefined : value))
-      .required('El valor debe ser un número entre 0 y 100'),  
+      .required('El valor debe ser un número entre 0 y 100'),
   }).required();
 
   const {
     control, handleSubmit, formState: {
-      errors 
+      errors
     }
   } = useForm({
     defaultValues: {
-      area: '',
+      areaId: '',
       percentage: '50',
     },
     resolver: yupResolver(createOptimalRouteSchema),
   });
-
-  const onSubmit = async (data) => {
-    const formData = new FormData();
-
-    const optimalRouteForm = {
-      area: data.area,
-      percentage: data.percentage,
-    };
-
-    formData.append('optimalRouteForm', JSON.stringify(optimalRouteForm));
-
-    try {
-      const response = await createOptimalRoute(formData);
-      if (response.success) {
-        handleOpenRightSideOptimalRouteInfo(data);
-        handleClose();  // Cerrar el formulario después de la acción exitosa
-      }
-    } catch (error) {
-      console.error('Error generating optimal route:', error);
-    }
-  }
+  const isLoading = false
 
   return (
     <form
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(onGenerateOptimalRoute)}
     >
       <Box
         sx={{
           width: 1,
-          padding: '1rem 1.5rem 1.3125rem' 
+          padding: '1rem 1.5rem 1.3125rem'
         }}
       >
         <Typography
@@ -88,22 +61,22 @@ export const GenerateOptimalRouteForm = ({
             fontSize: '1rem',
             fontWeight: 400,
             lineHeight: '1.66rem',
-            letterSpacing: '0.025rem' 
+            letterSpacing: '0.025rem'
           }}
         >
           Seleccione área:
         </Typography>
         <Box
           sx={{
-            width: 0.5,
-            mt: '8px' 
+            width: 1,
+            mt: '8px'
           }}
         >
           <Controller
-            name='area'
+            name='areaId'
             control={control}
             render={({
-              field 
+              field
             }) => (
               <FormControl
                 variant='filled'
@@ -112,7 +85,9 @@ export const GenerateOptimalRouteForm = ({
               >
                 <InputLabel
                   id='area'
-                >Área</InputLabel>
+                >
+                  Área
+                </InputLabel>
                 <Select
                   size='medium'
                   fullWidth
@@ -120,12 +95,12 @@ export const GenerateOptimalRouteForm = ({
                   label='Área'
                   {...field}
                 >
-                  {areas.map((option) => (
+                  {areas.map((area) => (
                     <MenuItem
-                      key={option}
-                      value={option}
+                      key={area.id}
+                      value={area.id}
                     >
-                      {option}
+                      {area.name}
                     </MenuItem>
                   ))}
                 </Select>
@@ -143,10 +118,10 @@ export const GenerateOptimalRouteForm = ({
           />
         </Box>
       </Box>
-      <Box
+      {/* <Box
         sx={{
           width: '100%',
-          padding: '1rem 1.5rem 0rem' 
+          padding: '1rem 1.5rem 0rem'
         }}
       >
         <Typography
@@ -155,7 +130,7 @@ export const GenerateOptimalRouteForm = ({
             fontSize: '1rem',
             fontWeight: 400,
             lineHeight: '1.66rem',
-            letterSpacing: '0.025rem' 
+            letterSpacing: '0.025rem'
           }}
         >
           Generar ruta que solo pase por contenedores que igualen o superen el
@@ -164,7 +139,7 @@ export const GenerateOptimalRouteForm = ({
               width: '75px',
               display: 'inline-block',
               verticalAlign: 'middle',
-              m: '0 12px' 
+              m: '0 12px'
             }}
           >
             <OutlinedInputForm
@@ -179,11 +154,11 @@ export const GenerateOptimalRouteForm = ({
           </Box>
           de su capacidad
         </Typography>
-      </Box>
+      </Box> */}
       <CancelAndSubmitButton
         handleClose={handleClose}
         typeButton='submit'
-        loadingBehaviour={isCreateOptimalRouteLoading ? (
+        loadingBehaviour={isLoading ? (
           <CircularProgress
             size={24}
             color='inherit'

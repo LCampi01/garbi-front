@@ -1,82 +1,119 @@
 import {
-  Box, Typography, Button 
+  Box, Typography, Button
 } from '@mui/material'
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import RouteIcon from '@mui/icons-material/Route';
 
 export const RouteOptimalInfo = ({
-  selected 
+  name,
+  timeInMinutes,
+  distanceInKms,
+  color,
+  colorNoSelected,
+  selected,
+  onClick,
+  onSendRoute
 }) => {
   return (
     <Box
       sx={{
         padding: '1rem',
-        height: '9rem',
-        borderLeft: selected ? '4px solid black' : 0,
-        boxShadow: '0px 2px 1px -1px #00000033, 0px 1px 1px 0px #00000024, 0px 1px 3px 0px #0000001F'
+        width: 1,
+        cursor: 'pointer',
+        borderLeft: selected ? `4px solid ${color}` : `4px solid ${colorNoSelected}`,
+        boxShadow: '0px 2px 1px -1px #00000033, 0px 1px 1px 0px #00000024, 0px 1px 3px 0px #0000001F',
+        transition: 'background-color 0.3s ease',  // Transición suave solo para el background
+        '&:hover': {
+          backgroundColor: '#f0f0f0',  // Cambia el color de fondo al hacer hover
+        },
       }}
+      onClick={onClick}
     >
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
           mb: '8px'
         }}
       >
         <Typography
           sx={{
-            //styleName: typography/h6;
-            fontSize: '1.25rem',
+            fontSize: '1.125rem',
             fontWeight: 500,
-            lineHeight: '2rem',
+            lineHeight: '1.8rem',
           }}
         >
-          Ruta 1
+          {name}
         </Typography>
-        <Typography
-          sx={{
-            //styleName: typography/h6;
-            fontSize: '1.25rem',
-            fontWeight: 500,
-            lineHeight: '2rem',
-          }}
-        >65 min</Typography>
       </Box>
       <Box
         sx={{
           display: 'flex',
-          justifyContent: 'space-between'
+          gap: '1.5rem'
         }}
       >
-        <Typography
+        <Box
           sx={{
-            fontSize: '16px',
-            fontWeight: 400,
-            lineHeight: '24px'
+            display: 'flex',
+            alignItems: 'center'
           }}
-        >Ruta más rápida</Typography>
-        <Typography
+        >
+          <AccessTimeIcon
+            sx={{
+              fontSize: '1.25rem',
+              mr: '2px'
+            }}
+
+          />
+          <Typography
+            sx={{
+              fontSize: '1rem',
+              fontWeight: 400,
+              lineHeight: '1.5rem'
+            }}
+          >
+            {timeInMinutes + ' min'}
+          </Typography>
+        </Box>
+        <Box
           sx={{
-            fontSize: '16px',
-            fontWeight: 400,
-            lineHeight: '24px'
+            display: 'flex',
+            alignItems: 'center'
           }}
-        >9 km</Typography>
+        >
+          <RouteIcon
+            sx={{
+              fontSize: '1.25rem',
+              mr: '2px'
+            }}
+
+          />
+          <Typography
+            sx={{
+              fontSize: '1rem',
+              fontWeight: 400,
+              lineHeight: '1.5rem'
+            }}
+          >
+            {distanceInKms + ' km'}
+          </Typography>
+        </Box>
       </Box>
       <Box >
         <Button
           variant='text'
           color='primary'
           size='large'
+          onClick={onSendRoute}
         >
           <Typography
             sx={{
-              color:'#2196F3',
+              color: '#2196F3',
             }}
           >
-            ENVIAR RUTA 
+            ENVIAR RUTA
           </Typography>
         </Button>
       </Box>
-       
-    </Box>
+
+    </Box >
   )
 }

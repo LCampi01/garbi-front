@@ -155,14 +155,19 @@ const EmployeeRowRender = (employee) => {
   )
 }
 
-
-
-
 export const EmployeeContent = () => {
   const [employees, setEmployees] = useState([])
   const [openCreateEmployeeModal, setOpenCreateEmployeeModal] = useState(false);
   const handleOpenCreateEmployeeModal = () => setOpenCreateEmployeeModal(true);
   const handleCloseCreateEmployeeModal = () => setOpenCreateEmployeeModal(false);
+
+  const [lastKey, setLastKey] = useState(null)
+  const {
+    fetchEmployees: {
+      fetchEmployees,
+      isLoadingFetchEmployees
+    }
+  } = useEmployees();
 
   const [openModifyEmployeeModal, setOpenModifyEmployeeModal] = useState(false);
   const [employeeToModify, setEmployeeToModify] = useState(false);
@@ -176,25 +181,20 @@ export const EmployeeContent = () => {
     setEmployeeToModify(null);
   };
 
-  const {
-    getEmployees: {
-      getEmployees: getEmployees
-    },
-  } = useEmployees();
+  const refreshEmployeeList = async () => {
+    try {
+      const employeesResponse = await fetchEmployees();
+      setEmployees(employeesResponse.result);
+    } catch (error) {
+      console.error('Error fetching employees:', error);
+    }
+  };
 
   useEffect(() => {
-    const retrieveEmployees = async () => {
-      const fetchedEmployees = await getEmployees();
-      setEmployees(fetchedEmployees.documents);
-    };
-
-    try {
-      retrieveEmployees();
-    } catch (e) {
-      console.log(e);
-    }
+    refreshEmployeeList();
   }, []);
 
+  
   return (
     <Box
       sx={{
@@ -208,6 +208,7 @@ export const EmployeeContent = () => {
         handleClose={handleCloseCreateEmployeeModal}
         form={<CreateEmployeeForm
           handleClose = {handleCloseCreateEmployeeModal}
+          onSuccess={refreshEmployeeList}
         />}
       />
       <Paper

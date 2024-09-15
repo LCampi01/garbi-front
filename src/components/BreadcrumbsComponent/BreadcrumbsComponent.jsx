@@ -11,17 +11,17 @@ const breadcrumbsTypographyStyles = {
 };
 
 export const BreadcrumbsComponent = ({
-  prefix, title, subtitle, titleLink
+  prefix, title, subtitle, titleLink, detail = null
 }) => {
   return (
     <Breadcrumbs
       separator={
-        <NavigateNextIcon 
-          fontSize='large' 
-          sx={{ 
-            color:'#757575'
+        <NavigateNextIcon
+          fontSize='large'
+          sx={{
+            color: '#757575'
           }}
-        /> 
+        />
       }
       aria-label='breadcrumb'
     >
@@ -52,6 +52,13 @@ export const BreadcrumbsComponent = ({
           sx={breadcrumbsTypographyStyles}
         >
           {subtitle}
+        </Typography>
+      )}
+      {detail && (
+        <Typography
+          sx={breadcrumbsTypographyStyles}
+        >
+          {detail}
         </Typography>
       )}
     </Breadcrumbs>

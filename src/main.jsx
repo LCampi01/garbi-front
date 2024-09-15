@@ -20,7 +20,6 @@ import CompanyPage from './pages/Company/CompanyPage.jsx';
 import {
   ContainerPage 
 } from './pages/Containers/ContainerPage.jsx';
-import CreateAreaPage from './pages/CreateArea/CreateAreaPage.jsx';
 import HomePage from './pages/Home/HomePage.jsx';
 import RecommendationsPage from './pages/Recomendaciones/RecommendationsPage.jsx';
 import RoutesPage from './pages/Routes/RoutesPage.jsx';
@@ -35,6 +34,10 @@ import EmployeePage from './pages/Empleados/EmployeePage.jsx';
 import {
   ReportDetailsPage 
 } from './pages/ReportDetails/ReportDetailsPage.jsx';
+import {
+  RouteDetailPage 
+} from './pages/Routes/Detail/RouteDetailPage.jsx';
+import PerfilPage from './pages/Perfil/PerfilPage.jsx';
 
 const theme = createTheme({
   palette: {
@@ -93,9 +96,13 @@ const router = createBrowserRouter([
         element: <RoutesPage />,
       },
       {
-        path: '/areas/new',
-        element: <CreateAreaPage />,
+        path: '/routes/detail',
+        element: <RouteDetailPage />,
       },
+      // {
+      //   path: '/areas/new',
+      //   element: <CreateAreaPage />,
+      // },
       {
         path: '/reportes',
         element: <ReportPage />,
@@ -103,7 +110,11 @@ const router = createBrowserRouter([
       {
         path: '/reportes/detalles',
         element: <ReportDetailsPage />
-      }
+      },
+      {
+        path: '/perfil',
+        element: <PerfilPage />,
+      },
     ],
   },
   {
@@ -124,7 +135,7 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
+  <React.Fragment>
     <ThemeProvider
       theme={theme}
     >
@@ -133,5 +144,5 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         router={router}
       />
     </ThemeProvider>
-  </React.StrictMode>,
+  </React.Fragment>,
 );

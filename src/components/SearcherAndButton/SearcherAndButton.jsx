@@ -1,8 +1,10 @@
 import {
-  Box, Button, FormControl, IconButton, InputAdornment, OutlinedInput 
+  Box, Button
 } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
 import AddIcon from '@mui/icons-material/Add';
+import {
+  SearchBox
+} from '../../components/SearchBox';
 
 export const SearcherAndButton = ({
   placeholderInput, buttonText, inputWidth, onClick 
@@ -15,30 +17,10 @@ export const SearcherAndButton = ({
         padding: '16px',
       }}
     >
-      <FormControl
-        sx={{
-          width: inputWidth,
-        }}
-        variant='outlined'
-      >
-        <OutlinedInput
-          id='outlined-adornment-search'
-          size='small'
-          placeholder={placeholderInput}
-          endAdornment={
-            <InputAdornment
-              position='end'
-            >
-              <IconButton
-                aria-label='icon search'
-                edge='end'
-              >
-                {<SearchIcon />}
-              </IconButton>
-            </InputAdornment>
-          }
-        />
-      </FormControl>
+      <SearchBox
+        placeholderInput= {placeholderInput}
+        inputWidth= {inputWidth}
+      />
 
       <Button
         size='medium'

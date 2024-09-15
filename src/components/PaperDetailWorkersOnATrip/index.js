@@ -1,0 +1,3 @@
+export {
+  PaperDetailWorkersOnATrip 
+} from './PaperDetailWorkersOnATrip'

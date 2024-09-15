@@ -1,0 +1,3 @@
+export {
+  ModalReportResolved 
+} from './ModalReportResolved';

@@ -1,8 +1,8 @@
 import {
-  yupResolver 
+  yupResolver
 } from '@hookform/resolvers/yup';
 import {
-  Visibility, VisibilityOff 
+  Visibility, VisibilityOff
 } from '@mui/icons-material';
 import {
   Box,
@@ -18,41 +18,41 @@ import {
   Typography,
 } from '@mui/material';
 import {
-  useState 
+  useState
 } from 'react';
 import {
-  Controller, useForm 
+  Controller, useForm
 } from 'react-hook-form';
 import {
-  object, string 
+  object, string
 } from 'yup';
 
 import logo from '/src/assets/garbi-login.png';
 import {
-  useNavigate 
+  useNavigate
 } from 'react-router-dom';
 import {
-  jwtDecode 
+  jwtDecode
 } from 'jwt-decode';
 import {
-  useAuth 
+  useAuth
 } from '../../api/hooks/useAuth/useAuth';
 
 const userLoginSchema = object({
-  email: string().email()
+  personalEmail: string().email()
     .required(),
   password: string().max(16)
     .required(),
 }).required();
 
 export const LoginBox = ({
-  setIsFlipped 
+  setIsFlipped
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const {
     login: {
       login: login,
-      isLoginLoading 
+      isLoginLoading
     },
   } = useAuth();
   const navigate = useNavigate();
@@ -66,32 +66,30 @@ export const LoginBox = ({
     control,
     handleSubmit,
     formState: {
-      errors 
+      errors
     },
   } = useForm({
     defaultValues: {
-      email: 'string@admin.com',
-      password: 'admin1234',
+      personalEmail: 'lucas.ezequiel001@gmail.com',
+      password: '1234',
     },
     resolver: yupResolver(userLoginSchema),
   });
 
   const onSubmit = async (data) => {
     const response = await login({
-      email: data.email,
+      personalEmail: data.personalEmail,
       password: data.password,
     });
 
-    if (response.success) {
-      localStorage.setItem('token', response.token);
-      const user = jwtDecode(response.token).user;
-      localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('token', response.token);
+    const user = jwtDecode(response.token);
+    localStorage.setItem('user', JSON.stringify(user));
 
-      if (!response.termsAndConditions) {
-        setIsFlipped(true);
-      } else {
-        navigate('/home');
-      }
+    if (!response.termsAndConditions) {
+      setIsFlipped(true);
+    } else {
+      navigate('/home');
     }
   };
 
@@ -157,13 +155,13 @@ export const LoginBox = ({
               padding={1}
             >
               <Controller
-                name='email'
+                name='personalEmail'
                 control={control}
                 rules={{
                   required: true,
                 }}
                 render={({
-                  field 
+                  field
                 }) => (
                   <FormControl
                     fullWidth
@@ -176,13 +174,13 @@ export const LoginBox = ({
                       label='Email'
                       {...field}
                     />
-                    {errors.email && (
+                    {errors.personalEmail && (
                       <Typography
                         fontSize={'0.85rem'}
                         paddingLeft={1.5}
                         color={'red'}
                       >
-                        {errors.email.message}
+                        {errors.personalEmail.message}
                       </Typography>
                     )}
                   </FormControl>
@@ -195,7 +193,7 @@ export const LoginBox = ({
                   required: true,
                 }}
                 render={({
-                  field 
+                  field
                 }) => (
                   <FormControl
                     sx={{
