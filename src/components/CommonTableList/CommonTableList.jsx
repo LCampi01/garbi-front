@@ -29,8 +29,6 @@ export const CommonTableList = ({
     fetch: fetchData,
     mapper
   })
-  console.log('Data in CommonTableList:', data); // Log para verificar los datos
-
 
   return (
     <Box

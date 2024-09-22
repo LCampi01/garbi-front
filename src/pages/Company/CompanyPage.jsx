@@ -1,8 +1,11 @@
 import {
-  useCompanies 
+  useCallback 
+} from 'react';
+import {
+  useCompanies
 } from '../../api/hooks/useCompanies/useCompanies';
 import {
-  CommonTableList 
+  CommonTableList
 } from '../../components/CommonTableList/CommonTableList';
 import CompanyTable from './CompanyTable';
 
@@ -16,11 +19,15 @@ export const CompanyPage = () => {
     },
   } = useCompanies();
 
+  const getCompaniesCallback = useCallback((lastKey) => {
+    return getCompanies(lastKey)
+  }, [])
+
   return (
     <CommonTableList
       table={CompanyTable}
-      fetchData={getCompanies} 
-      isLoadingFetchData={isLoadingGetCompanies} 
+      fetchData={getCompaniesCallback}
+      isLoadingFetchData={isLoadingGetCompanies}
       mapper={mapper}
       datePicker={false}
     />
