@@ -124,7 +124,6 @@ export default function HomePage() {
     const filteredAreas = areas.filter(area =>
       areasCondition.every(condition => condition(area))
     )
-    console.log('🚀 ~ whenFiltersSubmit ~ filteredAreas:', filteredAreas)
 
     setAreasToRender(filteredAreas)
     setContainersToRender(filteredContainers)
@@ -146,7 +145,6 @@ export default function HomePage() {
       control={control}
       areas={areas}
     />}
-    handleSubmit={handleSubmit}
-    whenFiltersSubmit={whenFiltersSubmit}
+    handleSubmit={handleSubmit(whenFiltersSubmit)}
   />;
 }

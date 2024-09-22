@@ -3,7 +3,7 @@ import {
 } from 'react';
 
 export const usePagination = ({
-  fetch, mapper 
+  fetch, mapper
 }) => {
   const [data, setData] = useState([])
 
@@ -13,7 +13,8 @@ export const usePagination = ({
 
   useEffect(() => {
     asyncFetchData(actualKey);
-  }, []);
+    setSearchStack([]);
+  }, [fetch]);
 
   const asyncFetchData = async (key = null) => {
     try {

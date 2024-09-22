@@ -11,6 +11,7 @@ export const SelectForm = ({
   control,
   errors,
   options,
+  required = true,
   size = 'small',
   variant = 'outlined',
   shrink = true,
@@ -20,8 +21,9 @@ export const SelectForm = ({
       name={name}
       control={control}
       rules={{
-        required: true,
+        required
       }}
+      defaultValue={''} 
       render={({
         field 
       }) => (

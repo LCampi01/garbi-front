@@ -9,7 +9,7 @@ export default class QueryBuilder {
   // Método para agregar parámetros a la URI
   addParam(key, value) {
     if (value !== null && value !== undefined) {
-      this.params.set(key, value);
+      this.params.append(key, value);
     }
     return this;
   }

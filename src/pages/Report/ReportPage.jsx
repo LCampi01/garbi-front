@@ -1,8 +1,17 @@
 import {
-  useReports 
+  useEffect, useState 
+} from 'react';
+import {
+  useForm 
+} from 'react-hook-form';
+import {
+  useAreas 
+} from '../../api/hooks/useAreas/useAreas';
+import {
+  useReports
 } from '../../api/hooks/useReports/useReports';
 import {
-  CommonTableList 
+  CommonTableList
 } from '../../components/CommonTableList/CommonTableList';
 import {
   FilterSideComponent
@@ -11,10 +20,22 @@ import {
   HEIGHT_FULL_SCREEN
 } from '../../config';
 import {
-  ReportTable 
+  CommonFilters 
+} from '../../filters/CommonFilters';
+import {
+  reportsFiltersDeclaration 
+} from '../../filters/reportFilter';
+import {
+  useQueryParamFilters 
+} from '../../hooks/useQueryParamFilters';
+import {
+  ReportTable
 } from '../../tables/ReportTable/ReportTable';
 import {
-  TimestampUtil 
+  addSelectFilterIfApplies, SelectBoxFilter 
+} from '../../utils/filtersUtil.';
+import {
+  TimestampUtil
 } from '../../utils/timestampUtil';
 
 const mapper = (reports) => {
@@ -44,7 +65,10 @@ const mapper = (reports) => {
 }
 
 
+
 export const ReportPage = () => {
+
+  const [reportsFilters, setReportFilters] = useState(reportsFiltersDeclaration)
 
   const {
     fetchReports: {
@@ -53,15 +77,68 @@ export const ReportPage = () => {
     }
   } = useReports();
 
+  const {
+    getAreas: {
+      getAreas,
+      isLoadingGetAreas
+    }
+  } = useAreas()
+
+
+  // this useEffect is to retrieve areas from BE and complete filters
+  useEffect(() => {
+    const getAreasAndCompleteFilters = async () => {
+      const {
+        result: areas 
+      } = await getAreas()
+
+      const areasOptions = areas.map(area => ({
+        value: area.id,
+        label: area.name
+      }))
+
+      const completedReportFilters = [...reportsFilters]
+
+      completedReportFilters.push({
+        key: 'area',
+        name: 'Área',
+        values: areasOptions,
+        render: SelectBoxFilter,
+        addFilter: addSelectFilterIfApplies
+      })
+
+      setReportFilters(completedReportFilters)
+    }
+
+    getAreasAndCompleteFilters()
+  }, [])
+
+  const {
+    control,
+    handleSubmit
+  } = useForm();
+
+  const {
+    fetchDataWithFilters: fetchReportsWithFilters,
+    whenFiltersSubmit
+  } = useQueryParamFilters(reportsFilters, fetchReports)
 
   return <FilterSideComponent
     title={'Reportes'}
     height={HEIGHT_FULL_SCREEN}
+    renderFilters={
+      () => <CommonFilters
+        control={control}
+        filters={reportsFilters}
+      />
+    }
+    handleSubmit={handleSubmit(whenFiltersSubmit)}
+    isLoading = {isLoadingGetAreas} 
     component={
       () =>
         <CommonTableList
           table={ReportTable}
-          fetchData={fetchReports}
+          fetchData={fetchReportsWithFilters}
           isLoadingFetchData={isLoadingFetchReports}
           mapper={mapper}
           placeHolderInput={'Buscar por ID, Título o Contenedor'}
