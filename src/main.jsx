@@ -16,7 +16,9 @@ import {
 import Base from './common/base.jsx';
 import BaseWithHeader from './common/baseWithHeader.jsx';
 import AreaPage from './pages/Area/AreaPage.jsx';
-import CompanyPage from './pages/Company/CompanyPage.jsx';
+import {
+  CompanyPage 
+} from './pages/Company/CompanyPage.jsx';
 import {
   ContainerPage
 } from './pages/Containers/ContainerPage.jsx';

@@ -14,7 +14,7 @@ import {
 
 
 export const TableWithEditAndDeleteButtons = ({
-  tableHeaders, rows, handleOnClickEditButton, handleOnClickDeleteButton, renderRow 
+  tableHeaders, rows=[], handleOnClickEditButton, handleOnClickDeleteButton, renderRow 
 }) => {
   return (
     <>
