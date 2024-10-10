@@ -28,6 +28,12 @@ import {
 import {
   ProfileIconMenu 
 } from '../../components/ProfileIconMenu';
+import {
+  onMessage 
+} from 'firebase/messaging';
+import {
+  messaging 
+} from '../../firebase/firebaseConfig';
 
 const pages = {
   Mapa: '/inicio',
@@ -54,6 +60,10 @@ export const Header = ({
   const [anchorElProfile, setAnchorElProfile] = useState(null);
   const [anchorElManagement, setAnchorElManagement] = useState(null);
   const [currentTab, setCurrentTab] = useState('');
+
+  onMessage(messaging, (payload) => {
+    console.log('🚀 ~ onMessage ~ payload:', payload)
+  });
 
   useEffect(() => {
     const activePage = Object.keys(pages).find(key => pages[key] === location.pathname);

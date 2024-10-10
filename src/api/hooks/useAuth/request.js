@@ -15,7 +15,7 @@ export const useLogin = () => {
   });
 
   const login = ({
-    personalEmail, password 
+    personalEmail, password, token
   }) => {
     return commonFetch({
       uri: '/authenticate',
@@ -23,6 +23,7 @@ export const useLogin = () => {
       body: {
         personalEmail,
         password,
+        tokenFCM: token
       },
     });
   };
