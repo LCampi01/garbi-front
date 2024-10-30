@@ -71,9 +71,10 @@ export const ReportDetailStateFlow = ({
                         alignItems: 'center'
                       }}
                     >
-                      <Avatar>
-                        {u.user.fullName[0]}
-                      </Avatar>
+                      <Avatar
+                        alt={u.user.fullName || 'No asignado'}
+                        src={u.user.avatar || undefined}
+                      />
                     </Box>
                     <Box>
                       <Box
@@ -98,7 +99,7 @@ export const ReportDetailStateFlow = ({
                             lineHeight: '1.66rem'
                           }}
                         >
-                          {'- ' + u.date + ' - ' + u.time}
+                          {`\u00A0 - ${u.date} - ${u.time}`}
                         </Typography>
                       </Box>
                       <Box
@@ -139,7 +140,8 @@ export const ReportDetailStateFlow = ({
                     <Box
                       sx={{
                         display: 'flex',
-                        mt: '0.5rem'
+                        mt: '0.5rem',
+                        ml: '3rem'
                       }}
                     >
                       <Typography

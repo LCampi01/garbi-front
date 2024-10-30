@@ -30,7 +30,7 @@ export const ReportDetailsDescriptionContent = ({
 
           }}
         >
-          Descripcion:
+          Descripción:
         </Typography>
         <Typography
           sx={{
