@@ -43,7 +43,7 @@ export const RoutesTable = ({
             fontWeight: 400,
           }}
         >
-          No hay rutas disponibles para la fecha seleccionada
+          No hay rutas disponibles para la fecha seleccionada.
         </Typography>
       </Box>
     )
