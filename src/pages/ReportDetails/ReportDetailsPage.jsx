@@ -56,7 +56,7 @@ const statusHistoryMapper = (report) => {
       return {
         id: index,
         user: {
-          avatar: userImage,
+          avatar: userImage || userName,
           fullName: userName || 'Ciudadano',
         },
         from: statusEntry.status,

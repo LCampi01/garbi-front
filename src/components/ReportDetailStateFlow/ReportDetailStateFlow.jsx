@@ -72,7 +72,7 @@ export const ReportDetailStateFlow = ({
                       }}
                     >
                       <Avatar
-                        alt={u.user.fullName || 'No asignado'}
+                        alt={u.user.fullName}
                         src={u.user.avatar || undefined}
                       />
                     </Box>
