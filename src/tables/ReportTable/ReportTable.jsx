@@ -43,6 +43,27 @@ export const ReportTable = ({
     navigate(`/reportes/${id}`)
   }
 
+  if(reports.length == 0) {
+    return(
+      <Box
+        sx = {{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '30%',
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: '1.2rem',
+            fontWeight: 400,
+          }}
+        >
+          No se creó ningún reporte en el rango de fechas seleccionado
+        </Typography>
+      </Box>
+    )
+  }
   
   return (
     <Table

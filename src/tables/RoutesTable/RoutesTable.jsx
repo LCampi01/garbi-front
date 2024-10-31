@@ -33,11 +33,17 @@ export const RoutesTable = ({
         sx = {{
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          height: '30%',
         }}
       >
-        <Typography>
-          No hay rutas disponibles para la fecha seleccionada.
+        <Typography
+          sx={{
+            fontSize: '1.2rem',
+            fontWeight: 400,
+          }}
+        >
+          No hay rutas disponibles para la fecha seleccionada
         </Typography>
       </Box>
     )
