@@ -16,6 +16,7 @@ import {
   Paper,
   TextField,
   Typography,
+  Modal,
 } from '@mui/material';
 import {
   useEffect,
@@ -38,6 +39,9 @@ import {
 import {
   useAuth
 } from '../../api/hooks/useAuth/useAuth';
+import {
+  ChangePasswordBox 
+} from '../ChangePasswordBox';
 
 const userLoginSchema = object({
   personalEmail: string().email()
@@ -51,6 +55,7 @@ export const LoginBox = ({
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoginScreenLoading, setIsLoginScreenLoading] = useState(true);
+  const [openChangePasswordBox, setOpenChangePasswordBox] = useState(false);
 
   const {
     login: {
@@ -61,15 +66,16 @@ export const LoginBox = ({
   const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
+  const handleMouseDownPassword = (event) => event.preventDefault();
+
+  const handleForgotPassword = () => setOpenChangePasswordBox(true);
+  const handleCloseChangePasswordBox = () => setOpenChangePasswordBox(false);
 
   const {
     control,
     handleSubmit,
     formState: {
-      errors
+      errors 
     },
   } = useForm({
     defaultValues: {
@@ -97,8 +103,9 @@ export const LoginBox = ({
   };
 
   useEffect(() => {
-    if (localStorage.getItem('token') != null) {
-      const decodedToken = jwtDecode(localStorage.getItem('token'));
+    const token = localStorage.getItem('token');
+    if (token) {
+      const decodedToken = jwtDecode(token);
       const currentTime = Date.now() / 1000;
 
       if (decodedToken.exp > currentTime) {
@@ -107,7 +114,7 @@ export const LoginBox = ({
     }
     
     setIsLoginScreenLoading(false);
-  }, [])
+  }, []);
 
   if (isLoginScreenLoading) {
     return (
@@ -121,7 +128,7 @@ export const LoginBox = ({
       >
         <CircularProgress />
       </Box>
-    )
+    );
   }
 
   return (
@@ -147,6 +154,7 @@ export const LoginBox = ({
       >
         <img
           src={logo}
+          alt='Logo'
           style={{
             borderTopLeftRadius: '1rem',
             borderBottomLeftRadius: '1rem',
@@ -188,16 +196,13 @@ export const LoginBox = ({
               <Controller
                 name='personalEmail'
                 control={control}
-                rules={{
-                  required: true,
-                }}
                 render={({
-                  field
+                  field 
                 }) => (
                   <FormControl
                     fullWidth
                     sx={{
-                      minHeight: '80px',
+                      minHeight: '80px' 
                     }}
                   >
                     <TextField
@@ -220,17 +225,14 @@ export const LoginBox = ({
               <Controller
                 name='password'
                 control={control}
-                rules={{
-                  required: true,
-                }}
                 render={({
-                  field
+                  field 
                 }) => (
                   <FormControl
-                    sx={{
-                      minHeight: '80px',
-                    }}
                     fullWidth
+                    sx={{
+                      minHeight: '80px' 
+                    }}
                   >
                     <InputLabel
                       htmlFor='outlined-adornment-password'
@@ -274,11 +276,11 @@ export const LoginBox = ({
                   color: 'white',
                   marginTop: 0.1,
                   '&:hover': {
-                    backgroundColor: '#0a2e1f', // Color verde oscuro al hacer hover
+                    backgroundColor: '#0a2e1f',
                   },
                   '&.Mui-disabled': {
-                    backgroundColor: '#12422C', // Mantener el mismo fondo
-                    color: 'gray', // Cambiar el color del texto a gris cuando está deshabilitado
+                    backgroundColor: '#12422C',
+                    color: 'gray',
                   },
                 }}
                 fullWidth
@@ -289,18 +291,25 @@ export const LoginBox = ({
                   size={24}
                   color='inherit'
                 /> : 'INGRESAR'}
-
               </Button>
               <Typography
+                onClick={handleForgotPassword}
                 sx={{
                   textDecoration: 'underline',
                   color: '#2196F3',
                   fontSize: '.875rem',
                   marginTop: '1rem',
+                  cursor: 'pointer',
                 }}
               >
                 ¿Olvidaste tu contraseña?
               </Typography>
+              <Modal
+                open={openChangePasswordBox}
+                onClose={handleCloseChangePasswordBox}
+              >
+                <ChangePasswordBox />
+              </Modal>
             </Box>
           </form>
         </Box>

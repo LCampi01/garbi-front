@@ -1,8 +1,10 @@
 import {
-  FormControl, TextField, Typography 
+  FormControl,
+  TextField,
+  Typography
 } from '@mui/material';
 import {
-  Controller 
+  Controller
 } from 'react-hook-form';
 
 export const InputForm = ({
@@ -19,7 +21,9 @@ export const InputForm = ({
   multiline = false,
   rows = 1,
   required = true,
-  fullWidth=true
+  fullWidth = true,
+  type = 'text', 
+  InputProps 
 }) => {
   return (
     <Controller
@@ -41,19 +45,14 @@ export const InputForm = ({
             size={size}
             fullWidth
             label={label}
+            type={type} 
             {...field}
             helperText={helperText}
             disabled={disabled}
             multiline={multiline}
             rows={rows}
             placeholder={placeholder}
-            sx={{
-              ...styleInput,
-              '& .MuiInputBase-input:-webkit-autofill': { //added this to prevent weird look when the browser autofills the field
-                'webkitBoxShadow': '0 0 0 1000px white inset',
-                'webkitTextFillColor': 'black',
-              }
-            }}
+            InputProps={InputProps}
           />
           {errors && errors[name] && (
             <Typography
