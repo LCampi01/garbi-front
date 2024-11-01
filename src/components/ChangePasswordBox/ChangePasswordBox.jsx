@@ -182,12 +182,13 @@ export const ChangePasswordBox = () => {
         minHeight: '100vh',
         backgroundColor: '#f0f2f5',
       }}
-    >      <ModalTermsAndConditions
-      title={'Términos y Condiciones'}
-      description={termsAndConditionsText}
-      open={openTermsModal}
-      handleClose={handleCloseTermsModal}
-      setCheckboxChecked={setCheckboxChecked}
+    >
+      <ModalTermsAndConditions
+        title={'Términos y Condiciones'}
+        description={termsAndConditionsText}
+        open={openTermsModal}
+        handleClose={handleCloseTermsModal}
+        setCheckboxChecked={setCheckboxChecked}
       />
       <Paper
         sx={{
@@ -326,6 +327,7 @@ export const ChangePasswordBox = () => {
                     >
                       <InputLabel
                         color='secondary'
+                        autocomplete='off'
                         sx={{
                           color: 'white',
                         }}
@@ -340,6 +342,7 @@ export const ChangePasswordBox = () => {
                         error={!!errors.password}
                         color='secondary'
                         inputProps={{
+                          autoComplete: 'off', // Desactiva el autocompletado del navegador
                           sx: {
                             color: 'white',
                           },
@@ -357,6 +360,7 @@ export const ChangePasswordBox = () => {
                           },
                         }}
                       />
+
                       {errors.email && (
                         <Typography
                           fontSize={'0.85rem'}
