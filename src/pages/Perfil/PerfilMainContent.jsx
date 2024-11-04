@@ -13,9 +13,7 @@ import {
 import {
   ModalChangePassword 
 } from '../../modales/ModalChangePassword/ModalChangePassword';
-import {
-  ChangePasswordForm 
-} from '../../forms/ChangePasswordForm/ChangePasswordForm';
+
 
 export default function PerfilMainContent() {
   const {
@@ -36,6 +34,7 @@ export default function PerfilMainContent() {
   const [userCompanyEmail, setUserCompanyEmail] = useState('');
   const [userCompanyPhone, setUserCompanyPhone] = useState('');
   const [passwordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [userPersonalEmail, setUserPersonalEmail] = useState('');
 
   const handlePasswordChange = () => {
     setIsPasswordModalOpen(false); 
@@ -51,6 +50,8 @@ export default function PerfilMainContent() {
           setUserWorkingShift(fetchedEmployee.workingShift);
           setUserCompanyEmail(fetchedEmployee.companyEmail);
           setUserCompanyPhone(fetchedEmployee.companyPhone);
+          setUserPersonalEmail(fetchedEmployee.personalEmail);
+
         }
       } catch (error) {
         console.error('Error al obtener la información del empleado:', error);
@@ -285,11 +286,8 @@ export default function PerfilMainContent() {
         title='Cambiar contraseña'
         description='Cambie aquí la contraseña'
         open={passwordModalOpen}
-        handleClose={() => setIsPasswordModalOpen(false)}
-        form={<ChangePasswordForm
-          handleClose={handlePasswordChange}
-          onSuccess={handlePasswordChange}
-        />}
+        handleClose={handlePasswordChange}
+        emailProp={userPersonalEmail}
       />
     </Box>
   );
