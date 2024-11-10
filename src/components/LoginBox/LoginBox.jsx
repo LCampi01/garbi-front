@@ -38,6 +38,12 @@ import {
 import {
   useAuth
 } from '../../api/hooks/useAuth/useAuth';
+import {
+  messaging 
+} from '../../firebase/firebaseConfig';
+import {
+  getToken 
+} from 'firebase/messaging';
 
 const userLoginSchema = object({
   personalEmail: string().email()
@@ -45,6 +51,10 @@ const userLoginSchema = object({
   password: string().max(16)
     .required(),
 }).required();
+
+const {
+  VITE_APP_VAPID_KEY 
+} = import.meta.env;
 
 export const LoginBox = ({
   setIsFlipped
@@ -80,9 +90,19 @@ export const LoginBox = ({
   });
 
   const onSubmit = async (data) => {
+
+    console.log('🚀 ~ onSubmit ~ messaging:', messaging);
+
+    const permission = await Notification.requestPermission();
+
+    const token = await getToken(messaging, {
+      vapidKey: VITE_APP_VAPID_KEY,
+    });
+
     const response = await login({
       personalEmail: data.personalEmail,
       password: data.password,
+      token
     });
 
     localStorage.setItem('token', response.token);
@@ -94,7 +114,8 @@ export const LoginBox = ({
     } else {
       navigate('/inicio');
     }
-  };
+  }
+
 
   useEffect(() => {
     if (localStorage.getItem('token') != null) {
@@ -307,4 +328,4 @@ export const LoginBox = ({
       </Box>
     </Paper>
   );
-};
+}
