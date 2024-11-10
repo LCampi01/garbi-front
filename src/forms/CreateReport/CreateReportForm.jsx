@@ -599,7 +599,7 @@ function Marker({
             >
               {point.address.street + ' ' + point.address.number}
             </Typography>
-            <Typography //TODO: update id here to receive the 6 numbers one
+            <Typography
               sx={{
                 fontSize: '12px',
                 fontWeight: 400,
