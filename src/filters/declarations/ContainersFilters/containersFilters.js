@@ -61,7 +61,7 @@ export const ContainersFiltersDeclaration = [
   },
   {
     key: 'nivel_de_bateria',
-    name: 'Nivel de bateria',
+    name: 'Nivel de batería',
     maxLabel: 'Máximo %',
     minLabel: 'Mínimo %',
     maxName: 'batteryMax',

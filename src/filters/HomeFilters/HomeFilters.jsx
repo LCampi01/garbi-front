@@ -45,7 +45,7 @@ export const HomeFilters = ({
       </Box>
       <Box
         sx={{
-          mt: '2rem'
+          mt: '1rem'
         }}
       >
         <Box>
