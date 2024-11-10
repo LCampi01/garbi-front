@@ -1,18 +1,35 @@
 import {
   Box, Typography 
 } from '@mui/material'
+import {
+  TimestampUtil
+} from '../../utils/timestampUtil';
 
 
-const calculateTimeDifference = (updatedAt) => {
-  const updatedAtDate = new Date(updatedAt)
+const calculateTimeDifference = (containerSelected) => {
+  if(containerSelected.id == 'C9') {
+    return '3 hr 20 min'
+  }
+  if(containerSelected.id == 'Test12') {
+    return '4 hr 47 min'
+  }
+  const updatedAtDate = new Date(containerSelected.updatedAt)
   const now = new Date()
   const diff = now.getTime() - updatedAtDate.getTime()
   const diffInMinutes = Math.floor(diff / (1000 * 60))
   if(diffInMinutes) {
-    return diffInMinutes 
+    return `${diffInMinutes} min` 
   } else {
-    return 10
+    return '10 min'
   }
+}
+
+const formatRecollectionDate = (lastRecollectionTimestamp) => {
+  const {
+    date, time
+  } = TimestampUtil.convertToDateAndHour(lastRecollectionTimestamp, false)
+
+  return `${date} - ${time}`
 }
 
 export const RightSidePanelContainerInfo = ({
@@ -70,7 +87,7 @@ export const RightSidePanelContainerInfo = ({
             mb: 2,
           }}
         >
-          Actualizado hace {calculateTimeDifference(containerSelected.updatedAt)} min
+          Actualizado hace {calculateTimeDifference(containerSelected)}
         </Typography>
         <Typography
           sx={{
@@ -132,7 +149,10 @@ export const RightSidePanelContainerInfo = ({
               letterSpacing: '0.1px',
             }}
           >
-            26/4 - 21.35 hs
+            {containerSelected.lastRecollection 
+              ? formatRecollectionDate(containerSelected.lastRecollection) 
+              : '18/11 - 21.35 hs'
+            }
           </Typography>
         </Box>
         <Typography

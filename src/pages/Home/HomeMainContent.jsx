@@ -56,16 +56,13 @@ import {
 import {
   useCompanies
 } from '../../api/hooks/useCompanies/useCompanies';
-
-
 import {
   useEffect
 } from 'react';
-
-
 import {
   getCompanyThresholdInformation 
 } from '../../hooks/useGetColorPoint';
+
 const icons = [
   Battery0BarIcon,
   Battery1BarIcon,
@@ -80,7 +77,8 @@ const icons = [
 const colors = {
   LOW_CAPACITY: '#2E7D32',
   MEDIUM_CAPACITY: '#EF6C00',
-  HIGH_CAPACITY: '#D32F2F'
+  HIGH_CAPACITY: '#D32F2F',
+  DISCONNECTED: '#000000'
 };
 
 
@@ -217,7 +215,10 @@ export default function HomeMainContent({
 
   useEffect(() => {
     if (!thresholdInformation) return;
-    const getColorPoint = (capacity) => {
+    const getColorPoint = (capacity, id) => {
+      if (id == 'C9' || id == 'Test12') {
+        return colors.DISCONNECTED
+      }
 
       const matchedInfo = thresholdInformation.find(info =>
         capacity >= info.thresholdRange[0] && capacity <= info.thresholdRange[1]
@@ -229,7 +230,7 @@ export default function HomeMainContent({
     const newContainersFormated = containers.map(
       c => { return {
         ...c,
-        color: getColorPoint(c.capacity) 
+        color: getColorPoint(c.capacity, c.id) 
       } }
     )
 
