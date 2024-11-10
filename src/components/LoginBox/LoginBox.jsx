@@ -39,10 +39,10 @@ import {
   useAuth
 } from '../../api/hooks/useAuth/useAuth';
 import {
-  messaging 
+  messaging
 } from '../../firebase/firebaseConfig';
 import {
-  getToken 
+  getToken
 } from 'firebase/messaging';
 
 const userLoginSchema = object({
@@ -53,7 +53,7 @@ const userLoginSchema = object({
 }).required();
 
 const {
-  VITE_APP_VAPID_KEY 
+  VITE_APP_VAPID_KEY
 } = import.meta.env;
 
 export const LoginBox = ({
@@ -61,6 +61,7 @@ export const LoginBox = ({
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoginScreenLoading, setIsLoginScreenLoading] = useState(true);
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
 
   const {
     login: {
@@ -90,31 +91,44 @@ export const LoginBox = ({
   });
 
   const onSubmit = async (data) => {
+    setIsSubmitLoading(true);
 
-    console.log('🚀 ~ onSubmit ~ messaging:', messaging);
+    try {
+      // const serviceWorkerRegistration = await getOrRegisterServiceWorker();
 
-    const permission = await Notification.requestPermission();
+      await Notification.requestPermission();
 
-    const token = await getToken(messaging, {
-      vapidKey: VITE_APP_VAPID_KEY,
-    });
+      const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js')
 
-    const response = await login({
-      personalEmail: data.personalEmail,
-      password: data.password,
-      token
-    });
+      await navigator.serviceWorker.ready
 
-    localStorage.setItem('token', response.token);
-    const user = jwtDecode(response.token);
-    localStorage.setItem('user', JSON.stringify(user));
+      const token = await getToken(messaging, {
+        serviceWorkerRegistration: registration,
+        vapidKey: VITE_APP_VAPID_KEY,
+      });
 
-    if (!response.termsAndConditions) {
-      setIsFlipped(true);
-    } else {
-      navigate('/inicio');
+      const response = await login({
+        personalEmail: data.personalEmail,
+        password: data.password,
+        token,
+      });
+
+      localStorage.setItem('token', response.token);
+      const user = jwtDecode(response.token);
+      localStorage.setItem('user', JSON.stringify(user));
+
+      setIsSubmitLoading(false);
+
+      if (!response.termsAndConditions) {
+        setIsFlipped(true);
+      } else {
+        navigate('/inicio');
+      }
+    } catch (error) {
+      console.error('Error en onSubmit:', error);
+      setIsSubmitLoading(false);
     }
-  }
+  };
 
 
   useEffect(() => {
@@ -126,7 +140,7 @@ export const LoginBox = ({
         navigate('/inicio');
       }
     }
-    
+
     setIsLoginScreenLoading(false);
   }, [])
 
@@ -306,7 +320,7 @@ export const LoginBox = ({
                 type='submit'
                 disabled={isLoginLoading}
               >
-                {isLoginLoading ? <CircularProgress
+                {isLoginLoading || isSubmitLoading ? <CircularProgress
                   size={24}
                   color='inherit'
                 /> : 'INGRESAR'}

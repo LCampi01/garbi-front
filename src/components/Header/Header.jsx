@@ -11,50 +11,50 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import {
-  ExpandMore 
+  ExpandMore
 } from '@mui/icons-material';
 import {
-  useState, useEffect 
+  useState, useEffect
 } from 'react';
 import garbiLogo from '/src/assets/garbi-navbar.png';
 import {
-  useNavigate, useLocation 
+  useNavigate, useLocation
 } from 'react-router-dom';
 import {
-  ProfileIconMenu 
+  ProfileIconMenu
 } from '../../components/ProfileIconMenu';
 import {
-  Notificactions 
+  Notificactions
 } from '../Notifications';
-import{
-  onMessage 
+import {
+  onMessage
 } from 'firebase/messaging';
 import {
-  messaging 
+  messaging
 } from '../../firebase/firebaseConfig';
 
 const pages = {
   Mapa: '/inicio',
   Estadísticas: '/estadisticas',
-  Recomendaciones: '/recomendaciones',  
+  Recomendaciones: '/recomendaciones',
   Reportes: '/reportes',
 };
 
 const managementItems = {
   Empleados: '/empleados',
-  Contenedores: '/contenedores',  
-  Recorridos: '/recorridos',  
+  Contenedores: '/contenedores',
+  Recorridos: '/recorridos',
   Áreas: '/areas',
 };
 
 export const Header = ({
-  logoOnly = false 
-}) => {  
+  logoOnly = false
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const [anchorElNav, setAnchorElNav] = useState(null);
-  
+
   const [anchorElProfile, setAnchorElProfile] = useState(null);
   const [anchorElManagement, setAnchorElManagement] = useState(null);
   const [currentTab, setCurrentTab] = useState('');
@@ -86,7 +86,7 @@ export const Header = ({
     setAnchorElNav(null);
   };
 
-  
+
 
   const handleCloseProfileMenu = () => {
     setAnchorElProfile(null);
@@ -116,7 +116,7 @@ export const Header = ({
       e.preventDefault() //previene el autoscroll para que funcione el abrir páginas en nuevas tabs.
     }
   }
-  
+
   const handleClickManagementItem = (path) => (event) => {
     if (event.type === 'auxclick' && event.button === 1) { //Middle-click
       window.open(path, '_blank');
@@ -134,7 +134,7 @@ export const Header = ({
       onMouseDown={handleHeaderMouseDown}
       sx={{
         background: '#12422c',
-        zIndex: 1100 
+        zIndex: 1100
       }}
     >
       <Container
@@ -151,16 +151,16 @@ export const Header = ({
           sx={{
             background: '#12422c',
             width: '100%',
-            pr: '32px' 
+            pr: '32px'
           }}
         >
           <AdbIcon
             sx={{
               display: {
-                xs: 'none' 
+                xs: 'none'
               },
               mr: 1,
-              backgroundColor: '#12422c' 
+              backgroundColor: '#12422c'
             }}
           />
           {logoOnly ? (
@@ -169,7 +169,7 @@ export const Header = ({
               sx={{
                 display: 'flex',
                 justifyContent: 'center',
-                alignItems: 'center' 
+                alignItems: 'center'
               }}
             >
               <Box
@@ -178,7 +178,7 @@ export const Header = ({
                   display: 'flex',
                   alignItems: 'center',
                   cursor: 'pointer',
-                  border: 'none' 
+                  border: 'none'
                 }}
                 component={'button'}
                 onClick={() => navigate('/inicio')}
@@ -193,7 +193,7 @@ export const Header = ({
             <Box
               sx={{
                 display: 'flex',
-                width: '100%' 
+                width: '100%'
               }}
             >
               <Box
@@ -201,7 +201,7 @@ export const Header = ({
                 sx={{
                   display: 'flex',
                   justifyContent: 'center',
-                  alignItems: 'center' 
+                  alignItems: 'center'
                 }}
               >
                 <Box
@@ -210,7 +210,7 @@ export const Header = ({
                     display: 'flex',
                     alignItems: 'center',
                     cursor: 'pointer',
-                    border: 'none' 
+                    border: 'none'
                   }}
                   component={'button'}
                   onClick={() => navigate('/inicio')}
@@ -232,9 +232,9 @@ export const Header = ({
                   flexGrow: 1,
                   display: {
                     xs: 'flex',
-                    md: 'none' 
+                    md: 'none'
                   },
-                  backgroundColor: '#12422c' 
+                  backgroundColor: '#12422c'
                 }}
               >
                 <IconButton
@@ -252,21 +252,21 @@ export const Header = ({
                   anchorEl={anchorElNav}
                   anchorOrigin={{
                     vertical: 'bottom',
-                    horizontal: 'left' 
+                    horizontal: 'left'
                   }}
                   keepMounted
                   transformOrigin={{
                     vertical: 'top',
-                    horizontal: 'left' 
+                    horizontal: 'left'
                   }}
                   open={Boolean(anchorElNav)}
                   onClose={handleCloseNavMenu}
                   sx={{
                     display: {
                       xs: 'block',
-                      md: 'none' 
+                      md: 'none'
                     },
-                    backgroundColor: '#12422c' 
+                    backgroundColor: '#12422c'
                   }}
                 >
                   {Object.keys(pages).map((page) => (
@@ -282,33 +282,33 @@ export const Header = ({
                   ))}
                 </Menu>
               </Box>
-              
+
               <AdbIcon
                 sx={{
                   display: {
                     xs: 'flex',
-                    md: 'none' 
+                    md: 'none'
                   },
                   backgroundColor: '#12422c',
-                  mr: 1 
+                  mr: 1
                 }}
               />
               <Box
                 sx={{
                   display: 'flex',
                   flexGrow: 1,
-                  justifyContent: 'space-between' 
+                  justifyContent: 'space-between'
                 }}
               >
                 <Box
                   sx={{
                     display: {
                       xs: 'none',
-                      md: 'flex' 
+                      md: 'flex'
                     },
                     backgroundColor: '#12422c',
                     gap: {
-                      md: '16px' 
+                      md: '16px'
                     },
                   }}
                 >
@@ -329,7 +329,7 @@ export const Header = ({
                       {page}
                     </Button>
                   ))}
-                          
+
                   <Button
                     onClick={handleOpenManagementMenu}
                     sx={{
@@ -344,24 +344,24 @@ export const Header = ({
                     Gestión
                     <ExpandMore
                       sx={{
-                        color: 'white' 
+                        color: 'white'
                       }}
                     />
                   </Button>
                   <Menu
                     sx={{
-                      mt: '44px' 
+                      mt: '44px'
                     }}
                     id='menu-appbar'
                     anchorEl={anchorElManagement}
                     anchorOrigin={{
                       vertical: 'top',
-                      horizontal: 'left' 
+                      horizontal: 'left'
                     }}
                     keepMounted
                     transformOrigin={{
                       vertical: 'top',
-                      horizontal: 'left' 
+                      horizontal: 'left'
                     }}
                     open={Boolean(anchorElManagement)}
                     onClose={handleCloseManagementMenu}
@@ -382,7 +382,7 @@ export const Header = ({
                 <Box
                   sx={{
                     display: 'flex',
-                    gap: '16px' 
+                    gap: '16px'
                   }}
                 >
                   <Notificactions />
@@ -392,7 +392,7 @@ export const Header = ({
                     >
                       <PersonIcon
                         sx={{
-                          color: 'white' 
+                          color: 'white'
                         }}
                       />
                     </IconButton>
