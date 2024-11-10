@@ -46,7 +46,7 @@ import {
   useAreas
 } from '../../api/hooks/useAreas/useAreas';
 import {
-  FeedbackSnackbar 
+  FeedbackSnackbar
 } from '../../components/FeedbackSnackbar';
 
 const slideIn = keyframes`
@@ -94,10 +94,10 @@ const areCoordinatesEqual = (arr1, arr2) => {
 
   const sortCoordinates = (arr) => {
     return arr.map(({
-      lat, lng 
+      lat, lng
     }) => ({
       lat,
-      lng 
+      lng
     }))
       .sort((a, b) => a.lat - b.lat || a.lng - b.lng);
   };
@@ -345,11 +345,10 @@ const AreaPage = () => {
   }
 
   if (isLoadingGetAreas) {
-    return <div>
+    return <Box>
       <Backdrop
         sx={(theme) => ({
           color: '#fff',
-          zIndex: theme.zIndex.drawer + 1
         })}
         open={isLoadingGetAreas}
       >
@@ -357,7 +356,7 @@ const AreaPage = () => {
           color='inherit'
         />
       </Backdrop>
-    </div>
+    </Box>
   }
 
   return (
@@ -542,58 +541,36 @@ const AreaPage = () => {
               gap: '32px',
             }}
           >
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '16px',
-              }}
-            >
+            {areas.map((area, index) => (
               <Box
+                key={index}
                 sx={{
-                  width: '16px',
-                  height: '16px',
-                  backgroundColor: 'red',
-                  borderRadius: '50%',
-                }}
-              />
-              <Typography
-                sx={{
-                  color: '#000',
-                  fontSize: '16px',
-                  fontWeight: 500,
-                  lineHeight: '24px' /* 150% */,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '16px',
+                  marginBottom: '8px', // Opcional para dar espacio entre elementos
                 }}
               >
-                Área 1
-              </Typography>
-            </Box>
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '16px',
-              }}
-            >
-              <Box
-                sx={{
-                  width: '16px',
-                  height: '16px',
-                  backgroundColor: 'green',
-                  borderRadius: '50%',
-                }}
-              />
-              <Typography
-                sx={{
-                  color: '#000',
-                  fontSize: '16px',
-                  fontWeight: 500,
-                  lineHeight: '24px' /* 150% */,
-                }}
-              >
-                Área 2
-              </Typography>
-            </Box>
+                <Box
+                  sx={{
+                    width: '16px',
+                    height: '16px',
+                    backgroundColor: area.color,
+                    borderRadius: '50%',
+                  }}
+                />
+                <Typography
+                  sx={{
+                    color: '#000',
+                    fontSize: '16px',
+                    fontWeight: 500,
+                    lineHeight: '24px' /* 150% */,
+                  }}
+                >
+                  {area.name}
+                </Typography>
+              </Box>
+            ))}
           </Paper>
         </Box>
       </Box>

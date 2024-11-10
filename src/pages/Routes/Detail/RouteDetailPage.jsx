@@ -153,7 +153,6 @@ export const RouteDetailPage = () => {
     const asyncFetchRoute = async () => {
       try {
         const routeReponse = await fetchRoute(id)
-        console.log('🚀 ~ asyncFetchRoute ~ routeReponse:', routeReponse)
 
         const routeDetailsMapped = routeDetailsMapper(routeReponse)
         setRouteDetails(routeDetailsMapped)
