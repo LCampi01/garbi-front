@@ -172,7 +172,7 @@ const tableHeaders = [
     align: 'center'
   },
   {
-    value: 'Bateria',
+    value: 'Batería',
     minWidth: 104,
     align: 'center'
   },
