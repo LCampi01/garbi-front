@@ -149,10 +149,7 @@ export const RightSidePanelContainerInfo = ({
               letterSpacing: '0.1px',
             }}
           >
-            {containerSelected.lastRecollection 
-              ? formatRecollectionDate(containerSelected.lastRecollection) 
-              : '18/11 - 21.35 hs'
-            }
+            {containerSelected.lastRecollection && formatRecollectionDate(containerSelected.lastRecollection) || '18/11 - 21.35 hs'}
           </Typography>
         </Box>
         <Typography
