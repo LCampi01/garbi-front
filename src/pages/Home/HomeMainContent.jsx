@@ -378,7 +378,7 @@ export default function HomeMainContent({
           position: 'fixed',
           bottom: 0,
           left: '50%',
-          transform: 'translateX(-50%)',
+          transform: 'translateX(-30%)',
           zIndex: 1,
         }}
       >
