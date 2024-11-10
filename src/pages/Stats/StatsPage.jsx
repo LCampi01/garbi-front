@@ -194,8 +194,6 @@ export const StatsPage = () => {
       open={conditionToShowBackDrop}
       sx={{
         color: '#fff',
-        zIndex: (theme) => theme.zIndex.drawer + 1,
-        position: 'absolute',
       }}
     >
       <CircularProgress
