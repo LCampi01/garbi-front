@@ -1,7 +1,7 @@
 
 export class TimestampUtil {
 
-  static convertToDateAndHour(timestamp) {
+  static convertToDateAndHour(timestamp, showYear = true) {
     const date = new Date(timestamp);
 
     date.setHours(date.getHours() + 3) //to transform to Argentina time
@@ -9,7 +9,7 @@ export class TimestampUtil {
     const formattedDate = date.toLocaleDateString('es-ES', {
       day: '2-digit',
       month: '2-digit',
-      year: '2-digit'
+      year: showYear ? '2-digit' : undefined
     });
 
     const formattedTime = date.toLocaleTimeString('es-ES', {

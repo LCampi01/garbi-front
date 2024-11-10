@@ -6,7 +6,8 @@ import {
 const colors = {
   LOW_CAPACITY: '#2E7D32',
   MEDIUM_CAPACITY: '#EF6C00',
-  HIGH_CAPACITY: '#D32F2F'
+  HIGH_CAPACITY: '#D32F2F',
+  DISCONNECTED: '#000000'
 };
   
 
@@ -39,6 +40,11 @@ export function getCompanyThresholdInformation(threshold) {
       color: colors.HIGH_CAPACITY,
       valor: '+' + threshold.full + '%',
       thresholdRange: [threshold.full, 100]
+    },
+    {
+      color: colors.DISCONNECTED,
+      valor: 'Desconectado',
+      thresholdRange: [101, 102]
     }
   ];
 }
