@@ -1,5 +1,4 @@
 import AppBar from '@mui/material/AppBar';
-import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -18,16 +17,15 @@ import {
   useState, useEffect 
 } from 'react';
 import garbiLogo from '/src/assets/garbi-navbar.png';
-import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import {
   useNavigate, useLocation 
 } from 'react-router-dom';
 import {
-  NotificationsMenu 
-} from '../../components/NotificationsMenu';
-import {
   ProfileIconMenu 
 } from '../../components/ProfileIconMenu';
+import {
+  Notificactions 
+} from '../Notifications';
 
 const pages = {
   Mapa: '/inicio',
@@ -50,7 +48,7 @@ export const Header = ({
   const location = useLocation();
 
   const [anchorElNav, setAnchorElNav] = useState(null);
-  const [anchorElNotifications, setAnchorElNotifications] = useState(null);
+  
   const [anchorElProfile, setAnchorElProfile] = useState(null);
   const [anchorElManagement, setAnchorElManagement] = useState(null);
   const [currentTab, setCurrentTab] = useState('');
@@ -70,10 +68,6 @@ export const Header = ({
     setAnchorElNav(event.currentTarget);
   };
 
-  const handleOpenNotificationsMenu = (event) => {
-    setAnchorElNotifications(event.currentTarget);
-  };
-
   const handleOpenProfileMenu = (event) => {
     setAnchorElProfile(event.currentTarget);
   };
@@ -82,9 +76,7 @@ export const Header = ({
     setAnchorElNav(null);
   };
 
-  const handleCloseNotificationsMenu = () => {
-    setAnchorElNotifications(null);
-  };
+  
 
   const handleCloseProfileMenu = () => {
     setAnchorElProfile(null);
@@ -124,39 +116,7 @@ export const Header = ({
       setCurrentTab('Gestión');
     }
   };
-  
 
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      type: 'frequencyChange',
-      title: 'Cambio de frecuencia',
-      description: 'Reduce la frecuencia en Área 2' 
-    },
-    {
-      id: 2,
-      type: 'newReport',
-      title: 'Nuevo reporte',
-      description: 'Contenedor desbordado' 
-    },
-    {
-      id: 3,
-      type: 'lowBattery',
-      title: 'Batería baja',
-      description: 'El contenedor #123456 tiene menos de 20% de batería' 
-    },
-    {
-      id: 4,
-      type: 'fullContainers',
-      title: 'Contenedores llenos',
-      description: 'El 60% de los contenedores en zona 1 están llenos',
-      details: 'VER DETALLES' 
-    },
-  ]);
-
-  const handleRemoveNotification = (id) => {
-    setNotifications(prevNotifications => prevNotifications.filter(notification => notification.id !== id));
-  };
 
 
   return (
@@ -415,34 +375,7 @@ export const Header = ({
                     gap: '16px' 
                   }}
                 >
-                  <Box>
-                    <IconButton
-                      onClick={handleOpenNotificationsMenu}
-                    >
-                      <Badge 
-                        badgeContent={notifications.length}
-                        color='error'
-                        sx={{
-                          '& .MuiBadge-badge': {
-                            right: 4,
-                            top: 4,
-                          },
-                        }}
-                      >
-                        <NotificationsOutlinedIcon
-                          sx={{
-                            color: 'white' 
-                          }}
-                        />
-                      </Badge>
-                    </IconButton>
-                    <NotificationsMenu
-                      handleClose={handleCloseNotificationsMenu}
-                      notifications={notifications}
-                      anchorEl={anchorElNotifications}
-                      onRemoveNotification={handleRemoveNotification}
-                    />
-                  </Box>
+                  <Notificactions />
                   <Box>
                     <IconButton
                       onClick={handleOpenProfileMenu}
