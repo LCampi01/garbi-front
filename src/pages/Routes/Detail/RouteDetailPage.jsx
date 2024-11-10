@@ -7,9 +7,8 @@ import {
 import {
   useEffect, useState
 } from 'react'
-import {
-  responseExample
-} from './response-example';
+
+
 import {
   BreadcrumbsComponent
 } from '../../../components/BreadcrumbsComponent/BreadcrumbsComponent';
@@ -17,23 +16,26 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import {
-  PaperDetailRoute 
+  PaperDetailRoute
 } from '../../../components/PaperDetailRoute';
 import {
-  PaperDetailWorkersOnATrip 
+  PaperDetailWorkersOnATrip
 } from '../../../components/PaperDetailWorkersOnATrip';
 import {
-  HEIGHT_HEADER 
+  HEIGHT_HEADER
 } from '../../../config';
 import {
-  useParams 
+  useParams
 } from 'react-router-dom';
 import {
-  useRoutes 
+  useRoutes
 } from '../../../api/hooks/useRoutes/useRoutes';
 import {
   TimestampUtil
 } from '../../../utils/timestampUtil';
+import {
+  decodePolyline 
+} from '../../../utils/decodePolyline';
 
 
 const routeDetailsMapper = (route) => {
@@ -50,7 +52,7 @@ const routeDetailsMapper = (route) => {
 
   const startedTimestamp = startedStatus?.timestamp;
   const {
-    time: startedTime 
+    time: startedTime
   } = TimestampUtil.convertToDateAndHour(startedTimestamp);
   if (startedTimestamp) { // recorrido empezado. Si no estuviera empezado, queda Pendiente.
     startTime = `Inicio: ${startedTime}`;
@@ -59,7 +61,7 @@ const routeDetailsMapper = (route) => {
   if (finishedStatus) { // recorrido finalizado
     const finishedTimestamp = finishedStatus.timestamp;
     const {
-      time: finishedTime 
+      time: finishedTime
     } = TimestampUtil.convertToDateAndHour(finishedTimestamp);
     endTime = `Fin: ${finishedTime}`;
 
@@ -134,7 +136,7 @@ export const RouteDetailPage = () => {
   };
 
   const {
-    id 
+    id
   } = useParams()
 
   const [routeData, setRouteData] = useState(null);
@@ -248,16 +250,17 @@ export const RouteDetailPage = () => {
               <APIProvider
                 apiKey={apiKeyGoogleMaps}
               >
+                <DrawOptionals
+                  route={routeData.directions.overview_polyline}
+                />
                 <Map
                   defaultZoom={13}
                   defaultCenter={position}
                   mapId='658a52589c7a963'
-                  id='garbi-create-area-map'
+                  id='garbi-route-detail'
                   disableDefaultUI
                   disableDoubleClickZoom
-                >
-                  <Directions />
-                </Map>
+                />
               </APIProvider>
             </Box>
           </Box>
@@ -267,24 +270,44 @@ export const RouteDetailPage = () => {
   )
 }
 
-function Directions() {
-  const map = useMap();
-  const [routes, setRoutes] = useState([]);
-  const [routeIndex, setRouteIndex] = useState(0);
-  const selected = routes[routeIndex];
+const DrawOptionals = ({
+  route
+}) => {
+  const map = useMap('garbi-route-detail')
 
   useEffect(() => {
-    if (!map) return;
+    if (route == null || map == null) return;
 
-    drawRoute(responseExample, map);
-  }, [map]);
+    const pathCoordinates = decodePolyline(route)
 
-  return (
-    <div
-      className='directions'
-    />
-  );
+    const innerStroke = new google.maps.Polyline({
+      path: pathCoordinates,
+      strokeColor: STROKE_COLORS.active.innerStroke,
+      strokeOpacity: 1.0,
+      strokeWeight: 3,
+      zIndex: 10,
+      map
+    });
+  
+    const outerStroke = new google.maps.Polyline({
+      path: pathCoordinates,
+      strokeColor: STROKE_COLORS.active.outerStroke,
+      strokeOpacity: 1.0,
+      strokeWeight: 6,
+      zIndex: 1,
+      map
+    });
+  
+    innerStroke.setMap(map);
+    outerStroke.setMap(map);
+
+    return () => {
+      innerStroke.setMap(null);
+      outerStroke.setMap(null)
+    }
+  }, [route, map])
 }
+
 const STROKE_COLORS = {
   active: {
     innerStroke: '#4285F4',
@@ -295,27 +318,3 @@ const STROKE_COLORS = {
     outerStroke: '#80868B',
   },
 };
-
-function drawRoute(directionResponse, map) {
-  if (!directionResponse) return;
-  const path = directionResponse.routes[0].overview_path;
-
-  const innerStroke = new google.maps.Polyline({
-    path: path,
-    strokeColor: STROKE_COLORS.active.innerStroke,
-    strokeOpacity: 1.0,
-    strokeWeight: 3,
-    zIndex: 10
-  });
-
-  const outerStroke = new google.maps.Polyline({
-    path: path,
-    strokeColor: STROKE_COLORS.active.outerStroke,
-    strokeOpacity: 1.0,
-    strokeWeight: 6,
-    zIndex: 1
-  });
-
-  innerStroke.setMap(map);
-  outerStroke.setMap(map);
-}
