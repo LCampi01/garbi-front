@@ -1,5 +1,5 @@
 import {
-  Visibility, VisibilityOff
+  Visibility, VisibilityOff 
 } from '@mui/icons-material';
 import {
   Box,
@@ -16,25 +16,26 @@ import {
   Typography,
 } from '@mui/material';
 import {
-  useEffect, useState
+  useEffect, useState 
 } from 'react';
 import {
-  Controller, useForm
+  Controller, useForm 
 } from 'react-hook-form';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 import useDebounce from '../../hooks/useDebounce';
+import logo from '/src/assets/garbi-login.png';
 import {
   ModalTermsAndConditions
 } from '../../modales/ModalTermsAndConditions';
 import {
-  useNavigate
+  useNavigate 
 } from 'react-router-dom';
 import {
-  useAuth
+  useAuth 
 } from '../../api/hooks/useAuth/useAuth';
 import {
-  useEmployees
+  useEmployees 
 } from '../../api/hooks/useEmployees/useEmployees';
 
 const passwordStatusInitial = {
@@ -78,20 +79,12 @@ export const ChangePasswordBox = () => {
 
   const {
     changePassword: {
-      changePassword: changePassword, isChangePasswordLoading
+      changePassword: changePassword, isChangePasswordLoading 
     },
   } = useAuth();
-
-  const {
-    login: {
-      login: login, isLoginLoading
-    },
-  } = useAuth();
-
-
   const {
     modifyEmployee: {
-      modifyEmployee: modifyEmployee, isModifyEmployeeLoading
+      modifyEmployee: modifyEmployee, isModifyEmployeeLoading 
     },
   } = useEmployees();
   const navigate = useNavigate();
@@ -100,7 +93,7 @@ export const ChangePasswordBox = () => {
     control,
     handleSubmit,
     formState: {
-      errors
+      errors 
     },
     watch,
   } = useForm({
@@ -142,6 +135,7 @@ export const ChangePasswordBox = () => {
   }, [passwordRepeatedDebounced]);
 
   useEffect(() => {
+    // Verifica si todos los valores son true
     const allValid = Object.values(passwordStatus).every((status) => status);
     setPasswordChecked(allValid);
   }, [passwordStatus]);
@@ -149,40 +143,31 @@ export const ChangePasswordBox = () => {
   const onSubmit = async (data) => {
     if (!passwordChecked || !checkboxChecked) return;
 
+    console.log(data);
+
+    const userString = localStorage.getItem('user');
+    if (!userString) return;
+
+    const user = await JSON.parse(userString);
+
     const response = await changePassword({
-      email: data.email,
+      email: user.personalEmail,
       newPassword: passwordDebounced,
       password: data.oldPassword,
     });
 
-
-    const loginResponse = await login({
-      personalEmail: data.email,
-      password: passwordDebounced
+    const termsResponse = await modifyEmployee({
+      userId: user.id,
+      termsAndConditions: checkboxChecked
     });
 
-    if (loginResponse.error) {
-      console.error('Error en login:', loginResponse.error);
-      return;
-    }
-
-
-    window.location.reload()
-
-
+    //TODO later: validar que la respuesta sea la esperada, y sino tirar error.
+    navigate('/inicio');
   };
 
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        backgroundColor: '#f0f2f5',
-      }}
-    >
+    <Box>
       <ModalTermsAndConditions
         title={'Términos y Condiciones'}
         description={termsAndConditionsText}
@@ -302,77 +287,23 @@ export const ChangePasswordBox = () => {
               display: 'flex',
               alignItems: 'center',
             }}
-          />
+          >
+            <img
+              style={{
+                width: '100%',
+                height: '300px',
+                objectFit: 'cover',
+              }}
+              src={logo}
+            />
+          </Box>
           <Box>
             <form
               onSubmit={handleSubmit(onSubmit)}
             >
               <Box
-                padding={3}
+                padding={1}
               >
-                <Controller
-                  name='email'
-                  control={control}
-                  rules={{
-                    required: true,
-                  }}
-                  render={({
-                    field
-                  }) => (
-                    <FormControl
-                      sx={{
-                        minHeight: '80px',
-                      }}
-                      fullWidth
-                    >
-                      <InputLabel
-                        color='secondary'
-                        autocomplete='off'
-                        sx={{
-                          color: 'white',
-                        }}
-                        htmlFor='outlined-adornment-email'
-                      >
-                        Email
-                      </InputLabel>
-                      <OutlinedInput
-                        id='outlined-adornment-change-email'
-                        {...field}
-                        type={showOldPassword ? 'text' : 'email'}
-                        error={!!errors.password}
-                        color='secondary'
-                        inputProps={{
-                          autoComplete: 'off', // Desactiva el autocompletado del navegador
-                          sx: {
-                            color: 'white',
-                          },
-                        }}
-                        label='Email'
-                        sx={{
-                          '& .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'white',
-                          },
-                          '& .MuiInputLabel-root': {
-                            color: 'white !important',
-                          },
-                          '&:hover .MuiOutlinedInput-notchedOutline': {
-                            borderColor: 'white',
-                          },
-                        }}
-                      />
-
-                      {errors.email && (
-                        <Typography
-                          fontSize={'0.85rem'}
-                          paddingLeft={1.5}
-                          color={'red'}
-                        >
-                          {errors.email.message}
-                        </Typography>
-                      )}
-                    </FormControl>
-                  )}
-                />
                 <Controller
                   name='oldPassword'
                   control={control}
@@ -380,7 +311,7 @@ export const ChangePasswordBox = () => {
                     required: true,
                   }}
                   render={({
-                    field
+                    field 
                   }) => (
                     <FormControl
                       sx={{
@@ -400,7 +331,7 @@ export const ChangePasswordBox = () => {
                       <OutlinedInput
                         id='outlined-adornment-change-oldPassword'
                         {...field}
-                        type={showOldPassword ? 'text' : 'password'}
+                        type={showOldPassword ? 'text' : 'oldPassword'}
                         error={!!errors.password}
                         color='secondary'
                         inputProps={{
@@ -455,7 +386,7 @@ export const ChangePasswordBox = () => {
                     required: true,
                   }}
                   render={({
-                    field
+                    field 
                   }) => (
                     <FormControl
                       sx={{
@@ -530,7 +461,7 @@ export const ChangePasswordBox = () => {
                     required: true,
                   }}
                   render={({
-                    field
+                    field 
                   }) => (
                     <FormControl
                       sx={{
@@ -598,12 +529,12 @@ export const ChangePasswordBox = () => {
                     </FormControl>
                   )}
                 />
-
+                
                 <Controller
                   name='termsAndConditions'
                   control={control}
                   render={({
-                    field
+                    field 
                   }) => (
                     <FormControl
                       fullWidth
@@ -612,14 +543,14 @@ export const ChangePasswordBox = () => {
                       }}
                     >
                       <Box
-                        sx={{
-                          display: 'flex',
+                        sx={{ 
+                          display: 'flex', 
                           alignItems: 'center',
                         }}
                       >
-                        <FormControlLabel
+                        <FormControlLabel 
                           control={
-                            <Checkbox
+                            <Checkbox 
                               {...field}
                               checked={checkboxChecked}
                               sx={{
@@ -634,7 +565,7 @@ export const ChangePasswordBox = () => {
                                 setCheckboxChecked(e.target.checked);
                               }}
                             />
-                          }
+                          } 
                         />
                         <Typography
                           sx={{
@@ -696,7 +627,7 @@ export const ChangePasswordBox = () => {
 };
 
 const ValidationItem = ({
-  isValid, text
+  isValid, text 
 }) => {
   return (
     <Box
