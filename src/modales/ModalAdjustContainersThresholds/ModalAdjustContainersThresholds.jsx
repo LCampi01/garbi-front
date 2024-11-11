@@ -17,23 +17,39 @@ import {
 } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-
-
-
 const schema = yup.object({
   thresholdFull: yup
-    .number()
-    .typeError('El valor debe ser un número')
-    .max(100, 'El valor no debe superar el 100%')
-    .required('El límite de llenado es obligatorio'),
+    .lazy((value) => {
+      if (value === '' || value === undefined) {
+        return yup.mixed().notRequired();
+      } else {
+        return yup
+          .number()
+          .typeError('El valor debe ser un número')
+          .max(100, 'El valor no debe superar el 100%')
+          .min(
+            yup.ref('thresholdWarning'), 
+            'El valor debe ser mayor al valor del otro campo'
+          )        
+          .required('El límite de llenado es obligatorio');
+      }
+    }),
 
   thresholdWarning: yup
-    .number()
-    .typeError('El valor debe ser un número')
-    .min(0, 'El valor debe ser mayor o igual a 0')
-    .max(100, 'El valor no debe superar el 100%')
-    .required('El límite de advertencia es obligatorio')
+    .lazy((value) => {
+      if (value === '' || value === undefined) {
+        return yup.mixed().notRequired();
+      } else {
+        return yup
+          .number()
+          .typeError('El valor debe ser un número')
+          .min(0, 'El valor debe ser mayor o igual a 0')
+          .max( yup.ref('thresholdFull'), 'El valor debe ser menor al valor del otro campo')
+          .required('El límite de advertencia es obligatorio');
+      }
+    }),
 }).required();
+
 
 const style = {
   position: 'absolute',
@@ -48,11 +64,13 @@ const style = {
 export const ModalAdjustContainersThreshold = ({
   open, handleClose, onSubmit, company, thresholdInformation
 }) => {
-
   const {
-    control, handleSubmit, formState: {
+    control,
+    handleSubmit,
+    setValue,
+    formState: {
       errors 
-    } 
+    }
   } = useForm({
     defaultValues: {
       thresholdFull: '',
@@ -62,24 +80,34 @@ export const ModalAdjustContainersThreshold = ({
   });
 
   const handleFormSubmit = (data) => {
-    const modifiedCompany = {
-      ...company
+
+    if (!data.thresholdFull) {
+      setValue('thresholdFull', company.threshold.full || 75);
+    }
+    if (!data.thresholdWarning) {
+      setValue('thresholdWarning', company.threshold.warning || 25);
     }
 
+    const thresholdFull = data.thresholdFull || company.threshold.full;
+    const thresholdWarning = data.thresholdWarning || company.threshold.warning;
+
+    const modifiedCompany = {
+      ...company 
+    };
     delete modifiedCompany.truckTerminal;
-    delete modifiedCompany.timestamp
-    delete modifiedCompany.dump    
+    delete modifiedCompany.timestamp;
+    delete modifiedCompany.dump;
+
     const reviewCompanyBody = {
-      ...modifiedCompany, 
-      threshold: { 
-        full: data.thresholdFull,
-        warning: data.thresholdWarning,
+      ...modifiedCompany,
+      threshold: {
+        full: thresholdFull,
+        warning: thresholdWarning,
       },
     };
 
     onSubmit(reviewCompanyBody);
     handleClose();
-
   };
 
   return (
@@ -99,7 +127,7 @@ export const ModalAdjustContainersThreshold = ({
             padding: '16px 24px',
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between' 
+            justifyContent: 'space-between',
           }}
         >
           <Typography
@@ -115,7 +143,7 @@ export const ModalAdjustContainersThreshold = ({
             sx={{
               padding: 0,
               minWidth: 0,
-              borderRadius: '50%',
+              borderRadius: '50%' 
             }}
             onClick={handleClose}
           >
@@ -124,7 +152,7 @@ export const ModalAdjustContainersThreshold = ({
         </Box>
         <Box
           sx={{
-            marginLeft:'20px'
+            marginLeft: '20px' 
           }}
         >
           <form
@@ -193,7 +221,6 @@ export const ModalAdjustContainersThreshold = ({
             />
           </form>
         </Box>
-          
       </Box>
     </Modal>
   );
