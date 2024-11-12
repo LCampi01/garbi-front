@@ -92,7 +92,6 @@ export const Header = ({
 
   const handleOpenManagementMenu = (event) => {
     setAnchorElManagement(event.currentTarget);
-    setCurrentTab('Gestión');
   };
 
   const handleCloseManagementMenu = () => {
