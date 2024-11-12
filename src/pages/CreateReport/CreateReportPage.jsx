@@ -6,10 +6,15 @@ import {
 import {
   CreateReportForm 
 } from '../../forms/CreateReport/CreateReportForm';
-
+import {
+  useParams
+} from 'react-router-dom';
 
 
 export const CreateReportPage = () => {
+  const {
+    containerId
+  } = useParams()
 
   
   return (
@@ -49,7 +54,9 @@ export const CreateReportPage = () => {
         }}
 
       >
-        <CreateReportForm/>
+        <CreateReportForm
+          containerId={containerId}
+        />
 
       </Box>
 
