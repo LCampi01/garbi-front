@@ -173,7 +173,7 @@ export default function HomeMainContent({
   } = useOptimalRoutes()
 
 
-  const apiKeyGoogleMaps = import.meta.env.VITE_REACT_APP_API_KEY_GOOGLE_MAPS;
+  const apiKeyGoogleMaps = 'AIzaSyChdsbPNc69MyOgPRQf8o2_5kMUFDx2zMM';
 
 
   const fetchOptimalRoutes = async (areaId) => {
