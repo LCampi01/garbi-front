@@ -98,7 +98,7 @@ const HtmlTooltip = styled(({
 }));
 
 export const CreateReportForm = ({
-  onSuccess
+  onSuccess, containerId
 }) => {
   const apiKeyGoogleMaps = 'AIzaSyChdsbPNc69MyOgPRQf8o2_5kMUFDx2zMM';
   const [selectedImage, setSelectedImage] = useState(null);
@@ -113,7 +113,7 @@ export const CreateReportForm = ({
   };
 
   const [containers, setContainers] = useState([]);
-  const [containerSelected, setContainerSeleted] = useState(null);
+  const [containerSelected, setContainerSelected] = useState(null);
   const [containerError, setContainerError] = useState(false);
 
   const {
@@ -129,10 +129,20 @@ export const CreateReportForm = ({
 
   useEffect(() => {
     const retrieveContainers = async () => {
-      const containersUnformated = await getAllContainers();
-      const containersFormated = formatContainers(containersUnformated.result);
+      const containersUnformatted = await getAllContainers();
+      const containersFormatted = formatContainers(containersUnformatted.result);
 
-      setContainers(containersFormated);
+      setContainers(containersFormatted);
+
+      if (containerId) {
+        const container = containersFormatted.find((c) => c.id === containerId)
+        if (container) {
+          setValue('containerId', container.id)
+          setValue('address', `${container.address.street} ${container.address.number || ''}`)
+          setValue('neighborhood', container.address.neighborhood || '')
+          setContainerSelected(container)
+        }
+      }
     };
 
     try {
@@ -143,10 +153,10 @@ export const CreateReportForm = ({
   }, []);
 
   const handleContainerClick = (container) => {
-    setValue('address', container.address.street + ' ' + container.address.number || '');
-    setValue('neighborhood', container.address.neighborhood || '');
-    setValue('containerId', container.id);
-    setContainerSeleted(container);
+    setValue('containerId', container.id)
+    setValue('address', `${container.address.street} ${container.address.number || ''}`)
+    setValue('neighborhood', container.address.neighborhood || '')
+    setContainerSelected(container)
   };
 
   const convertBase64 = (file) => {
@@ -446,7 +456,7 @@ export const CreateReportForm = ({
               centerPosition={position}
               containers={containers.map((p) => (
                 <Marker
-                  setContainerSeleted={handleContainerClick}
+                  setContainerSelected={handleContainerClick}
                   key={p._id}
                   point={p}
                 />
@@ -570,12 +580,12 @@ export const CreateReportForm = ({
 };
 
 function Marker({
-  point, setContainerSeleted
+  point, setContainerSelected
 }) {
   return (
     <AdvancedMarker
       position={point}
-      onClick={() => setContainerSeleted(point)}
+      onClick={() => setContainerSelected(point)}
     >
       <HtmlTooltip
         placement='top'
