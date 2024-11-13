@@ -142,6 +142,7 @@ export default function HomeMainContent({
   const [company, setCompany] = useState(null)
   const [openAdjustThresholdsModal, setOpenAdjustThresholdsModal] = useState(false);
   const [collectors, setCollectors] = useState([])
+  const [selectedCollectors, setSelectedCollectors] = useState([])
 
   const handleOpenAdjustThresholdsModal = () => {
     setOpenAdjustThresholdsModal(true)
@@ -256,6 +257,11 @@ export default function HomeMainContent({
   }, [thresholdInformation])
 
   const onGenerateOptimalRoute = (data) => {
+    const selectedCollectorObjects = collectors.filter((collector) =>
+      data.collectors.includes(collector.id)
+    )
+    setSelectedCollectors(selectedCollectorObjects)
+
     fetchOptimalRoutes(data.areaId)
     handleCloseOpenGenerateOptimalRouteModal()
     setOpenGenerateOptimalRouteRightSideInfo(true)
@@ -381,6 +387,7 @@ export default function HomeMainContent({
                 routeSelected={optimalRouteSelected}
                 optimalRoutes={optimalRoutes}
                 setRouteSelected={setOptimalRouteSelected}
+                selectedCollectors={selectedCollectors}
               />}
             />
           )

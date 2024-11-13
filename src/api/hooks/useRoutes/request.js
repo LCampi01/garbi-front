@@ -77,11 +77,12 @@ export const useSelectOptimalRoutes = () => {
     baseUri: baseIntegrationRoute
   })
 
-  const selectOptimalRoute = (optimalRouteId) => {
+  const selectOptimalRoute = (optimalRouteId, collectors) => {
     return commonFetch({
       method: HTTPMethods.POST,
       body: {
-        optimalRouteId
+        optimalRouteId,
+        collectors
       }
     })
   }
