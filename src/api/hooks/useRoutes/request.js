@@ -91,3 +91,24 @@ export const useSelectOptimalRoutes = () => {
     selectOptimalRoute
   }
 }
+
+export const useFetchCollectors = () => {
+  const {
+    isLoading,
+    commonFetch
+  } = useFetch({
+    baseUri: baseIntegrationRoute
+  })
+
+  const fetchCollectors = () => {
+    return commonFetch({
+      uri: '/collectors',
+      method: HTTPMethods.GET,
+    })
+  }
+
+  return {
+    isLoading,
+    fetchCollectors
+  }
+}

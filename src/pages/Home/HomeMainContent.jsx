@@ -62,6 +62,9 @@ import {
 import {
   getCompanyThresholdInformation 
 } from '../../hooks/useGetColorPoint';
+import {
+  useRoutes 
+} from '../../api/hooks/useRoutes/useRoutes';
 
 const icons = [
   Battery0BarIcon,
@@ -138,6 +141,7 @@ export default function HomeMainContent({
   const [optimalRoutes, setOptimalRoutes] = useState(null)
   const [company, setCompany] = useState(null)
   const [openAdjustThresholdsModal, setOpenAdjustThresholdsModal] = useState(false);
+  const [collectors, setCollectors] = useState([])
 
   const handleOpenAdjustThresholdsModal = () => {
     setOpenAdjustThresholdsModal(true)
@@ -172,6 +176,13 @@ export default function HomeMainContent({
     }
   } = useOptimalRoutes()
 
+  const {
+    fetchCollectors: {
+      isLoadingFetchCollectors,
+      fetchCollectors,
+    }
+  } = useRoutes()
+
 
   const apiKeyGoogleMaps = 'AIzaSyChdsbPNc69MyOgPRQf8o2_5kMUFDx2zMM';
 
@@ -204,6 +215,13 @@ export default function HomeMainContent({
           setCompany(response)
         });
     }
+
+    const fetchCollectorsForRoute = async () => {
+      const collectorsRetrieved = await fetchCollectors()
+      setCollectors(collectorsRetrieved.result)
+    }
+
+    fetchCollectorsForRoute()
   }, []);
 
   useEffect(() => {
@@ -282,6 +300,7 @@ export default function HomeMainContent({
           handleClose={handleCloseOpenGenerateOptimalRouteModal}
           handleOpenRightSideOptimalRouteInfo={handleOpenRightSidePanelOptimalRouteInfo}
           areas={areas}
+          collectors={collectors}
         />}
       />
       <Box

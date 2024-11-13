@@ -4,33 +4,38 @@ import {
 import {
   Controller, useForm
 } from 'react-hook-form';
-
-
 import {
   CancelAndSubmitButton
 } from '../../components/CancelAndSubmitButton/CancelAndSubmitButton';
-
 import {
   yupResolver
 } from '@hookform/resolvers/yup';
 import {
-  object, string, number
+  object, string, array
 } from 'yup';
+import {
+  useState
+} from 'react';
+
 
 export const GenerateOptimalRouteForm = ({
   handleClose,
   handleOpenRightSideOptimalRouteInfo,
   onGenerateOptimalRoute,
-  areas
+  areas,
+  collectors
 }) => {
+  const [selectedCollectors, setSelectedCollectors] = useState([]);
+
+  const handleChange = (event) => {
+    setSelectedCollectors(event.target.value)
+  }
 
   const createOptimalRouteSchema = object({
     areaId: string().required('Debe seleccionar una opción'),
-    percentage: number()
-      .min(0, 'El valor debe ser al menos 0')
-      .max(100, 'El valor debe ser como máximo 100')
-      .transform((value) => (isNaN(value) || value === '' ? undefined : value))
-      .required('El valor debe ser un número entre 0 y 100'),
+    collectors: array()
+      .min(2, 'Debe seleccionar al menos dos recolectores')
+      .required('Debe seleccionar dos recolectores'),
   }).required();
 
   const {
@@ -40,7 +45,7 @@ export const GenerateOptimalRouteForm = ({
   } = useForm({
     defaultValues: {
       areaId: '',
-      percentage: '50',
+      collectors: [],
     },
     resolver: yupResolver(createOptimalRouteSchema),
   });
@@ -104,13 +109,84 @@ export const GenerateOptimalRouteForm = ({
                     </MenuItem>
                   ))}
                 </Select>
-                {errors.area && (
+                {errors.areaId && (
                   <Typography
                     fontSize='0.85rem'
                     paddingLeft={1.5}
                     color='red'
                   >
-                    {errors.area.message}
+                    {errors.areaId.message}
+                  </Typography>
+                )}
+              </FormControl>
+            )}
+          />
+        </Box>
+      </Box>
+      <Box
+        sx={{
+          width: 1,
+          padding: '1rem 1.5rem 1.3125rem'
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: '1rem',
+            fontWeight: 400,
+            lineHeight: '1.66rem',
+            letterSpacing: '0.025rem'
+          }}
+        >
+          Seleccione recolectores:
+        </Typography>
+        <Box
+          sx={{
+            width: 1,
+            mt: '8px'
+          }}
+        >
+          <Controller
+            name='collectors'
+            control={control}
+            render={({
+              field
+            }) => (
+              <FormControl
+                variant='outlined'
+                size='medium'
+                fullWidth
+              >
+                <InputLabel
+                  id='collectors'
+                >
+                  Recolectores
+                </InputLabel>
+                <Select
+                  size='medium'
+                  fullWidth
+                  variant='outlined'
+                  label='Recolectores'
+                  multiple
+                  value={selectedCollectors}
+                  onChange={handleChange}
+                  {...field}
+                >
+                  {collectors.map((c) => (
+                    <MenuItem
+                      key={c.id}
+                      value={c.id}
+                    >
+                      {c.name} {c.surname}
+                    </MenuItem>
+                  ))}
+                </Select>
+                {errors.collectors && (
+                  <Typography
+                    fontSize='0.85rem'
+                    paddingLeft={1.5}
+                    color='red'
+                  >
+                    {errors.collectors.message}
                   </Typography>
                 )}
               </FormControl>
