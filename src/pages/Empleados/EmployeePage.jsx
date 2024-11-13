@@ -14,6 +14,7 @@ import {
   EmployeesTable
 } from '../../tables/EmployeesTable/EmployeesTable';
 import {
+  useEffect,
   useState
 } from 'react';
 import {
@@ -61,6 +62,7 @@ export const EmployeePage = () => {
   const [employeeToModify, setEmployeeToModify] = useState(false);
   const [reloadTable, setReloadTable] = useState(0);
   const [selectedElement, setSelectedElement] = useState(null);
+  const [isLoadingData, setIsLoadingData] = useState(true);
 
   const refreshList = () => {
     setReloadTable(prev => prev + 1);
@@ -115,6 +117,10 @@ export const EmployeePage = () => {
 
   const onSearcherSubmit = useSearchQueryParam(addQueryParamFilter, removeQueryParamFilter)
 
+  useEffect(() => {
+    if (!isLoadingFetchEmployees) setIsLoadingData(false)
+  }, [isLoadingFetchEmployees])
+
   return (
     <FilterSideComponent
       prefix={'Gestión'}
@@ -164,7 +170,7 @@ export const EmployeePage = () => {
             <CommonTableList
               table={EmployeesTable}
               fetchData={fetchEmployeesWithFilters}
-              isLoadingFetchData={isLoadingFetchEmployees}
+              isLoadingFetchData={isLoadingFetchEmployees || isLoadingData}
               mapper={mapper}
               reloadTable={reloadTable}
               placeHolderInput={'Buscar por Nombre o Apellido'}

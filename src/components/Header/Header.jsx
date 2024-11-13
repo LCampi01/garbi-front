@@ -44,7 +44,8 @@ const managementItems = {
 };
 
 export const Header = ({
-  logoOnly = false 
+  logoOnly = false ,
+  redirectLogo = true
 }) => {  
   const navigate = useNavigate();
   const location = useLocation();
@@ -157,7 +158,6 @@ export const Header = ({
     setNotifications(prevNotifications => prevNotifications.filter(notification => notification.id !== id));
   };
 
-
   return (
     <AppBar
       onMouseDown={handleHeaderMouseDown}
@@ -206,11 +206,12 @@ export const Header = ({
                   background: 'none',
                   display: 'flex',
                   alignItems: 'center',
-                  cursor: 'pointer',
+                  cursor: !redirectLogo ? 'unset' : 'pointer',
                   border: 'none' 
                 }}
                 component={'button'}
                 onClick={() => navigate('/inicio')}
+                disabled={!redirectLogo}
               >
                 <img
                   src={garbiLogo}

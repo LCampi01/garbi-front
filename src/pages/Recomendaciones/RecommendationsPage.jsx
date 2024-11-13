@@ -11,6 +11,7 @@ import {
   useQueryParamFilters 
 } from '../../hooks/useQueryParamFilters';
 import {
+  useEffect,
   useState 
 } from 'react';
 import {
@@ -37,6 +38,8 @@ const mapper = (data) => data
 export default function RecommendationsPage() {
   const [reportsFilters, setReportFilters] = useState(reportsFiltersDeclaration)
   const [recommendationsFilters, setRecommendationsFilters] = useState(recommendationsFiltersDeclaration)
+  const [isLoadingFilters, setIsLoadingFilters] = useState(true)
+  const [isLoadingData, setIsLoadingData] = useState(true)
 
   const {
     fetchReports: {
@@ -68,6 +71,14 @@ export default function RecommendationsPage() {
     first: true 
   })
 
+  useEffect(() => {
+    if (!isLoadingGetAreas) setIsLoadingFilters(false)
+  }, [isLoadingGetAreas])
+
+  useEffect(() => {
+    if (!isLoadingFetchReports) setIsLoadingData(false)
+  }, [isLoadingFetchReports])
+
   return (
     <FilterSideComponent
       title={'Recomendaciones'}
@@ -78,12 +89,12 @@ export default function RecommendationsPage() {
         />
       }
       handleSubmit={handleSubmit(whenFiltersSubmit)}
-      isLoading={isLoadingGetAreas}
+      isLoading={isLoadingGetAreas || isLoadingFilters}
       component={
         () =>
           <CommonTableList
             table={RecommendationsTable}
-            isLoadingFetchData={isLoadingFetchReports}
+            isLoadingFetchData={isLoadingFetchReports || isLoadingData}
             mapper={mapper}
             placeHolderInput={'Buscar por ID o Contenedor'}
             handleChangeOrder={handleChangeOrder}

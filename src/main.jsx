@@ -152,15 +152,23 @@ const router = createBrowserRouter([
   {
     element: <BaseWithHeader
       logoOnly={true}
+      redirectLogo={false}
+    />,
+    children: [
+      {
+        path: 'nuevo-reporte',
+        element: <CreateReportPage />,
+      },
+    ],
+  },
+  {
+    element: <BaseWithHeader
+      logoOnly={true}
     />,
     children: [
       {
         path: '/empresas',
         element: <CompanyPage />,
-      },
-      {
-        path: 'nuevo-reporte',
-        element: <CreateReportPage />,
       },
     ],
   },

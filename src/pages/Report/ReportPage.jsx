@@ -38,16 +38,16 @@ import {
   TimestampUtil
 } from '../../utils/timestampUtil';
 import {
-  subDays 
+  subDays
 } from 'date-fns'
 import {
-  useSearchQueryParam 
+  useSearchQueryParam
 } from '../../hooks/useSearchQueryParam';
 import {
-  getInitialQueryParams, handleDateRangeChange 
+  getInitialQueryParams, handleDateRangeChange
 } from '../../hooks/useDateRangePicker';
 import {
-  reportsFiltersDeclaration 
+  reportsFiltersDeclaration
 } from '../../filters/declarations/ReportFilters/reportFilter';
 
 const mapper = (reports) => {
@@ -81,6 +81,8 @@ const mapper = (reports) => {
 export const ReportPage = () => {
 
   const [reportsFilters, setReportFilters] = useState(reportsFiltersDeclaration)
+  const [isLoadingFilters, setIsLoadingFilters] = useState(true)
+  const [isLoadingData, setIsLoadingData] = useState(true)
 
   const {
     fetchReports: {
@@ -120,6 +122,7 @@ export const ReportPage = () => {
       })
 
       setReportFilters(completedReportFilters)
+      setIsLoadingFilters(false)
     }
 
     getAreasAndCompleteFilters()
@@ -129,7 +132,7 @@ export const ReportPage = () => {
     control,
     handleSubmit
   } = useForm();
-  
+
   const fromDate = subDays(new Date(), 6)
   const toDate = new Date()
   const initialQueryParams = getInitialQueryParams(fromDate, toDate)
@@ -146,6 +149,9 @@ export const ReportPage = () => {
 
   const onDateRangeChange = handleDateRangeChange(addMultipleQueryParamFilter);
 
+  useEffect(() => {
+    if (!isLoadingFetchReports) setIsLoadingData(false)
+  }, [isLoadingFetchReports])
 
   return <FilterSideComponent
     title={'Reportes'}
@@ -157,21 +163,21 @@ export const ReportPage = () => {
       />
     }
     handleSubmit={handleSubmit(whenFiltersSubmit)}
-    isLoading={isLoadingGetAreas}
+    isLoading={isLoadingGetAreas || isLoadingFilters}
     component={
       () =>
         <CommonTableList
           table={ReportTable}
           fetchData={fetchReportsWithFilters}
-          isLoadingFetchData={isLoadingFetchReports}
+          isLoadingFetchData={isLoadingFetchReports || isLoadingData}
           mapper={mapper}
           placeHolderInput={'Buscar por ID o Contenedor'}
-          componentToRender={ 
-            <DateRangePicker 
-              onDateChange={onDateRangeChange} 
-            /> 
+          componentToRender={
+            <DateRangePicker
+              onDateChange={onDateRangeChange}
+            />
           }
-          onSearcherSubmit = { onSearcherSubmit }
+          onSearcherSubmit={onSearcherSubmit}
         />
     }
   />;

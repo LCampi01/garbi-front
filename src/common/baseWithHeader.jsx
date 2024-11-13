@@ -11,11 +11,14 @@ import {
   HEIGHT_HEADER 
 } from '../config';
 
-const BaseWithHeader = (props) => {
+const BaseWithHeader = ({
+  logoOnly, redirectLogo
+}) => {
   return (
     <Box>
       <Header
-        logoOnly={props.logoOnly}
+        logoOnly={logoOnly}
+        redirectLogo={redirectLogo}
       />
       <Box
         marginTop={'64px'}

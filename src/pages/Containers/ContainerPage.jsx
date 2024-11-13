@@ -65,6 +65,8 @@ export const ContainerPage = () => {
   const handleOpenCreateContainerModal = () => setOpenCreateContainerModal(true);
   const handleCloseCreateContainerModal = () => setOpenCreateContainerModal(false);
   const [containersFilters, setContainersFilters] = useState(ContainersFiltersDeclaration)
+  const [isLoadingData, setIsLoadingData] = useState(true)
+  const [isLoadingFilters, setIsLoadingFilters] = useState(true);
 
   const [openModifyContainerModal, setOpenModifyContainerModal] = useState(false);
   const [containerToModify, setContainerToModify] = useState(false);
@@ -155,10 +157,15 @@ export const ContainerPage = () => {
       })
 
       setContainersFilters(completedFilters)
+      setIsLoadingFilters(false);
     }
 
     getContainersAndCompleteFilters()
   }, [])
+
+  useEffect(() => {
+    if (!isLoadingGetContainers) setIsLoadingData(false)
+  }, [isLoadingGetContainers])
 
   return (
     <FilterSideComponent
@@ -173,6 +180,7 @@ export const ContainerPage = () => {
         />
       }
       handleSubmit={handleSubmit(whenFiltersSubmit)}
+      isLoading={isLoadingFilters || isLoadingGetAreas}
       component={
         () =>
           <>
@@ -209,7 +217,7 @@ export const ContainerPage = () => {
             <CommonTableList
               table={ContainerTable}
               fetchData={fetchContainersWithFilters}
-              isLoadingFetchData={isLoadingGetContainers}
+              isLoadingFetchData={isLoadingGetContainers || isLoadingData}
               mapper={mapper}
               reloadTable={reloadTable}
               placeHolderInput={'Buscar por ID'}

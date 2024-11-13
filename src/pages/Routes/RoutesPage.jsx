@@ -113,6 +113,8 @@ export const RoutesPage = () => {
   } = useRoutes();
 
   const [routesFilters, setRoutesFilters] = useState(routesFiltersDeclaration)
+  const [isLoadingData, setIsLoadingData] = useState(true)
+  const [isLoadingFilters, setIsLoadingFilters] = useState(true);
 
   const {
     getAreas: {
@@ -145,6 +147,7 @@ export const RoutesPage = () => {
       })
 
       setRoutesFilters(completedRoutesFilters)
+      setIsLoadingFilters(false);
     }
 
     getAreasAndCompleteFilters()
@@ -169,6 +172,10 @@ export const RoutesPage = () => {
 
   const onDateChange = handleDateChange(addQueryParamFilter);
 
+  useEffect(() => {
+    if (!isLoadingFetchRoutes) setIsLoadingData(false)
+  }, [isLoadingFetchRoutes])
+
   return (
     <FilterSideComponent
       prefix={'Gestión'}
@@ -181,14 +188,14 @@ export const RoutesPage = () => {
         />
       }
       handleSubmit={handleSubmit(whenFiltersSubmit)}
-      isLoading = {isLoadingGetAreas} 
+      isLoading = {isLoadingGetAreas || isLoadingFilters} 
       component={
         () => 
           <CommonTableList
             table={RoutesTable}
             onSearcherSubmit={onSearcherSubmit}
             fetchData={fetchRoutesWithFilters}
-            isLoadingFetchData={isLoadingFetchRoutes}
+            isLoadingFetchData={isLoadingFetchRoutes || isLoadingData}
             mapper={mapper}
             placeHolderInput={'Buscar por Supervisor'}
             inputWidth={'240px'}
