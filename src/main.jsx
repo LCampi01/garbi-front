@@ -156,7 +156,7 @@ const router = createBrowserRouter([
     />,
     children: [
       {
-        path: 'nuevo-reporte',
+        path: 'nuevo-reporte/:containerId?',
         element: <CreateReportPage />,
       },
     ],
@@ -169,7 +169,7 @@ const router = createBrowserRouter([
       {
         path: '/empresas',
         element: <CompanyPage />,
-      },
+      }
     ],
   },
 ]);
