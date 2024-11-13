@@ -2,14 +2,18 @@ import {
   useEffect, useState 
 } from 'react';
 import {
-  Avatar, Box, Typography, Divider 
+  Avatar, Box, Typography, Divider, IconButton 
 } from '@mui/material';
 import {
-  AccessTime, Email, Phone, Work, Edit 
+  AccessTime, Email, Phone, Work, Edit, Lock 
 } from '@mui/icons-material';
 import {
   useEmployees 
 } from '../../api/hooks/useEmployees/useEmployees';
+import {
+  ModalChangePassword 
+} from '../../modales/ModalChangePassword/ModalChangePassword';
+
 
 export default function PerfilMainContent() {
   const {
@@ -18,17 +22,23 @@ export default function PerfilMainContent() {
     },
     fetchEmployee: {
       fetchEmployee 
-    }
+    },
   } = useEmployees();
-  
+
   const user = JSON.parse(localStorage.getItem('user'));
   const id = user.id;
-  const [selectedImage, setSelectedImage] = useState('');
-  const [userRole, setUserRole] = useState('')
-  const [userWorkingShift, setUserWorkingShift] = useState('')
-  const [userCompanyEmail, setUserCompanyEmail] = useState('')
-  const [usercompanyPhone, setUserCompanyPhone] = useState('')
 
+  const [selectedImage, setSelectedImage] = useState('');
+  const [userRole, setUserRole] = useState('');
+  const [userWorkingShift, setUserWorkingShift] = useState('');
+  const [userCompanyEmail, setUserCompanyEmail] = useState('');
+  const [userCompanyPhone, setUserCompanyPhone] = useState('');
+  const [passwordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [userPersonalEmail, setUserPersonalEmail] = useState('');
+
+  const handlePasswordChange = () => {
+    setIsPasswordModalOpen(false); 
+  };
 
   useEffect(() => {
     const getEmployee = async () => {
@@ -40,6 +50,7 @@ export default function PerfilMainContent() {
           setUserWorkingShift(fetchedEmployee.workingShift);
           setUserCompanyEmail(fetchedEmployee.companyEmail);
           setUserCompanyPhone(fetchedEmployee.companyPhone);
+          setUserPersonalEmail(fetchedEmployee.personalEmail);
 
         }
       } catch (error) {
@@ -49,11 +60,12 @@ export default function PerfilMainContent() {
 
     getEmployee();
   }, []); 
+
   const userProperties = {
     Cargo: userRole.charAt(0).toUpperCase() + userRole.slice(1).toLowerCase(),
     Turno: userWorkingShift.charAt(0).toUpperCase() + userWorkingShift.slice(1).toLowerCase(),
     'Mail de la empresa': userCompanyEmail,
-    'Teléfono de la empresa': usercompanyPhone,
+    'Teléfono de la empresa': userCompanyPhone,
   };
 
   const convertBase64 = (file) => {
@@ -67,13 +79,10 @@ export default function PerfilMainContent() {
 
   const uploadImageToBackend = async (base64Image) => {
     try {
-
       const payload = {
-        
         image: base64Image 
       };
       const response = await modifyEmployee(id, payload);
-
       if (response && response.image) {
         setSelectedImage(response.image);
       }
@@ -100,7 +109,7 @@ export default function PerfilMainContent() {
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'center',
-        paddingTop: 4,
+        paddingTop: 2,
       }}
     >
       <Box
@@ -112,7 +121,7 @@ export default function PerfilMainContent() {
         }}
       >
         <Avatar
-          src={selectedImage} 
+          src={selectedImage}
           sx={{
             width: 150,
             height: 150,
@@ -153,7 +162,7 @@ export default function PerfilMainContent() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          marginTop: 3,
+          marginTop: 3 
         }}
       >
         <Typography
@@ -171,7 +180,7 @@ export default function PerfilMainContent() {
             width: '40%',
             borderBottomWidth: 2,
             marginTop: 1,
-            borderColor: '#12422C',
+            borderColor: '#12422C' 
           }}
         />
       </Box>
@@ -234,7 +243,7 @@ export default function PerfilMainContent() {
                 fontSize: '16px',
                 fontWeight: 400,
                 letterSpacing: '0.3px',
-                color: '#555',
+                color: '#555' 
               }}
             >
               {key}: {value}
@@ -242,6 +251,44 @@ export default function PerfilMainContent() {
           </Box>
         ))}
       </Box>
+
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          marginTop: 2,
+          cursor: 'pointer',
+          color: '#12422C',
+          '&:hover': {
+            color: '#0c3d28',
+          },
+        }}
+        onClick={() => setIsPasswordModalOpen(true)}
+      >
+        <IconButton
+          sx={{
+            color: 'inherit' 
+          }}
+        >
+          <Lock />
+        </IconButton>
+        <Typography
+          variant='body1'
+          sx={{
+            fontWeight: 500 
+          }}
+        >
+          Cambiar contraseña
+        </Typography>
+      </Box>
+      
+      <ModalChangePassword
+        title='Cambiar contraseña'
+        description='Cambie aquí la contraseña'
+        open={passwordModalOpen}
+        handleClose={handlePasswordChange}
+        emailProp={userPersonalEmail}
+      />
     </Box>
   );
 }
