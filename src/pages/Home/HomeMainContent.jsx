@@ -329,7 +329,8 @@ export default function HomeMainContent({
             apiKey={apiKeyGoogleMaps}
             zoom={15}
             areas={areas}
-            route={optimalRouteSelected}
+            // route={optimalRouteSelected}
+            routes={optimalRouteSelected?.polylines}
             centerPosition={position}
             containers={containersFormatted.map((p) => (
               <Marker

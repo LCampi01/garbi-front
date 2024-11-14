@@ -12,7 +12,7 @@ import {
   completePath
 } from '../../reducers/drawReducer';
 import {
-  decodePolyline 
+  decodePolyline
 } from '../../utils/decodePolyline';
 
 export const MapWithContainers = ({
@@ -57,18 +57,32 @@ const DrawOptionals = ({
   const map = useMap('garbi-home-map')
 
   useEffect(() => {
-    if (routes == null || map == null) return;
+    if (routes == null || map == null || routes.length === 0) return;
 
-    const pathCoordinates = decodePolyline(routes.optimalRouteFull.overview_polyline)
+    const routesPolylines = [];
 
-    const polyline = new window.google.maps.Polyline({
-      path: pathCoordinates,
-      geodesic: true,
-      strokeColor: '#2196F3',
-      strokeOpacity: 0.8,
-      strokeWeight: 5,
-      map: map
-    });
+    routes.forEach(
+      r => {
+        const pathCoordinates = decodePolyline(r)
+
+        const routePolyline = new window.google.maps.Polyline({
+          path: pathCoordinates,
+          geodesic: true,
+          strokeColor: '#2196F3',
+          strokeOpacity: 0.8,
+          strokeWeight: 5,
+          map
+        });
+
+        routesPolylines.push(routePolyline);
+      }
+    )
+
+    return () => {
+      routesPolylines.forEach(
+        r => r.setMap(null)
+      );
+    }
   }, [routes])
 
   useEffect(() => {
@@ -123,7 +137,7 @@ const DrawOptionals = ({
       });
       newPolylines.push(polyline);
     })
-    
+
     return () => {
       newPolygons.forEach(polygon => polygon.setMap(null)); // Eliminar polígonos del mapa
       newPolylines.forEach(polyline => polyline.setMap(null));
