@@ -38,6 +38,12 @@ import {
 import {
   useAuth
 } from '../../api/hooks/useAuth/useAuth';
+import {
+  messaging
+} from '../../firebase/firebaseConfig';
+import {
+  getToken
+} from 'firebase/messaging';
 
 const userLoginSchema = object({
   personalEmail: string().email()
@@ -46,11 +52,16 @@ const userLoginSchema = object({
     .required(),
 }).required();
 
+const {
+  VITE_APP_VAPID_KEY
+} = import.meta.env;
+
 export const LoginBox = ({
   setIsFlipped
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoginScreenLoading, setIsLoginScreenLoading] = useState(true);
+  const [isSubmitLoading, setIsSubmitLoading] = useState(false);
 
   const {
     login: {
@@ -80,21 +91,45 @@ export const LoginBox = ({
   });
 
   const onSubmit = async (data) => {
-    const response = await login({
-      personalEmail: data.personalEmail,
-      password: data.password,
-    });
+    setIsSubmitLoading(true);
 
-    localStorage.setItem('token', response.token);
-    const user = jwtDecode(response.token);
-    localStorage.setItem('user', JSON.stringify(user));
+    try {
+      // const serviceWorkerRegistration = await getOrRegisterServiceWorker();
 
-    if (!response.termsAndConditions) {
-      setIsFlipped(true);
-    } else {
-      navigate('/inicio');
+      await Notification.requestPermission();
+
+      const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js')
+
+      await navigator.serviceWorker.ready
+
+      const token = await getToken(messaging, {
+        serviceWorkerRegistration: registration,
+        vapidKey: VITE_APP_VAPID_KEY,
+      });
+
+      const response = await login({
+        personalEmail: data.personalEmail,
+        password: data.password,
+        token,
+      });
+
+      localStorage.setItem('token', response.token);
+      const user = jwtDecode(response.token);
+      localStorage.setItem('user', JSON.stringify(user));
+
+      setIsSubmitLoading(false);
+
+      if (!response.termsAndConditions) {
+        setIsFlipped(true);
+      } else {
+        navigate('/inicio');
+      }
+    } catch (error) {
+      console.error('Error en onSubmit:', error);
+      setIsSubmitLoading(false);
     }
   };
+
 
   useEffect(() => {
     if (localStorage.getItem('token') != null) {
@@ -105,7 +140,7 @@ export const LoginBox = ({
         navigate('/inicio');
       }
     }
-    
+
     setIsLoginScreenLoading(false);
   }, [])
 
@@ -285,7 +320,7 @@ export const LoginBox = ({
                 type='submit'
                 disabled={isLoginLoading}
               >
-                {isLoginLoading ? <CircularProgress
+                {isLoginLoading || isSubmitLoading ? <CircularProgress
                   size={24}
                   color='inherit'
                 /> : 'INGRESAR'}
@@ -307,4 +342,4 @@ export const LoginBox = ({
       </Box>
     </Paper>
   );
-};
+}

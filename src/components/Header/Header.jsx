@@ -1,5 +1,4 @@
 import AppBar from '@mui/material/AppBar';
-import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
@@ -12,34 +11,39 @@ import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import {
-  ExpandMore 
+  ExpandMore
 } from '@mui/icons-material';
 import {
-  useState, useEffect 
+  useState, useEffect
 } from 'react';
 import garbiLogo from '/src/assets/garbi-navbar.png';
-import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined';
 import {
-  useNavigate, useLocation 
+  useNavigate, useLocation
 } from 'react-router-dom';
 import {
-  NotificationsMenu 
-} from '../../components/NotificationsMenu';
-import {
-  ProfileIconMenu 
+  ProfileIconMenu
 } from '../../components/ProfileIconMenu';
+import {
+  Notificactions
+} from '../Notifications';
+import {
+  onMessage
+} from 'firebase/messaging';
+import {
+  messaging
+} from '../../firebase/firebaseConfig';
 
 const pages = {
   Mapa: '/inicio',
   Estadísticas: '/estadisticas',
-  Recomendaciones: '/recomendaciones',  
+  Recomendaciones: '/recomendaciones',
   Reportes: '/reportes',
 };
 
 const managementItems = {
   Empleados: '/empleados',
-  Contenedores: '/contenedores',  
-  Recorridos: '/recorridos',  
+  Contenedores: '/contenedores',
+  Recorridos: '/recorridos',
   Áreas: '/areas',
 };
 
@@ -51,10 +55,14 @@ export const Header = ({
   const location = useLocation();
 
   const [anchorElNav, setAnchorElNav] = useState(null);
-  const [anchorElNotifications, setAnchorElNotifications] = useState(null);
+
   const [anchorElProfile, setAnchorElProfile] = useState(null);
   const [anchorElManagement, setAnchorElManagement] = useState(null);
   const [currentTab, setCurrentTab] = useState('');
+
+  onMessage(messaging, (payload) => {
+    console.log('🚀 ~ onMessage ~ payload:', payload)
+  });
 
   useEffect(() => {
     const activePage = Object.keys(pages).find(key => pages[key] === location.pathname);
@@ -71,10 +79,6 @@ export const Header = ({
     setAnchorElNav(event.currentTarget);
   };
 
-  const handleOpenNotificationsMenu = (event) => {
-    setAnchorElNotifications(event.currentTarget);
-  };
-
   const handleOpenProfileMenu = (event) => {
     setAnchorElProfile(event.currentTarget);
   };
@@ -83,9 +87,7 @@ export const Header = ({
     setAnchorElNav(null);
   };
 
-  const handleCloseNotificationsMenu = () => {
-    setAnchorElNotifications(null);
-  };
+
 
   const handleCloseProfileMenu = () => {
     setAnchorElProfile(null);
@@ -114,7 +116,7 @@ export const Header = ({
       e.preventDefault() //previene el autoscroll para que funcione el abrir páginas en nuevas tabs.
     }
   }
-  
+
   const handleClickManagementItem = (path) => (event) => {
     if (event.type === 'auxclick' && event.button === 1) { //Middle-click
       window.open(path, '_blank');
@@ -124,46 +126,14 @@ export const Header = ({
       setCurrentTab('Gestión');
     }
   };
-  
 
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      type: 'frequencyChange',
-      title: 'Cambio de frecuencia',
-      description: 'Reduce la frecuencia en Área 2' 
-    },
-    {
-      id: 2,
-      type: 'newReport',
-      title: 'Nuevo reporte',
-      description: 'Contenedor desbordado' 
-    },
-    {
-      id: 3,
-      type: 'lowBattery',
-      title: 'Batería baja',
-      description: 'El contenedor #123456 tiene menos de 20% de batería' 
-    },
-    {
-      id: 4,
-      type: 'fullContainers',
-      title: 'Contenedores llenos',
-      description: 'El 60% de los contenedores en zona 1 están llenos',
-      details: 'VER DETALLES' 
-    },
-  ]);
-
-  const handleRemoveNotification = (id) => {
-    setNotifications(prevNotifications => prevNotifications.filter(notification => notification.id !== id));
-  };
 
   return (
     <AppBar
       onMouseDown={handleHeaderMouseDown}
       sx={{
         background: '#12422c',
-        zIndex: 1100 
+        zIndex: 1100
       }}
     >
       <Container
@@ -180,16 +150,16 @@ export const Header = ({
           sx={{
             background: '#12422c',
             width: '100%',
-            pr: '32px' 
+            pr: '32px'
           }}
         >
           <AdbIcon
             sx={{
               display: {
-                xs: 'none' 
+                xs: 'none'
               },
               mr: 1,
-              backgroundColor: '#12422c' 
+              backgroundColor: '#12422c'
             }}
           />
           {logoOnly ? (
@@ -198,7 +168,7 @@ export const Header = ({
               sx={{
                 display: 'flex',
                 justifyContent: 'center',
-                alignItems: 'center' 
+                alignItems: 'center'
               }}
             >
               <Box
@@ -223,7 +193,7 @@ export const Header = ({
             <Box
               sx={{
                 display: 'flex',
-                width: '100%' 
+                width: '100%'
               }}
             >
               <Box
@@ -231,7 +201,7 @@ export const Header = ({
                 sx={{
                   display: 'flex',
                   justifyContent: 'center',
-                  alignItems: 'center' 
+                  alignItems: 'center'
                 }}
               >
                 <Box
@@ -240,7 +210,7 @@ export const Header = ({
                     display: 'flex',
                     alignItems: 'center',
                     cursor: 'pointer',
-                    border: 'none' 
+                    border: 'none'
                   }}
                   component={'button'}
                   onClick={() => navigate('/inicio')}
@@ -262,9 +232,9 @@ export const Header = ({
                   flexGrow: 1,
                   display: {
                     xs: 'flex',
-                    md: 'none' 
+                    md: 'none'
                   },
-                  backgroundColor: '#12422c' 
+                  backgroundColor: '#12422c'
                 }}
               >
                 <IconButton
@@ -282,21 +252,21 @@ export const Header = ({
                   anchorEl={anchorElNav}
                   anchorOrigin={{
                     vertical: 'bottom',
-                    horizontal: 'left' 
+                    horizontal: 'left'
                   }}
                   keepMounted
                   transformOrigin={{
                     vertical: 'top',
-                    horizontal: 'left' 
+                    horizontal: 'left'
                   }}
                   open={Boolean(anchorElNav)}
                   onClose={handleCloseNavMenu}
                   sx={{
                     display: {
                       xs: 'block',
-                      md: 'none' 
+                      md: 'none'
                     },
-                    backgroundColor: '#12422c' 
+                    backgroundColor: '#12422c'
                   }}
                 >
                   {Object.keys(pages).map((page) => (
@@ -312,33 +282,33 @@ export const Header = ({
                   ))}
                 </Menu>
               </Box>
-              
+
               <AdbIcon
                 sx={{
                   display: {
                     xs: 'flex',
-                    md: 'none' 
+                    md: 'none'
                   },
                   backgroundColor: '#12422c',
-                  mr: 1 
+                  mr: 1
                 }}
               />
               <Box
                 sx={{
                   display: 'flex',
                   flexGrow: 1,
-                  justifyContent: 'space-between' 
+                  justifyContent: 'space-between'
                 }}
               >
                 <Box
                   sx={{
                     display: {
                       xs: 'none',
-                      md: 'flex' 
+                      md: 'flex'
                     },
                     backgroundColor: '#12422c',
                     gap: {
-                      md: '16px' 
+                      md: '16px'
                     },
                   }}
                 >
@@ -359,7 +329,7 @@ export const Header = ({
                       {page}
                     </Button>
                   ))}
-                          
+
                   <Button
                     onClick={handleOpenManagementMenu}
                     sx={{
@@ -374,24 +344,24 @@ export const Header = ({
                     Gestión
                     <ExpandMore
                       sx={{
-                        color: 'white' 
+                        color: 'white'
                       }}
                     />
                   </Button>
                   <Menu
                     sx={{
-                      mt: '44px' 
+                      mt: '44px'
                     }}
                     id='menu-appbar'
                     anchorEl={anchorElManagement}
                     anchorOrigin={{
                       vertical: 'top',
-                      horizontal: 'left' 
+                      horizontal: 'left'
                     }}
                     keepMounted
                     transformOrigin={{
                       vertical: 'top',
-                      horizontal: 'left' 
+                      horizontal: 'left'
                     }}
                     open={Boolean(anchorElManagement)}
                     onClose={handleCloseManagementMenu}
@@ -412,44 +382,17 @@ export const Header = ({
                 <Box
                   sx={{
                     display: 'flex',
-                    gap: '16px' 
+                    gap: '16px'
                   }}
                 >
-                  <Box>
-                    <IconButton
-                      onClick={handleOpenNotificationsMenu}
-                    >
-                      <Badge 
-                        badgeContent={notifications.length}
-                        color='error'
-                        sx={{
-                          '& .MuiBadge-badge': {
-                            right: 4,
-                            top: 4,
-                          },
-                        }}
-                      >
-                        <NotificationsOutlinedIcon
-                          sx={{
-                            color: 'white' 
-                          }}
-                        />
-                      </Badge>
-                    </IconButton>
-                    <NotificationsMenu
-                      handleClose={handleCloseNotificationsMenu}
-                      notifications={notifications}
-                      anchorEl={anchorElNotifications}
-                      onRemoveNotification={handleRemoveNotification}
-                    />
-                  </Box>
+                  <Notificactions />
                   <Box>
                     <IconButton
                       onClick={handleOpenProfileMenu}
                     >
                       <PersonIcon
                         sx={{
-                          color: 'white' 
+                          color: 'white'
                         }}
                       />
                     </IconButton>
