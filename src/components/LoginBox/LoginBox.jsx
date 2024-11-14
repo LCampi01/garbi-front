@@ -52,9 +52,7 @@ const userLoginSchema = object({
     .required(),
 }).required();
 
-const {
-  VITE_APP_VAPID_KEY
-} = import.meta.env;
+const VITE_APP_VAPID_KEY = 'BNQxGHhRSxiYWTWhDMJrhuHzVioqhgJP666pjfa_q-GPiH8iKM3XKf7QDZ6rdp1VLQVXJq2DW_GfDymV6R8aM10'
 
 export const LoginBox = ({
   setIsFlipped
@@ -92,43 +90,64 @@ export const LoginBox = ({
 
   const onSubmit = async (data) => {
     setIsSubmitLoading(true);
-
+  
     try {
-      // const serviceWorkerRegistration = await getOrRegisterServiceWorker();
-
-      await Notification.requestPermission();
-
-      const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js')
-
-      await navigator.serviceWorker.ready
-
+      // Solicitar permiso para enviar notificaciones
+      const permission = await Notification.requestPermission();
+  
+      if (permission !== 'granted') {
+        // Si el permiso no es concedido, maneja este caso y detén el proceso
+        console.warn('Permisos de notificación no concedidos');
+        setIsSubmitLoading(false);
+        return;
+      }
+  
+      // Registrar el Service Worker para Firebase
+      const registration = await navigator.serviceWorker.register('/firebase-messaging-sw.js');
+  
+      // Asegurarse de que el Service Worker esté listo
+      await navigator.serviceWorker.ready;
+  
+      // Obtener el token de Firebase usando el Service Worker registrado
       const token = await getToken(messaging, {
         serviceWorkerRegistration: registration,
         vapidKey: VITE_APP_VAPID_KEY,
       });
-
+  
+      if (!token) {
+        // Manejar el caso en que no se pueda obtener el token
+        console.error('No se pudo obtener el token de Firebase');
+        setIsSubmitLoading(false);
+        return;
+      }
+  
+      // Realizar el login con el email, password y el token de Firebase
       const response = await login({
         personalEmail: data.personalEmail,
         password: data.password,
         token,
       });
-
+  
+      // Guardar el token y la información del usuario en localStorage
       localStorage.setItem('token', response.token);
       const user = jwtDecode(response.token);
       localStorage.setItem('user', JSON.stringify(user));
-
+  
       setIsSubmitLoading(false);
-
+  
+      // Verificar condiciones después del login
       if (!response.termsAndConditions) {
         setIsFlipped(true);
       } else {
         navigate('/inicio');
       }
     } catch (error) {
+      // Manejo de errores generales
       console.error('Error en onSubmit:', error);
       setIsSubmitLoading(false);
     }
   };
+  
 
 
   useEffect(() => {
