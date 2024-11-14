@@ -21,7 +21,7 @@ import {
 
 
 export const RightSidePanelOptimalRouteIinfo = ({
-  routeSelected, optimalRoutes, setRouteSelected
+  routeSelected, optimalRoutes, setRouteSelected, selectedCollectors
 }) => {
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const [snackBarText, setSnackbarText] = useState('Ruta enviada.')
@@ -36,7 +36,7 @@ export const RightSidePanelOptimalRouteIinfo = ({
 
   const onSelectOptimalRoute = async (optimalRouteId) => {
     try {
-      await selectOptimalRoute(optimalRouteId)
+      await selectOptimalRoute(optimalRouteId, selectedCollectors)
       setSnackbarText('Ruta enviada.')
       setSnackBarSeverity('success')
       setOpenSnackbar(true)

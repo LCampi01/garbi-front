@@ -65,6 +65,9 @@ import {
 import {
   formatContainers 
 } from '../../api/hooks/useReports/mappers';
+import {
+  useRoutes 
+} from '../../api/hooks/useRoutes/useRoutes';
 
 const icons = [
   Battery0BarIcon,
@@ -141,6 +144,8 @@ export default function HomeMainContent({
   const [optimalRoutes, setOptimalRoutes] = useState(null)
   const [company, setCompany] = useState(null)
   const [openAdjustThresholdsModal, setOpenAdjustThresholdsModal] = useState(false);
+  const [collectors, setCollectors] = useState([])
+  const [selectedCollectors, setSelectedCollectors] = useState([])
 
   const handleOpenAdjustThresholdsModal = () => {
     setOpenAdjustThresholdsModal(true)
@@ -175,6 +180,13 @@ export default function HomeMainContent({
       isLoadingGetOptimalRoutes
     }
   } = useOptimalRoutes()
+
+  const {
+    fetchCollectors: {
+      isLoadingFetchCollectors,
+      fetchCollectors,
+    }
+  } = useRoutes()
 
 
   const apiKeyGoogleMaps = 'AIzaSyChdsbPNc69MyOgPRQf8o2_5kMUFDx2zMM';
@@ -215,6 +227,13 @@ export default function HomeMainContent({
           setCompany(response)
         });
     }
+
+    const fetchCollectorsForRoute = async () => {
+      const collectorsRetrieved = await fetchCollectors()
+      setCollectors(collectorsRetrieved.result)
+    }
+
+    fetchCollectorsForRoute()
   }, []);
 
   useEffect(() => {
@@ -249,6 +268,11 @@ export default function HomeMainContent({
   }, [thresholdInformation])
 
   const onGenerateOptimalRoute = (data) => {
+    const selectedCollectorObjects = collectors.filter((collector) =>
+      data.collectors.includes(collector.id)
+    )
+    setSelectedCollectors(selectedCollectorObjects)
+
     fetchOptimalRoutes(data.areaId)
     handleCloseOpenGenerateOptimalRouteModal()
     setOpenGenerateOptimalRouteRightSideInfo(true)
@@ -293,6 +317,7 @@ export default function HomeMainContent({
           handleClose={handleCloseOpenGenerateOptimalRouteModal}
           handleOpenRightSideOptimalRouteInfo={handleOpenRightSidePanelOptimalRouteInfo}
           areas={areas}
+          collectors={collectors}
         />}
       />
       <Box
@@ -374,6 +399,7 @@ export default function HomeMainContent({
                 routeSelected={optimalRouteSelected}
                 optimalRoutes={optimalRoutes}
                 setRouteSelected={setOptimalRouteSelected}
+                selectedCollectors={selectedCollectors}
               />}
             />
           )
