@@ -62,6 +62,9 @@ import {
 import {
   getCompanyThresholdInformation 
 } from '../../hooks/useGetColorPoint';
+import {
+  formatContainers 
+} from '../../api/hooks/useReports/mappers';
 
 const icons = [
   Battery0BarIcon,
@@ -127,7 +130,7 @@ const HtmlTooltip = styled(({
 }));
 
 export default function HomeMainContent({
-  containers, areas, containerSelected, setContainerSelected
+  containers, areas, containerSelected, setContainerSelected, setContainersToRender, cleanFilters
 }) {
 
   const [openGenerateOptimalRouteModal, setOpenGenerateOptimalRouteModal] = useState(false)
@@ -154,6 +157,7 @@ export default function HomeMainContent({
     setOpenGenerateOptimalRouteRightSideInfo(false)
     setOptimalRouteSelected(null)
     setOptimalRoutes(null)
+    cleanFilters()
   }
   const handleOpenRightSidePanelOptimalRouteInfo = () => {
     handleCloseOpenGenerateOptimalRouteModal()
@@ -182,6 +186,13 @@ export default function HomeMainContent({
     setOptimalRoutes(optimalRoutes)
     setOptimalRouteSelected(optimalRoutes.optimalRouteFull)
   }
+
+  useEffect(() => {
+    if(optimalRouteSelected) {
+      setContainersToRender(formatContainers(optimalRouteSelected.containers))
+    }
+
+  }, [optimalRouteSelected])
 
   const {
     getCompany: {

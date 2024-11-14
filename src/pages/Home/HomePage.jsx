@@ -185,6 +185,8 @@ export default function HomePage() {
           containers={containersToRender}
           setContainerSelected={setContainerSelected}
           containerSelected={containerSelected}
+          cleanFilters={cleanFilters}
+          setContainersToRender={setContainersToRender}
         />
     }
     renderFilters={() => <HomeFilters

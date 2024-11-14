@@ -29,12 +29,12 @@ export function getCompanyThresholdInformation(threshold) {
     {
       color: colors.LOW_CAPACITY,
       valor: '-' + threshold.warning + '%',
-      thresholdRange: [0, threshold.warning]
+      thresholdRange: [0, threshold.warning - 1]
     },
     {
       color: colors.MEDIUM_CAPACITY,
       valor: threshold.warning + '% - ' + threshold.full + '%',
-      thresholdRange: [threshold.warning, threshold.full]
+      thresholdRange: [threshold.warning, threshold.full - 1]
     },
     {
       color: colors.HIGH_CAPACITY,
