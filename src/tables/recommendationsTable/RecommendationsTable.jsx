@@ -103,7 +103,7 @@ export const RecommendationsTable = ({
         aria-label='simple table'
       >
         <TableBody>
-          {recommendationsInitial.map((row) => (
+          {data.map((row) => (
             <TableRow
               key={row.id}
               sx={{
@@ -167,7 +167,7 @@ export const RecommendationsTable = ({
                     color: '#616161',
                   }}
                 >
-                  {formatDate(row.date)}
+                  {/* {formatDate(row.date)} */}
                 </Typography>
               </TableCell>
               <TableCell

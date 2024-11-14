@@ -6,13 +6,13 @@ import {
 } from 'firebase/messaging';
 
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_APP_API_KEY,
-  authDomain: import.meta.env.VITE_APP_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_APP_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_APP_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_APP_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_APP_APP_ID,
-  measurementId: import.meta.env.VITE_APP_MEASUREMENT_ID,
+  apiKey: 'AIzaSyAPdIg4xodg61mEwwo1NMrOgMFoBpDl-74',
+  authDomain: 'garbi-2b6c2.firebaseapp.com',
+  projectId: 'garbi-2b6c2',
+  storageBucket: 'garbi-2b6c2.appspot.com',
+  messagingSenderId: '916237553430',
+  appId: '1:916237553430:web:51dda03555042ddf42ca37',
+  measurementId: 'G-3P1PRK2PR9',
 };
 
 const app = initializeApp(firebaseConfig);

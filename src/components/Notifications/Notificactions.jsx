@@ -2,7 +2,7 @@ import {
   Badge, Box, IconButton 
 } from '@mui/material';
 import {
-  useEffect, useState 
+  useState 
 } from 'react'
 import {
   NotificationsMenu 
@@ -58,14 +58,14 @@ export const Notificactions = () => {
   } = useNotifications()
 
 
-  useEffect(() => {
-    const fetchNotifications = async () => {
-      const notifications = await getNotifications();
-      console.log('🚀 ~ fetchNotifications ~ notifications:', notifications)
-    }
+  // useEffect(() => {
+  //   const fetchNotifications = async () => {
+  //     const notifications = await getNotifications();
+  //     console.log('🚀 ~ fetchNotifications ~ notifications:', notifications)
+  //   }
 
-    fetchNotifications();
-  }, [])
+  //   fetchNotifications();
+  // }, [])
 
 
   const handleCloseNotificationsMenu = () => {

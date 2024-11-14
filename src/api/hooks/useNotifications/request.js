@@ -9,6 +9,9 @@ import QueryBuilder from '../../queryBuilder/QueryBuilder'
 import {
   HTTPMethods 
 } from '../../config/HTTPMethods'
+import {
+  LIMIT_DEFAULT 
+} from '../../../config'
 
 const baseNotificationsUri = baseIntegrationUri + '/notifications'
 
@@ -19,13 +22,18 @@ export const useGetNotifications = () => {
     baseUri: baseNotificationsUri
   })
 
-  const getNotifications = (limit = 10, newNotificationsParam = true) => {
+  const getNotifications = (lastKey = null, queryParamsFilter, limit = LIMIT_DEFAULT) => {
     const queryBuilder = new QueryBuilder()
 
-    const uri = queryBuilder
+    queryBuilder
+      .addParam('lastKey', lastKey)
       .addParam('limit', limit)
-      .addParam('newNotifications', newNotificationsParam)
-      .build();
+
+    queryParamsFilter.forEach(element => {
+      queryBuilder.addParam(element.key, element.value)
+    });
+
+    const uri = queryBuilder.build();
 
     return commonFetch({
       uri,
