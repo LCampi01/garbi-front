@@ -46,4 +46,12 @@ export class TimestampUtil {
       day: '2-digit' 
     })
   }
+
+  static getDuration(finishedTimestamp, startedTimestamp) {
+    const finished = new Date(finishedTimestamp)
+    const started = new Date(startedTimestamp)
+  
+    const duration = finished - started
+    return duration
+  }
 }
