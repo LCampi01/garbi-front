@@ -16,6 +16,7 @@ export const useNotifications = () => {
 
   return {
     getNotifications: {
+      
       getNotifications,
       isLoadingGetNotifications
     },
