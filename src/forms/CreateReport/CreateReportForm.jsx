@@ -108,8 +108,8 @@ export const CreateReportForm = ({
   const [snackbarText, setSnackbarText] = useState(null)
 
   const position = {
-    lat: -34.5893,
-    lng: -58.3974,
+    lat: -34.598918,
+    lng: -58.421261,
   };
 
   const [containers, setContainers] = useState([]);
@@ -459,6 +459,7 @@ export const CreateReportForm = ({
                   setContainerSelected={handleContainerClick}
                   key={p._id}
                   point={p}
+                  selectedContainerId={containerSelected?.id}
                 />
               ))}
             />
@@ -580,8 +581,10 @@ export const CreateReportForm = ({
 };
 
 function Marker({
-  point, setContainerSelected
+  point, setContainerSelected, selectedContainerId
 }) {
+  const isSelected = selectedContainerId === point.id
+
   return (
     <AdvancedMarker
       position={point}
@@ -624,7 +627,8 @@ function Marker({
         <div>
           <CircleIcon
             sx={{
-              color: '#12422c'
+              color: isSelected ? '#e74a54' : '#12422c',
+              fontSize: isSelected ? '32px' : '24px',
             }}
           />
         </div>
