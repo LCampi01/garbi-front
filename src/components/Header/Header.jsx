@@ -41,10 +41,10 @@ const pages = {
 };
 
 const managementItems = {
-  Empleados: '/empleados',
-  Contenedores: '/contenedores',
-  Recorridos: '/recorridos',
   Áreas: '/areas',
+  Contenedores: '/contenedores',
+  Empleados: '/empleados',
+  Recorridos: '/recorridos',
 };
 
 export const Header = ({
@@ -65,10 +65,10 @@ export const Header = ({
   });
 
   useEffect(() => {
-    const activePage = Object.keys(pages).find(key => pages[key] === location.pathname);
+    const activePage = Object.keys(pages).find(key => location.pathname.startsWith(pages[key]));
     if (activePage) {
       setCurrentTab(activePage);
-    } else if (Object.values(managementItems).includes(location.pathname)) {
+    } else if (Object.values(managementItems).some(path => location.pathname.startsWith(path))) {
       setCurrentTab('Gestión');
     } else {
       setCurrentTab('');
