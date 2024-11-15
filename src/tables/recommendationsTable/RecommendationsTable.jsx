@@ -17,18 +17,15 @@ import {
 import {
   useState 
 } from 'react';
+import {
+  TimestampUtil
+} from '../../utils/timestampUtil';
 
 export const RecommendationsTable = ({
   data 
 }) => {
 
   const [recommendations,setRecommendations] = useState([])
-
-  const formatDate = (dateStr) => {
-    const [year, month, day] = dateStr.split('/');
-    return `${day}/${month}`;
-  };
-
 
   const handleToggleRead = (id) => {
     setRecommendations(recommendations.map(row =>
@@ -167,7 +164,12 @@ export const RecommendationsTable = ({
                     color: '#616161',
                   }}
                 >
-                  {/* {formatDate(row.date)} */}
+                  {(() => {
+                    const { 
+                      date, time 
+                    } = TimestampUtil.convertToDateAndHour(row.date)
+                    return `${date}`
+                  })()}
                 </Typography>
               </TableCell>
               <TableCell

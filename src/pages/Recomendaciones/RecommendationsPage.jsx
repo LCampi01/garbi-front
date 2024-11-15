@@ -47,6 +47,7 @@ const mapper = (data) => {
       id: rec.id,
       title: rec.title,
       subtitle: rec.description,
+      date: rec.timestamp,
       read: 'READ' === rec.status,
       Icon: rec.type === 'lowBattery' ?  DeleteIcon : UpdateIcon
     }
