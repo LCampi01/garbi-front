@@ -31,8 +31,8 @@ export const AreaDrawingMap = ({
   }, [selectedColor, drawingManager])
 
   const position = {
-    lat: -34.5893,
-    lng: -58.3974,
+    lat: -34.608901,
+    lng: -58.428579,
   };
 
   useEffect(() => {
@@ -72,7 +72,7 @@ export const AreaDrawingMap = ({
   return (
     <>
       <Map
-        defaultZoom={12}
+        defaultZoom={14.5}
         defaultCenter={position}
         mapId='658a52589c7a963'
         id='garbi-create-area-map'

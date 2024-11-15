@@ -170,8 +170,8 @@ export default function HomeMainContent({
   }
 
   const position = {
-    lat: -34.5893,
-    lng: -58.3974,
+    lat: -34.608901,
+    lng: -58.428579,
   };
 
   const {
@@ -363,7 +363,7 @@ export default function HomeMainContent({
         >
           <MapWithContainers
             apiKey={apiKeyGoogleMaps}
-            zoom={15}
+            zoom={14.5}
             areas={areas}
             // route={optimalRouteSelected}
             routes={optimalRouteSelected?.polylines}
