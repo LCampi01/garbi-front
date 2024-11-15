@@ -33,7 +33,7 @@ const formatRecollectionDate = (lastRecollectionTimestamp) => {
 }
 
 export const RightSidePanelContainerInfo = ({
-  containerSelected, getBatteryIcon, company, areaName
+  containerSelected, getBatteryIcon, company
 }) => {
 
   return (
@@ -81,7 +81,7 @@ export const RightSidePanelContainerInfo = ({
             fontFamily: 'Roboto',
             fontSize: '12px',
             fontStyle: 'normal',
-            fontWeight: 400,
+            fontWeight: 300,
             lineHeight: '16px',
             letterSpacing: '0.1px',
             mb: 2,
@@ -101,7 +101,7 @@ export const RightSidePanelContainerInfo = ({
             letterSpacing: '0.1px',
           }}
         >
-          {containerSelected.address.neighborhood} - {areaName}
+          {containerSelected.address.neighborhood} - Área 2
         </Typography>
         <Typography
           sx={{
@@ -110,7 +110,7 @@ export const RightSidePanelContainerInfo = ({
             fontFamily: 'Roboto',
             fontSize: '12px',
             fontStyle: 'normal',
-            fontWeight: 400,
+            fontWeight: 300,
             lineHeight: '24px',
             letterSpacing: '0.1px',
             mb: 2,
