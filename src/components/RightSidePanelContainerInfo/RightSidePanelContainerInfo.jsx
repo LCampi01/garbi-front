@@ -33,7 +33,7 @@ const formatRecollectionDate = (lastRecollectionTimestamp) => {
 }
 
 export const RightSidePanelContainerInfo = ({
-  containerSelected, getBatteryIcon, company
+  containerSelected, getBatteryIcon, company 
 }) => {
 
   return (
