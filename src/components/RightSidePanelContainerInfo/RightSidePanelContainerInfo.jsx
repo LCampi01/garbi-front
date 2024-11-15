@@ -33,7 +33,7 @@ const formatRecollectionDate = (lastRecollectionTimestamp) => {
 }
 
 export const RightSidePanelContainerInfo = ({
-  containerSelected, getBatteryIcon, company 
+  containerSelected, getBatteryIcon, company, areaName
 }) => {
 
   return (
@@ -101,7 +101,7 @@ export const RightSidePanelContainerInfo = ({
             letterSpacing: '0.1px',
           }}
         >
-          {containerSelected.address.neighborhood} - Área 2
+          {containerSelected.address.neighborhood} - {areaName}
         </Typography>
         <Typography
           sx={{

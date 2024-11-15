@@ -91,7 +91,7 @@ const colors = {
 const getBatteryIcon = (battery) => {
   const index = Math.min(Math.floor(battery / 12.5), icons.length - 1);
   const IconComponent = icons[index];
-  console.log(100 - battery);
+  // console.log(100 - battery);
   return (
     <IconComponent
       sx={{
@@ -146,6 +146,7 @@ export default function HomeMainContent({
   const [openAdjustThresholdsModal, setOpenAdjustThresholdsModal] = useState(false);
   const [collectors, setCollectors] = useState([])
   const [selectedCollectors, setSelectedCollectors] = useState([])
+  const [containerSelectedArea, setContainerSelectedArea] = useState(null)
 
   const handleOpenAdjustThresholdsModal = () => {
     setOpenAdjustThresholdsModal(true)
@@ -302,6 +303,13 @@ export default function HomeMainContent({
       </Box>
     )
   }
+  
+  const getAreaNameById = (id) => {
+    const area = areas.find((area) => area.id === id)
+    return area.name
+  }
+  const areaName = containerSelected ? getAreaNameById(containerSelected.areaId) : '';
+
 
   return (
     <Box
@@ -385,6 +393,7 @@ export default function HomeMainContent({
             componentToRender={
               <RightSidePanelContainerInfo
                 containerSelected={containerSelected}
+                areaName={areaName}
                 getBatteryIcon={getBatteryIcon}
               />
             }
