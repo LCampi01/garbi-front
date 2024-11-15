@@ -34,7 +34,7 @@ export const useFetchRoutes = () => {
 
     const uri = queryBuilder.build();
 
-    console.log('🚀 ~ fetchReports ~ uri:', uri)
+    console.log('🚀 ~ fetchRoutes ~ uri:', uri)
 
     return commonFetch({
       uri,

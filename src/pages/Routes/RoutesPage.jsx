@@ -77,7 +77,8 @@ const mapper = (routes) => {
         } = TimestampUtil.convertToDateAndHour(finishedTimestamp);
         endTime = ` - ${finishedTime}`;
 
-        duration = TimestampUtil.formatMinutes(r.directions.total_duration / 60)
+        const durationUnformatter = TimestampUtil.getDuration(finishedTimestamp, startedTimestamp);
+        duration = TimestampUtil.formatMinutes(durationUnformatter / 1000 / 60)
       } else if (startedTimestamp) { // recorridos en curso: empezado pero no finalizado
         duration = 'En curso';
         startTime = `Comenzó a las ${startTime}`;

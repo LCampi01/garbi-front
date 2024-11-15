@@ -15,7 +15,9 @@ export const PaperDetailWorkersOnATrip = ({
         height: 1,
         p: '1rem',
         display: 'flex',
-        flexBasis: '48%'
+        flexBasis: '48%',
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
 
@@ -25,6 +27,7 @@ export const PaperDetailWorkersOnATrip = ({
         }}
       >
         <Typography
+          align='center'
           sx={{
             fontSize: '16px',
             fontWeight: 600,
