@@ -19,5 +19,13 @@ export default defineConfig({
         plugins: ['@emotion/babel-plugin'],
       },
     }),
+    viteStaticCopy({
+      targets: [
+        {
+          src: './firebase-messagin-sw.js', // correct path to this file.
+          dest: './', // root of your output directory
+        },
+      ],
+    }),
   ],
 });
