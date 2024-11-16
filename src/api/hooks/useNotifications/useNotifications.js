@@ -13,6 +13,7 @@ export const useNotifications = () => {
     updateNotification,
     isLoading: isLoadingUpdateNotifications
   } = useUpdateNotification();
+  
 
   return {
     getNotifications: {
