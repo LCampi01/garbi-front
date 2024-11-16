@@ -585,7 +585,7 @@ function Marker({
 }
 
 
-function PositionMarker({
+export function PositionMarker({
   position, text
 }) {
   return (

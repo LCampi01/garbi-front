@@ -34,8 +34,14 @@ import {
   TimestampUtil
 } from '../../../utils/timestampUtil';
 import {
-  decodePolyline 
+  decodePolyline
 } from '../../../utils/decodePolyline';
+import {
+  useCompanies 
+} from '../../../api/hooks/useCompanies/useCompanies';
+import {
+  PositionMarker 
+} from '../../Home/HomeMainContent';
 
 
 const routeDetailsMapper = (route) => {
@@ -143,6 +149,25 @@ export const RouteDetailPage = () => {
   const [routeData, setRouteData] = useState(null);
   const [routeDetails, setRouteDetails] = useState(null);
   const [workersDetails, setWorkersDetails] = useState(null);
+  const [company, setCompany] = useState(null);
+
+  const {
+    getCompany: {
+      getCompany,
+      isGetCompanyLoading
+    }
+  } = useCompanies();
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem('user'));
+    const companyId = user?.companyId;
+    if (companyId) {
+      getCompany(companyId)
+        .then((response) => {
+          setCompany(response)
+        });
+    }
+  }, []);
 
   const {
     fetchRoute: {
@@ -251,7 +276,7 @@ export const RouteDetailPage = () => {
                 apiKey={apiKeyGoogleMaps}
               >
                 <DrawOptionals
-                  route={routeData.directions.overview_polyline}
+                  routes={routeData.directions.polylines}
                 />
                 <Map
                   defaultZoom={13}
@@ -260,7 +285,20 @@ export const RouteDetailPage = () => {
                   id='garbi-route-detail'
                   disableDefaultUI
                   disableDoubleClickZoom
-                />
+                >
+                  {company && [
+                    <PositionMarker
+                      position={company.dump}
+                      text='FIN'
+                      key={'pt-1'}
+                    />,
+                    <PositionMarker
+                      position={company.truckTerminal}
+                      text='INICIO'
+                      key={'pt-2'}
+                    />
+                  ]}
+                </Map>
               </APIProvider>
             </Box>
           </Box>
@@ -271,41 +309,38 @@ export const RouteDetailPage = () => {
 }
 
 const DrawOptionals = ({
-  route
+  routes
 }) => {
   const map = useMap('garbi-route-detail')
 
   useEffect(() => {
-    if (route == null || map == null) return;
+    if (routes == null || map == null || routes.length === 0) return;
 
-    const pathCoordinates = decodePolyline(route)
+    const routesPolylines = [];
 
-    const innerStroke = new google.maps.Polyline({
-      path: pathCoordinates,
-      strokeColor: STROKE_COLORS.active.innerStroke,
-      strokeOpacity: 1.0,
-      strokeWeight: 3,
-      zIndex: 10,
-      map
-    });
-  
-    const outerStroke = new google.maps.Polyline({
-      path: pathCoordinates,
-      strokeColor: STROKE_COLORS.active.outerStroke,
-      strokeOpacity: 1.0,
-      strokeWeight: 6,
-      zIndex: 1,
-      map
-    });
-  
-    innerStroke.setMap(map);
-    outerStroke.setMap(map);
+    routes.forEach(
+      r => {
+        const pathCoordinates = decodePolyline(r)
+
+        const routePolyline = new window.google.maps.Polyline({
+          path: pathCoordinates,
+          geodesic: true,
+          strokeColor: '#2196F3',
+          strokeOpacity: 0.8,
+          strokeWeight: 5,
+          map
+        });
+
+        routesPolylines.push(routePolyline);
+      }
+    )
 
     return () => {
-      innerStroke.setMap(null);
-      outerStroke.setMap(null)
+      routesPolylines.forEach(
+        r => r.setMap(null)
+      );
     }
-  }, [route, map])
+  }, [routes, map])
 }
 
 const STROKE_COLORS = {
