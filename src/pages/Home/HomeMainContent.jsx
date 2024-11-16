@@ -376,6 +376,20 @@ export default function HomeMainContent({
                 markerColor={p.color}
               />
             ))}
+            markers = {
+              optimalRouteSelected && company && [
+                <PositionMarker
+                  position={company.dump}
+                  text='FIN'
+                  key={'pt-1'}
+                />,
+                <PositionMarker
+                  position={company.truckTerminal}
+                  text='INICIO'
+                  key={'pt-2'}
+                />
+              ]
+            }
           />
 
         </Box>
@@ -566,6 +580,32 @@ function Marker({
           />
         </Box>
       </HtmlTooltip>
+    </AdvancedMarker>
+  );
+}
+
+
+function PositionMarker({
+  position, text
+}) {
+  return (
+    <AdvancedMarker
+      position={position}
+    >
+      <Box
+        sx = {{
+          width: '33px',
+          height: '33px',
+          backgroundColor: 'lightgray',
+          borderRadius: '50%',
+          color: 'black',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        {text}
+      </Box>
     </AdvancedMarker>
   );
 }

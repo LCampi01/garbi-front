@@ -16,7 +16,7 @@ import {
 } from '../../utils/decodePolyline';
 
 export const MapWithContainers = ({
-  apiKey, zoom, centerPosition, containers, routes, route, areas
+  apiKey, zoom, centerPosition, containers, routes, route, areas, markers
 }) => {
 
   return (
@@ -46,6 +46,7 @@ export const MapWithContainers = ({
         }}
       >
         {containers}
+        {markers}
       </Map>
     </APIProvider>
   );
