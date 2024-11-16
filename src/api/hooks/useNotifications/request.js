@@ -47,6 +47,33 @@ export const useGetNotifications = () => {
   }
 }
 
+export const useGetNewestNotifications = () => {
+  const {
+    commonFetch, isLoading
+  } = useFetch({
+    baseUri: baseNotificationsUri
+  })
+
+  const getNewestNotifications = () => {
+    const queryBuilder = new QueryBuilder()
+
+    queryBuilder
+      .addParam('newNotifications', true)
+
+    const uri = queryBuilder.build();
+
+    return commonFetch({
+      uri,
+      method: HTTPMethods.GET
+    })
+  }
+
+  return {
+    isLoading,
+    getNewestNotifications
+  }
+}
+
 export const useUpdateNotification = () => {
   const {
     commonFetch, isLoading
@@ -68,5 +95,29 @@ export const useUpdateNotification = () => {
   return {
     isLoading,
     updateNotification
+  }
+}
+
+export const useUpdateNotifications = () => {
+  const {
+    commonFetch, isLoading
+  } = useFetch({
+    baseUri: baseNotificationsUri
+  })
+
+  const updateNotifications = (notificationsId, wasRead) => {
+
+    return commonFetch({
+      body: {
+        read: wasRead,
+        ids: [notificationsId]
+      },
+      methd: HTTPMethods.PUT
+    })
+  }
+
+  return {
+    isLoading,
+    updateNotifications
   }
 }

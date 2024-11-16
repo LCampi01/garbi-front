@@ -1,7 +1,5 @@
-import DeleteIcon from '@mui/icons-material/Delete';
 import DraftsOutlinedIcon from '@mui/icons-material/DraftsOutlined';
 import MarkunreadOutlinedIcon from '@mui/icons-material/MarkunreadOutlined';
-import UpdateIcon from '@mui/icons-material/Update';
 import {
   Avatar,
   Box,
@@ -15,11 +13,15 @@ import {
   Typography
 } from '@mui/material';
 import {
+  useEffect,
   useState 
 } from 'react';
 import {
   TimestampUtil
 } from '../../utils/timestampUtil';
+import {
+  useNotifications 
+} from '../../api/hooks/useNotifications/useNotifications';
 
 export const RecommendationsTable = ({
   data 
@@ -27,65 +29,26 @@ export const RecommendationsTable = ({
 
   const [recommendations,setRecommendations] = useState([])
 
-  const handleToggleRead = (id) => {
+  const {
+    updateNotification: {
+      updateNotification
+    }
+  } = useNotifications();
+
+  const handleToggleRead = (r) => {
+    updateNotification(r.id, !r.read)
+    
     setRecommendations(recommendations.map(row =>
-      row.id === id ? {
+      row.id === r.id ? {
         ...row,
         read: !row.read
       } : row
     ));
   };
     
-  const recommendationsInitial = [
-    {
-      id: 1,
-      title: 'Añadir un contenedor',
-      subtitle: 'en Hilario Pueyrredón 1234 - Villa Crespo',
-      date: '2024/05/20',
-      read: false,
-      Icon: DeleteIcon
-    },
-    {
-      id: 2,
-      title: 'Eliminar un contenedor',
-      subtitle: 'en Hilario Pueyrredón 1234 - Villa Crespo',
-      date: '2024/05/24',
-      read: false,
-      Icon: DeleteIcon
-    },
-    {
-      id: 3,
-      title: 'Reducir la frecuencia de recolección',
-      subtitle: 'en el Área 2 de Villa del Parque',
-      date: '2024/06/20',
-      read: false,
-      Icon: UpdateIcon
-    },
-    {
-      id: 4,
-      title: 'Añadir un contenedor',
-      subtitle: 'en Hilario Pueyrredón 1234 - Villa Crespo',
-      date: '2024/05/29',
-      read: true,
-      Icon: DeleteIcon
-    },
-    {
-      id: 5,
-      title: 'Eliminar un contenedor',
-      subtitle: 'en Hilario Pueyrredón 1234 - Villa Crespo',
-      date: '2024/07/20',
-      read: true,
-      Icon: DeleteIcon
-    },
-    {
-      id: 6,
-      title: 'Reducir la frecuencia de recolección',
-      subtitle: 'en el Área 2 de Villa del Parque',
-      date: '2024/06/20',
-      read: true,
-      Icon: UpdateIcon
-    },
-  ];
+  useEffect(() => {
+    setRecommendations(data)
+  }, [data])
 
   return (
     <Paper
@@ -100,7 +63,7 @@ export const RecommendationsTable = ({
         aria-label='simple table'
       >
         <TableBody>
-          {data.map((row) => (
+          {recommendations.map((row) => (
             <TableRow
               key={row.id}
               sx={{
@@ -183,25 +146,12 @@ export const RecommendationsTable = ({
                 >
                   <IconButton
                     edge='end'
-                    onClick={() => handleToggleRead(row.id)}
+                    onClick={() => handleToggleRead(row)}
                   >
                     {row.read ? <MarkunreadOutlinedIcon /> : <DraftsOutlinedIcon />}
                   </IconButton>
                 </Tooltip>
               </TableCell>
-              <TableCell
-                sx={{
-                  width: '1%',
-                  paddingRight: '32px'
-                }}
-              >
-                <IconButton
-                  edge='end'
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
-
             </TableRow>
           ))}
         </TableBody>

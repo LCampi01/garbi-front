@@ -2,6 +2,7 @@ import {
   Badge, Box, IconButton 
 } from '@mui/material';
 import {
+  useEffect,
   useState 
 } from 'react'
 import {
@@ -11,61 +12,63 @@ import NotificationsOutlinedIcon from '@mui/icons-material/NotificationsOutlined
 import {
   useNotifications 
 } from '../../api/hooks/useNotifications/useNotifications';
+import {
+  useNavigate 
+} from 'react-router-dom';
+import {
+  onMessage 
+} from 'firebase/messaging';
+import {
+  messaging 
+} from '../../firebase/firebaseConfig';
 
 export const Notificactions = () => {
   const [anchorElNotifications, setAnchorElNotifications] = useState(null);
   const handleOpenNotificationsMenu = (event) => {
     setAnchorElNotifications(event.currentTarget);
   };
-  const [notifications, setNotifications] = useState([
-    {
-      id: 1,
-      type: 'frequencyChange',
-      title: 'Cambio de frecuencia',
-      description: 'Reduce la frecuencia en Área 2'
-    },
-    {
-      id: 2,
-      type: 'newReport',
-      title: 'Nuevo reporte',
-      description: 'Contenedor desbordado'
-    },
-    {
-      id: 3,
-      type: 'lowBattery',
-      title: 'Batería baja',
-      description: 'El contenedor #123456 tiene menos de 20% de batería'
-    },
-    {
-      id: 4,
-      type: 'fullContainers',
-      title: 'Contenedores llenos',
-      description: 'El 60% de los contenedores en zona 1 están llenos',
-      details: 'VER DETALLES'
-    },
-  ]);
-
+  const [notifications, setNotifications] = useState([]);
+  const navigate = useNavigate()
 
   const {
-    getNotifications: {
-      getNotifications,
-      isLoadingGetNotifications
+    getNewestNotifications: {
+      getNewestNotifications
     },
-    updateNotification: {
-      updateNotification,
-      isLoadingUpdateNotifications
+    updateNotifications: {
+      updateNotifications
     }
   } = useNotifications()
 
 
-  // useEffect(() => {
-  //   const fetchNotifications = async () => {
-  //     const notifications = await getNotifications();
-  //     console.log('🚀 ~ fetchNotifications ~ notifications:', notifications)
-  //   }
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      const notifications = await getNewestNotifications();
+      setNotifications(notifications.result)
+    }
 
-  //   fetchNotifications();
-  // }, [])
+    fetchNotifications();
+  }, [])
+
+  const onClickNoti = () => {
+    setAnchorElNotifications(null);
+    
+    updateNotifications(notifications.map(n => n.id), false)
+
+    setNotifications([])
+
+    navigate('/recomendaciones')
+  }
+
+  onMessage(messaging, (payload) => {
+    console.log('🚀 ~ onMessage ~ payload:', payload)
+
+    const jsonObject = JSON.parse(payload.body);
+    const newNotifications = [...notifications]
+    newNotifications.push(jsonObject);
+
+    setNotifications(notifications)
+  });
+
 
 
   const handleCloseNotificationsMenu = () => {
@@ -103,6 +106,7 @@ export const Notificactions = () => {
         notifications={notifications}
         anchorEl={anchorElNotifications}
         onRemoveNotification={handleRemoveNotification}
+        onClickNoti={onClickNoti}
       />
     </Box>
   )

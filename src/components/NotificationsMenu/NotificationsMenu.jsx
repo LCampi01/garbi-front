@@ -9,7 +9,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 import CloseIcon from '@mui/icons-material/Close';
 
 export const NotificationsMenu = ({
-  handleClose, notifications, anchorEl, onRemoveNotification
+  handleClose, notifications, anchorEl, onRemoveNotification, onClickNoti
 }) => {
   const iconStyle = {
     color: '#bdbdbd' 
@@ -80,7 +80,7 @@ export const NotificationsMenu = ({
         notifications.map((notification, index) => (
           <MenuItem
             key={notification.id}
-            onClick={handleClose} //TODO
+            onClick={onClickNoti} 
             divider={index < notifications.length - 1}
             sx={{
               width: '384px',
