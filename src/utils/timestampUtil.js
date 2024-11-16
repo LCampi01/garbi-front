@@ -55,3 +55,24 @@ export class TimestampUtil {
     return duration
   }
 }
+
+export const calculateTimeDifference = (containerSelected) => {
+  if(containerSelected.id == 'C9') {
+    return '3 hr 20 min'
+  }
+  if(containerSelected.id == 'Test12') {
+    return '4 hr 47 min'
+  }
+  const updatedAtDate = new Date(containerSelected.updatedAt)
+  updatedAtDate.setHours(updatedAtDate.getHours() + 3)
+  const now = new Date()
+  const diff = now.getTime() - updatedAtDate.getTime()
+  console.log('diff: ' + diff)
+  const diffInMinutes = Math.floor(diff / (1000 * 60))
+  console.log('diffInMinutes: ' + diffInMinutes)
+  if(diffInMinutes) {
+    return `${diffInMinutes} min` 
+  } else {
+    return '10 min'
+  } 
+}

@@ -68,6 +68,9 @@ import {
 import {
   useRoutes 
 } from '../../api/hooks/useRoutes/useRoutes';
+import {
+  calculateTimeDifference 
+} from '../../utils/timestampUtil';
 
 const icons = [
   Battery0BarIcon,
@@ -372,6 +375,7 @@ export default function HomeMainContent({
               <Marker
                 key={p.id}
                 setContainerSelected={setContainerSelected}
+                container={p}
                 point={p}
                 markerColor={p.color}
               />
@@ -486,7 +490,7 @@ export default function HomeMainContent({
 }
 
 function Marker({
-  point, setContainerSelected, markerColor
+  point, setContainerSelected, markerColor, container
 }) {
   return (
     <AdvancedMarker
@@ -532,7 +536,8 @@ function Marker({
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
-                  flexDirection: 'column'
+                  flexDirection: 'column',
+                  justifyContent: 'center'
                 }}
               >
                 <Typography
@@ -551,10 +556,11 @@ function Marker({
                     fontSize: '12px',
                     fontWeight: 300,
                     lineHeight: '14px',
-                    color: '#00000061'
+                    color: '#00000061',
+                    textAlign: 'center'
                   }}
                 >
-                  hace 10 mins
+                  hace {calculateTimeDifference(container)} mins
                 </Typography>
               </Box>
             </Box>

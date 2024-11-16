@@ -2,27 +2,11 @@ import {
   Box, Typography 
 } from '@mui/material'
 import {
+  calculateTimeDifference,
   TimestampUtil
 } from '../../utils/timestampUtil';
 
 
-const calculateTimeDifference = (containerSelected) => {
-  if(containerSelected.id == 'C9') {
-    return '3 hr 20 min'
-  }
-  if(containerSelected.id == 'Test12') {
-    return '4 hr 47 min'
-  }
-  const updatedAtDate = new Date(containerSelected.updatedAt)
-  const now = new Date()
-  const diff = now.getTime() - updatedAtDate.getTime()
-  const diffInMinutes = Math.floor(diff / (1000 * 60))
-  if(diffInMinutes) {
-    return `${diffInMinutes} min` 
-  } else {
-    return '10 min'
-  }
-}
 
 const formatRecollectionDate = (lastRecollectionTimestamp) => {
   const {
