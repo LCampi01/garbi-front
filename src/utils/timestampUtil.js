@@ -67,9 +67,7 @@ export const calculateTimeDifference = (containerSelected) => {
   updatedAtDate.setHours(updatedAtDate.getHours() + 3)
   const now = new Date()
   const diff = now.getTime() - updatedAtDate.getTime()
-  console.log('diff: ' + diff)
   const diffInMinutes = Math.floor(diff / (1000 * 60))
-  console.log('diffInMinutes: ' + diffInMinutes)
   if(diffInMinutes) {
     return `${diffInMinutes} min` 
   } else {

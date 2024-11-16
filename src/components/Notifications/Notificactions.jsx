@@ -63,11 +63,14 @@ export const Notificactions = () => {
     console.log('🚀 ~ onMessage ~ payload:', payload)
 
     const jsonObject = JSON.parse(payload.notification.body);
-    const newNotifications = [...notifications]
-    newNotifications.push(jsonObject);
+    console.log('🚀 ~ onMessage ~ jsonObject:', jsonObject)
+    const newNotifications = [...notifications, jsonObject]
 
-    setNotifications(notifications)
+    console.log('🚀 ~ onMessage ~ newNotifications:', newNotifications)
+
+    setNotifications(newNotifications)
   });
+   
 
 
 
