@@ -63,12 +63,14 @@ export const calculateTimeDifference = (containerSelected) => {
   if(containerSelected.id == 'Test12') {
     return '4 hr 47 min'
   }
+
   const updatedAtDate = new Date(containerSelected.updatedAt)
   updatedAtDate.setHours(updatedAtDate.getHours() + 3)
   const now = new Date()
   const diff = now.getTime() - updatedAtDate.getTime()
   const diffInMinutes = Math.floor(diff / (1000 * 60))
-  if(diffInMinutes) {
+
+  if(diffInMinutes >= 0) {
     return `${diffInMinutes} min` 
   } else {
     return '10 min'

@@ -568,7 +568,7 @@ function Marker({
                     textAlign: 'center'
                   }}
                 >
-                  hace {calculateTimeDifference(container)} mins
+                  hace {calculateTimeDifference(container)}
                 </Typography>
               </Box>
             </Box>
