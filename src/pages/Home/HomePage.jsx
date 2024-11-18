@@ -2,30 +2,30 @@ import {
   FilterSideComponent
 } from '../../components/FilterSideComponent';
 import {
-  HomeFilters 
+  HomeFilters
 } from '../../filters/HomeFilters/HomeFilters';
 import HomeMainContent from './HomeMainContent';
 import {
-  useForm 
+  useForm
 } from 'react-hook-form';
 import {
-  yupResolver 
+  yupResolver
 } from '@hookform/resolvers/yup';
 import {
   number,
-  object 
+  object
 } from 'yup';
 import {
-  useAreas 
+  useAreas
 } from '../../api/hooks/useAreas/useAreas';
 import {
-  useEffect, useState 
+  useEffect, useState
 } from 'react';
 import {
-  useContainers 
+  useContainers
 } from '../../api/hooks/useContainers/useContainers';
 import {
-  formatContainers 
+  formatContainers
 } from '../../api/hooks/useReports/mappers';
 
 export const homeFilterValidations = object({
@@ -36,11 +36,11 @@ export const homeFilterValidations = object({
     .max(100, 'Máx 100%')
     .test('is-less-than-maxLlenado', 'El llenado mínimo no puede ser mayor que el llenado máximo', function (value) {
       const {
-        maxLlenado 
+        maxLlenado
       } = this.parent; // Accede a maxLlenado en el contexto del esquema
       return value === null || maxLlenado === null || value <= maxLlenado; // Verifica la condición
     }),
-    
+
   maxLlenado: number()
     .nullable()
     .transform((value, originalValue) => originalValue.trim() === '' ? null : value)
@@ -54,7 +54,7 @@ export const homeFilterValidations = object({
     .max(100, 'Máx 100%')
     .test('is-less-than-maxBateria', 'La batería mínima no puede ser mayor que la batería máxima', function (value) {
       const {
-        maxBateria 
+        maxBateria
       } = this.parent; // Accede a maxBateria en el contexto del esquema
       return value === null || maxBateria === null || value <= maxBateria; // Verifica la condición
     }),
@@ -71,13 +71,14 @@ export default function HomePage() {
   const [areasToRender, setAreasToRender] = useState([])
   const [containers, setContainers] = useState([]);
   const [containersToRender, setContainersToRender] = useState([])
-  const [containerSelected, setContainerSelected] = useState(null);  
+  const [containerSelected, setContainerSelected] = useState(null);
 
   const {
     control, handleSubmit, setValue, formState: {
       errors
-    }, 
-    reset
+    },
+    reset,
+    getValues
   } = useForm({
     defaultValues: {
       areaId: '',
@@ -130,8 +131,56 @@ export default function HomePage() {
     }
   }, []);
 
+  const retrieveContainers = async () => {
+    try {
+      const containersUnformated = await getAllContainers();
+      const containersFormated = formatContainers(containersUnformated.result);
+
+      setContainers(containersFormated);
+      // Aplica filtros después de obtener los contenedores
+      const filters = getFormValues();
+      whenFiltersSubmit(filters);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  // Función para obtener los valores actuales del formulario
+  const getFormValues = () => {
+    const {
+      areaId, minLlenado, maxLlenado, minBateria, maxBateria 
+    } = getValues();
+    const formatValues = getValues();
+
+    if (minLlenado === '') {
+      formatValues.minLlenado = null
+    }
+    if (maxLlenado === '') {
+      formatValues.maxLlenado = null
+    }
+    if (minBateria === '') {
+      formatValues.minBateria = null
+    }
+    if (maxBateria === '') {
+      formatValues.maxBateria = null
+    }
+
+    return formatValues;
+  };
+
+  useEffect(() => {
+
+    // Configurar el intervalo de 30 segundos
+    const intervalId = setInterval(() => {
+      retrieveContainers();
+    }, 5000);
+
+    // Limpiar el intervalo cuando el componente se desmonte
+    return () => clearInterval(intervalId);
+  }, [areas, containers]);
+
   const whenFiltersSubmit = ({
-    areaId, minLlenado, maxLlenado, minBateria, maxBateria 
+    areaId, minLlenado, maxLlenado, minBateria, maxBateria
   }) => {
     const containersCondition = []
     const areasCondition = []
@@ -157,7 +206,6 @@ export default function HomePage() {
     const filteredAreas = areas.filter(area =>
       areasCondition.every(condition => condition(area))
     )
-
     setAreasToRender(filteredAreas)
     setContainersToRender(filteredContainers)
   }
