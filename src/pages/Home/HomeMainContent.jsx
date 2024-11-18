@@ -233,9 +233,12 @@ export default function HomeMainContent({
 
     const fetchCollectorsForRoute = async () => {
       const collectorsRetrieved = await fetchCollectors()
-      setCollectors(collectorsRetrieved.result)
+      const sortedCollectors = collectorsRetrieved.result.sort((a, b) =>
+        a.name.localeCompare(b.name)
+      )
+      setCollectors(sortedCollectors)
     }
-
+    
     fetchCollectorsForRoute()
   }, []);
 
