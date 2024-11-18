@@ -246,7 +246,11 @@ export const ReportDetailsPage = () => {
               >
                 <ReportDetailsDescriptionHeader
                   title={reportData?.title}
-                  state={reportData?.type.replace(/_/g, ' ')}
+                  state={
+                    reportData?.type === 'CONTENEDOR_ROTO' 
+                      ? 'CONTENEDOR EN MAL ESTADO' 
+                      : reportData?.type.replace(/_/g, ' ')
+                  }
                 />
               </Box>
               <Box

@@ -69,7 +69,7 @@ const tipos = [
   },
   {
     value: 'OTROS',
-    label: 'Otro'
+    label: 'Otros'
   },
 ];
 
