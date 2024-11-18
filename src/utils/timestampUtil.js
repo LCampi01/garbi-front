@@ -25,7 +25,7 @@ export class TimestampUtil {
   }
 
   static formatMinutes = (minutes) => {
-    console.log('🚀 ~ TimestampUtil ~ minutes:', minutes)
+    // console.log('🚀 ~ TimestampUtil ~ minutes:', minutes)
     const hours = Math.floor(minutes / 60);
     const remainingMinutes = minutes % 60;
   
