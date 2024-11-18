@@ -67,8 +67,9 @@ const mapper = (reports) => {
         state: r.currentStatus,
         typeOfUser: creator,
         description: r.title,
-        reportType: r.type.replace(/_/g, ' '),
-        //TODO: falta place. cuando carguemos bien los contenedores, ver el formato de la address y sale de ahi.
+        reportType: r.type === 'CONTENEDOR_ROTO' 
+          ? 'CONTENEDOR EN MAL ESTADO' 
+          : r.type.replace(/_/g, ' '),
         area: r.area.name,
         assignedManagerName: r.managerName,
         assignedManagerPhoto: r.managerImage

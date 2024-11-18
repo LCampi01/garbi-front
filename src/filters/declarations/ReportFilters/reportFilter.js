@@ -38,7 +38,7 @@ export const reportsFiltersDeclaration = [
       },
       {
         key: 'Contenedor en mal estado',
-        value: 'contenedor_en_mal_estado'
+        value: 'contenedor_roto'
       },
       {
         key: 'Contenedor faltante',
@@ -49,8 +49,8 @@ export const reportsFiltersDeclaration = [
         value: 'contenedor_sucio'
       },
       {
-        key: 'Otro',
-        value: 'otro'
+        key: 'Otros',
+        value: 'otros'
       }
     ],
     render: CheckboxFilter,
