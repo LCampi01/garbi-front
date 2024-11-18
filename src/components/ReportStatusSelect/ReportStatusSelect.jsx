@@ -6,16 +6,17 @@ import {
   FormControl,
   Select,
   MenuItem,
+  CircularProgress,
 } from '@mui/material';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import {
-  styled 
+  styled
 } from '@mui/system';
 import {
-  reportStates 
+  reportStates
 } from '../../enums/reportStates';
 import {
-  useReports 
+  useReports
 } from '../../api/hooks/useReports/useReports';
 import {
   ModalReportResolved
@@ -27,14 +28,23 @@ import {
 
 const SmallKeyboardArrowDownIcon = (color) =>
   styled(KeyboardArrowDownIcon)(({
-    _ 
+    _
   }) => ({
     fontSize: '16px',
     color: color + '!important',
   }));
 
+const SmallCircularProgress = (color) =>
+  styled(CircularProgress)(({
+    _ 
+  }) => ({
+    color: `${color} !important`,
+    width: '12px !important', // Tamaño reducido
+    height: '12px !important', // Tamaño reducido
+  }));
+
 export const ReportStatusSelect = ({
-  reportId, reportState, onAvatarUpdate=null
+  reportId, reportState, onAvatarUpdate = null, onUpdate
 }) => {
   const [selectedValue, setSelectedValue] = useState(reportState);
   const [newSelectedValue, setNewSelectedValue] = useState(reportState);
@@ -47,10 +57,10 @@ export const ReportStatusSelect = ({
   const {
     reviewReport: {
       reviewReport,
-      isReviewReportLoading 
+      isReviewReportLoading
     },
-  } = useReports(); 
-  
+  } = useReports();
+
   useEffect(() => {
     if (statusUpdated) {
       setSelectedValue(newSelectedValue);
@@ -72,14 +82,14 @@ export const ReportStatusSelect = ({
   const handleChange = async (event) => {
     const newValue = event.target.value;
     setNewSelectedValue(newValue);
-    
+
     if (newValue === reportStates.RECHAZADO.text) {
       handleOpenModalReportResolved('Cambiar a Rechazado', reportStates.RECHAZADO.text);
     } else if (newValue === reportStates.RESUELTO.text) {
       handleOpenModalReportResolved('Cambiar a Resuelto', reportStates.RESUELTO.text);
     } else if (newValue === reportStates['EN REVISIÓN'].text) {
       setSelectedValue(newValue);
-      
+
       const user = JSON.parse(localStorage.getItem('user'));
 
       try {
@@ -90,14 +100,18 @@ export const ReportStatusSelect = ({
 
         const response = await reviewReport(reportId, reviewReportBody);
 
+        if (onUpdate) {
+          onUpdate()
+        }
         //TODO later: validar que la respuesta sea la esperada, y sino tirar error.
-        if(onAvatarUpdate) {
+        if (onAvatarUpdate) {
           onAvatarUpdate(reportId, {
             name: user.name,
-            surname:user.surname,
-            profilePicture: user.profilePicture 
+            surname: user.surname,
+            profilePicture: user.profilePicture
           });
         }
+
       } catch (error) {
         console.error('Error submitting form', error);
       }
@@ -131,7 +145,11 @@ export const ReportStatusSelect = ({
         <Select
           value={selectedValue}
           onChange={handleChange}
-          IconComponent={SmallKeyboardArrowDownIcon(reportStates[selectedValue].colorText)}
+          IconComponent={
+            isReviewReportLoading ?
+              SmallCircularProgress(reportStates[selectedValue].colorText) :
+              SmallKeyboardArrowDownIcon(reportStates[selectedValue].colorText)
+          }
           sx={{
             height: '30px',
             color: reportStates[selectedValue].colorText,
@@ -141,7 +159,7 @@ export const ReportStatusSelect = ({
             textAlign: 'center',
           }}
         >
-          <MenuItem 
+          <MenuItem
             value='NUEVO'
             sx={{
               color: selectedValue === reportStates.NUEVO.text ? reportStates['NUEVO'].colorText : 'inherit',
@@ -186,6 +204,7 @@ export const ReportStatusSelect = ({
             reportId={selectedReportId}
             reportStatus={selectedReportStatus}
             statusUpdated={handleStatusUpdated}
+            onUpdate={onUpdate}
           />}
         />
       )}

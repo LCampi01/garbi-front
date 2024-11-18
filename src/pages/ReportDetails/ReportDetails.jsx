@@ -9,7 +9,7 @@ import {
 } from '../../components/ReportStatusSelect';
 
 export const ReportDetails = ({
-  reportId, content, state
+  reportId, content, state, onUpdate
 }) => {
   return (
     <Box
@@ -26,6 +26,7 @@ export const ReportDetails = ({
         <ReportStatusSelect
           reportId={reportId}
           reportState={state}
+          onUpdate = {onUpdate}
         />
       </Box>
       <Paper

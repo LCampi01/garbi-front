@@ -37,20 +37,20 @@ import {
   BreadcrumbsComponent
 } from '../../components/BreadcrumbsComponent/BreadcrumbsComponent';
 import {
-  HEIGHT_FULL_SCREEN 
+  HEIGHT_FULL_SCREEN
 } from '../../config';
 
 
 const statusHistoryMapper = (report) => {
   const {
-    status, managerImage, managerName, userName, userImage, observation 
+    status, managerImage, managerName, userName, userImage, observation
   } = report
 
   const reversedStatus = [...status].reverse();
 
   const statusHistory = reversedStatus.map((statusEntry, index) => {
     const {
-      date, time 
+      date, time
     } = TimestampUtil.convertToDateAndHour(statusEntry.timestamp)
 
     if (index == reversedStatus.length - 1) { //first status (NUEVO)
@@ -153,23 +153,23 @@ export const ReportDetailsPage = () => {
     },
   } = useReports();
 
+  const asyncFetchReport = async () => {
+    try {
+      const reportReponse = await fetchReport(id)
+
+      const sideDetailsContent = sideDetailsMapper(reportReponse)
+      setReportSideDetailsContent(sideDetailsContent)
+
+      const statusHistoryContent = statusHistoryMapper(reportReponse)
+      setReportStatusHistoryContent(statusHistoryContent)
+
+      setReportData(reportReponse)
+    } catch (error) {
+      console.error('Error fetching report:', error)
+    }
+  };
+
   useEffect(() => {
-    const asyncFetchReport = async () => {
-      try {
-        const reportReponse = await fetchReport(id)
-        console.log('🚀 ~ asyncFetchReport ~ reportReponse:', reportReponse)
-
-        const sideDetailsContent = sideDetailsMapper(reportReponse)
-        setReportSideDetailsContent(sideDetailsContent)
-
-        const statusHistoryContent = statusHistoryMapper(reportReponse)
-        setReportStatusHistoryContent(statusHistoryContent)
-
-        setReportData(reportReponse)
-      } catch (error) {
-        console.error('Error fetching report:', error)
-      }
-    };
     asyncFetchReport()
   }, [])
 
@@ -198,7 +198,7 @@ export const ReportDetailsPage = () => {
         />
       </Box>
       <Divider />
-      {!reportData ? (
+      {!reportData || isLoadingFetchReport ? (
         <Box
           sx={{
             width: 1,
@@ -247,8 +247,8 @@ export const ReportDetailsPage = () => {
                 <ReportDetailsDescriptionHeader
                   title={reportData?.title}
                   state={
-                    reportData?.type === 'CONTENEDOR_ROTO' 
-                      ? 'CONTENEDOR EN MAL ESTADO' 
+                    reportData?.type === 'CONTENEDOR_ROTO'
+                      ? 'CONTENEDOR EN MAL ESTADO'
                       : reportData?.type.replace(/_/g, ' ')
                   }
                 />
@@ -284,6 +284,7 @@ export const ReportDetailsPage = () => {
                 reportId={id}
                 content={reportSideDetailsContent}
                 state={reportData?.currentStatus}
+                onUpdate = {asyncFetchReport}
               />
             </Box>
           </Box>
