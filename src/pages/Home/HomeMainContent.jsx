@@ -68,6 +68,9 @@ import {
 import {
   useRoutes 
 } from '../../api/hooks/useRoutes/useRoutes';
+import {
+  calculateTimeDifference 
+} from '../../utils/timestampUtil';
 
 const icons = [
   Battery0BarIcon,
@@ -91,7 +94,7 @@ const colors = {
 const getBatteryIcon = (battery) => {
   const index = Math.min(Math.floor(battery / 12.5), icons.length - 1);
   const IconComponent = icons[index];
-  console.log(100 - battery);
+  
   return (
     <IconComponent
       sx={{
@@ -303,6 +306,13 @@ export default function HomeMainContent({
     )
   }
 
+  const getAreaNameById = (id) => {
+    const area = areas.find((area) => area.id === id)
+    return area.name
+  }
+  const areaName = containerSelected ? getAreaNameById(containerSelected.areaId) : '';
+
+
   return (
     <Box
       width='100%'
@@ -372,6 +382,7 @@ export default function HomeMainContent({
               <Marker
                 key={p.id}
                 setContainerSelected={setContainerSelected}
+                container={p}
                 point={p}
                 markerColor={p.color}
               />
@@ -399,6 +410,7 @@ export default function HomeMainContent({
             componentToRender={
               <RightSidePanelContainerInfo
                 containerSelected={containerSelected}
+                areaName={areaName}
                 getBatteryIcon={getBatteryIcon}
               />
             }
@@ -486,7 +498,7 @@ export default function HomeMainContent({
 }
 
 function Marker({
-  point, setContainerSelected, markerColor
+  point, setContainerSelected, markerColor, container
 }) {
   return (
     <AdvancedMarker
@@ -532,7 +544,8 @@ function Marker({
                 sx={{
                   display: 'flex',
                   alignItems: 'center',
-                  flexDirection: 'column'
+                  flexDirection: 'column',
+                  justifyContent: 'center'
                 }}
               >
                 <Typography
@@ -551,10 +564,11 @@ function Marker({
                     fontSize: '12px',
                     fontWeight: 300,
                     lineHeight: '14px',
-                    color: '#00000061'
+                    color: '#00000061',
+                    textAlign: 'center'
                   }}
                 >
-                  hace 10 mins
+                  hace {calculateTimeDifference(container)}
                 </Typography>
               </Box>
             </Box>

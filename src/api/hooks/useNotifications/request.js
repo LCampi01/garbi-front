@@ -88,7 +88,7 @@ export const useUpdateNotification = () => {
         read: wasRead,
         ids: [notificationId]
       },
-      methd: HTTPMethods.PUT
+      method: HTTPMethods.PUT
     })
   }
 
@@ -106,13 +106,13 @@ export const useUpdateNotifications = () => {
   })
 
   const updateNotifications = (notificationsId, wasRead) => {
-
+  
     return commonFetch({
       body: {
         read: wasRead,
-        ids: [notificationsId]
+        ids: notificationsId
       },
-      methd: HTTPMethods.PUT
+      method: HTTPMethods.PUT
     })
   }
 

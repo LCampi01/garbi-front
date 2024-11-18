@@ -24,6 +24,7 @@ export const ReportDetailStateFlow = ({
       }}
     >
       <Accordion
+        defaultExpanded
         sx = {{
           '& .MuiCollapse-root': {
             maxHeight: '240px',

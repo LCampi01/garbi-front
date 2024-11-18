@@ -179,7 +179,6 @@ export const RoutesPage = () => {
 
   return (
     <FilterSideComponent
-      prefix={'Gestión'}
       title={'Recorridos'}
       height={HEIGHT_FULL_SCREEN}
       renderFilters={

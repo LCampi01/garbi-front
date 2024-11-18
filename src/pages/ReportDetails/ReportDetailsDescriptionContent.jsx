@@ -67,9 +67,9 @@ export const ReportDetailsDescriptionContent = ({
             alt='Descripción de la imagen'
             style={{
               maxWidth: '320px',
-              maxHeight: '240px',
-              width: '100%',
-              height: 'auto',
+              maxHeight: '320px',
+              // width: '100%',
+              // height: 'auto',
             }}
           />
         ) : (

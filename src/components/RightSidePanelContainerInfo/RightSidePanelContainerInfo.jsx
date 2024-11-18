@@ -2,27 +2,11 @@ import {
   Box, Typography 
 } from '@mui/material'
 import {
+  calculateTimeDifference,
   TimestampUtil
 } from '../../utils/timestampUtil';
 
 
-const calculateTimeDifference = (containerSelected) => {
-  if(containerSelected.id == 'C9') {
-    return '3 hr 20 min'
-  }
-  if(containerSelected.id == 'Test12') {
-    return '4 hr 47 min'
-  }
-  const updatedAtDate = new Date(containerSelected.updatedAt)
-  const now = new Date()
-  const diff = now.getTime() - updatedAtDate.getTime()
-  const diffInMinutes = Math.floor(diff / (1000 * 60))
-  if(diffInMinutes) {
-    return `${diffInMinutes} min` 
-  } else {
-    return '10 min'
-  }
-}
 
 const formatRecollectionDate = (lastRecollectionTimestamp) => {
   const {
@@ -33,7 +17,7 @@ const formatRecollectionDate = (lastRecollectionTimestamp) => {
 }
 
 export const RightSidePanelContainerInfo = ({
-  containerSelected, getBatteryIcon, company 
+  containerSelected, getBatteryIcon, company, areaName
 }) => {
 
   return (
@@ -81,7 +65,7 @@ export const RightSidePanelContainerInfo = ({
             fontFamily: 'Roboto',
             fontSize: '12px',
             fontStyle: 'normal',
-            fontWeight: 300,
+            fontWeight: 400,
             lineHeight: '16px',
             letterSpacing: '0.1px',
             mb: 2,
@@ -101,7 +85,7 @@ export const RightSidePanelContainerInfo = ({
             letterSpacing: '0.1px',
           }}
         >
-          {containerSelected.address.neighborhood} - Área 2
+          {areaName}
         </Typography>
         <Typography
           sx={{
@@ -110,7 +94,7 @@ export const RightSidePanelContainerInfo = ({
             fontFamily: 'Roboto',
             fontSize: '12px',
             fontStyle: 'normal',
-            fontWeight: 300,
+            fontWeight: 400,
             lineHeight: '24px',
             letterSpacing: '0.1px',
             mb: 2,

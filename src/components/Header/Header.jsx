@@ -36,13 +36,13 @@ const pages = {
   Estadísticas: '/estadisticas',
   Recomendaciones: '/recomendaciones',
   Reportes: '/reportes',
+  Recorridos: '/recorridos',
 };
 
 const managementItems = {
   Áreas: '/areas',
   Contenedores: '/contenedores',
   Empleados: '/empleados',
-  Recorridos: '/recorridos',
 };
 
 export const Header = ({
@@ -62,7 +62,7 @@ export const Header = ({
     const activePage = Object.keys(pages).find(key => location.pathname.startsWith(pages[key]));
     if (activePage) {
       setCurrentTab(activePage);
-    } else if (Object.values(managementItems).some(path => location.pathname.startsWith(path))) {
+    } else if (Object.values(managementItems).includes(location.pathname)) {
       setCurrentTab('Gestión');
     } else {
       setCurrentTab('');

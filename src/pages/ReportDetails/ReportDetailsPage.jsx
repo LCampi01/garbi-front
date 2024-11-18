@@ -121,7 +121,7 @@ const sideDetailsMapper = (report) => {
         }}
       />,
       title: 'Ubicación',
-      description: `${neighborhood} - ${area}`,
+      description: `${area}`,
       description2: address
     },
     {
