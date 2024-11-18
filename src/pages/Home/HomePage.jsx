@@ -173,7 +173,7 @@ export default function HomePage() {
     // Configurar el intervalo de 30 segundos
     const intervalId = setInterval(() => {
       retrieveContainers();
-    }, 10000);
+    }, 100000);
 
     // Limpiar el intervalo cuando el componente se desmonte
     return () => clearInterval(intervalId);
