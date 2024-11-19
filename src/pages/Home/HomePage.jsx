@@ -170,10 +170,10 @@ export default function HomePage() {
 
   useEffect(() => {
 
-    // Configurar el intervalo de 30 segundos
+    // Configurar el intervalo de 30 segundos para recargar el mapa
     const intervalId = setInterval(() => {
       retrieveContainers();
-    }, 100000);
+    }, 30000);
 
     // Limpiar el intervalo cuando el componente se desmonte
     return () => clearInterval(intervalId);
