@@ -212,6 +212,7 @@ export default function HomePage() {
     const filteredAreas = areas.filter(area =>
       areasCondition.every(condition => condition(area))
     )
+    console.log('actualizando el estado')
     setAreasToRender(filteredAreas)
     setContainersToRender(filteredContainers)
   }
