@@ -252,7 +252,7 @@ export default function HomeMainContent({
   useEffect(() => {
     if (!thresholdInformation) return;
     const getColorPoint = (capacity, id) => {
-      if (id == 'C9' || id == 'Test12') {
+      if (id == '240043' || id == '266449') {
         return colors.DISCONNECTED
       }
 

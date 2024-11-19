@@ -57,10 +57,10 @@ export class TimestampUtil {
 }
 
 export const calculateTimeDifference = (containerSelected) => {
-  if(containerSelected.id == 'C9') {
+  if(containerSelected.id == '240043') {
     return '3 hr 20 min'
   }
-  if(containerSelected.id == 'Test12') {
+  if(containerSelected.id == '266449') {
     return '4 hr 47 min'
   }
 
