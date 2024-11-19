@@ -136,6 +136,12 @@ export default function HomePage() {
       const containersUnformated = await getAllContainers();
       const containersFormated = formatContainers(containersUnformated.result);
 
+      const realContainer = containersFormated.find(c => c.id === '298731')
+
+      if(realContainer) {
+        console.log('🚀 ~ retrieveContainers ~ realContainer:', realContainer)
+      }
+
       setContainers(containersFormated);
       // Aplica filtros después de obtener los contenedores
       const filters = getFormValues();
