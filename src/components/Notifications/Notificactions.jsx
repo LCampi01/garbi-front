@@ -60,8 +60,7 @@ export const Notificactions = () => {
   }
 
   onMessage(messaging, (payload) => {
-    const jsonObject = JSON.parse(payload.notification.body);
-    const newNotifications = [...notifications, jsonObject]
+    const newNotifications = [...notifications, payload.data]
 
     setNotifications(newNotifications)
   });
