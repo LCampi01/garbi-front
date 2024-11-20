@@ -115,8 +115,8 @@ function fillAndSortHours(data) {
 export const StatsPage = () => {
   const [stats, setStats] = useState(null)
   const [selectedRangeDate, setSelectedRangeDate] = useState({
-    from: TimestampUtil.convertToDateForFilter(subDays(new Date(), 6)),
-    to: TimestampUtil.convertToDateForFilter(new Date())
+    from: TimestampUtil.convertToDateForFilter(subDays(new Date(), 7)),
+    to: TimestampUtil.convertToDateForFilter(subDays(new Date(), 1))
   })
   const [areas, isLoadingGetAreas] = useFetchAreas();
 
@@ -252,6 +252,8 @@ export const StatsPage = () => {
           <Box>
             <DateRangePicker
               onDateChange={onDateRangeChange}
+              defaultStartDate = {subDays(new Date(), 7)}
+              lastAvailableDate = {subDays(new Date(), 1)}
             />
           </Box>
         </Box>
