@@ -47,6 +47,7 @@ const BandChartSetting = {
   yAxis: [
     {
       label: '% de contenedores',
+      max: 100,
     },
   ],
   xAxis: [
@@ -331,7 +332,7 @@ export const StatsPage = () => {
                   }}
                 >
                   <Tooltip
-                    title={'Tiempo que tardan los contenedores en llenarse hasta el 90% o más.'}
+                    title={'Tiempo que tardan los contenedores en llenarse hasta el 80% o más.'}
                     arrow
                     placement='top'
                   >
@@ -558,7 +559,7 @@ export const StatsPage = () => {
                 Contenedores que superaron el umbral
               </Typography>
               <Tooltip
-                title={'Porcentaje de contenedores que superaron el 90% de capacidad dentro del área seleccionada en el rango de fechas seleccionado.'}
+                title={'Porcentaje de contenedores que superaron el 80% de capacidad dentro del área seleccionada en el rango de fechas seleccionado.'}
                 arrow
                 placement='top'
               >
@@ -593,7 +594,7 @@ export const StatsPage = () => {
                   }}
                   component={'span'}
                 >
-                  15%
+                  54%
                 </Typography>
               </Typography>
             </Box>
