@@ -115,7 +115,7 @@ function fillAndSortHours(data) {
 export const StatsPage = () => {
   const [stats, setStats] = useState(null)
   const [selectedRangeDate, setSelectedRangeDate] = useState({
-    from: TimestampUtil.convertToDateForFilter(subDays(new Date(), 7)),
+    from: TimestampUtil.convertToDateForFilter(subDays(new Date(), 8)),
     to: TimestampUtil.convertToDateForFilter(subDays(new Date(), 1))
   })
   const [areas, isLoadingGetAreas] = useFetchAreas();
