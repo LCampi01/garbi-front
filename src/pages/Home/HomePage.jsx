@@ -134,6 +134,9 @@ export default function HomePage() {
 
   const retrieveContainers = async () => {
     try {
+
+      if (optimalRouteSelected) return;
+
       const containersUnformated = await getAllContainers();
       const containersFormated = formatContainers(containersUnformated.result);
 
@@ -142,6 +145,8 @@ export default function HomePage() {
       if (realContainer) {
         console.log('🚀 ~ retrieveContainers ~ realContainer:', realContainer)
       }
+
+      if (optimalRouteSelected) return;
 
       setContainers(containersFormated);
       // Aplica filtros después de obtener los contenedores
@@ -185,7 +190,7 @@ export default function HomePage() {
     // Configurar el intervalo de 30 segundos para recargar el mapa
     const intervalId = setInterval(() => {
       retrieveContainers();
-    }, 10000);
+    }, 30000);
 
     // Limpiar el intervalo cuando el componente se desmonte
     return () => clearInterval(intervalId);
