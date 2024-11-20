@@ -142,7 +142,7 @@ export const StatsPage = () => {
 
   useEffect(() => {
     const retrieveStats = async () => {
-      const selectedAreaToSend = selectedArea ? selectedArea : areas[0].id
+      const selectedAreaToSend = selectedArea ? selectedArea : [...areas].reverse()[0].id
 
       const stats = await getStats(selectedAreaToSend, selectedRangeDate.from, selectedRangeDate.to)
 
