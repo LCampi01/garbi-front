@@ -95,10 +95,10 @@ const mapper = (routes) => {
         endTime: endTime,
         manager: r.managerName,
         manager_picture: r.managerImage,
-        collector1: r.collectors[0].name + ' ' + r.collectors[0].surname,
-        collector1_picture: null,
-        collector2: r.collectors[1].name + ' ' + r.collectors[1].surname,
-        collector2_picture: null
+        collector1: r.collectors[0]?.name + ' ' + r.collectors[0]?.surname,
+        collector1_picture: r.collectors[0]?.collectorImage,
+        collector2: r.collectors[1].name + ' ' + r.collectors[1]?.surname,
+        collector2_picture: r.collectors[1]?.collectorImage,
       }
     })
 }
