@@ -145,7 +145,6 @@ export const StatsPage = () => {
       const selectedAreaToSend = selectedArea ? selectedArea : areas[0].id
 
       const stats = await getStats(selectedAreaToSend, selectedRangeDate.from, selectedRangeDate.to)
-      console.log('🚀 ~ retrieveStats ~ stats:', stats)
 
       const containersOverThresholdPerDaySorted = stats.containersOverThresholdPerDay.sort((a, b) => {
         return new Date(a.date) - new Date(b.date);
@@ -164,10 +163,6 @@ export const StatsPage = () => {
 
     retrieveStats()
   }, [selectedArea, selectedRangeDate, areas]);
-
-  useEffect(() => {
-    console.log('🚀 ~ StatsPage ~ stats:', stats)
-  }, [stats])
 
 
   const onDateRangeChange = (selectedDateRange) => {
@@ -245,7 +240,7 @@ export const StatsPage = () => {
               control={control}
               name={'area'}
               label={'Área'}
-              defaultValue={areas[0].id}
+              defaultValue={areas.reverse()[0].id}
               options={areas.map(area => {
                 return {
                   value: area.id,

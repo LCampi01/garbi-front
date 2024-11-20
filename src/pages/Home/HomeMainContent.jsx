@@ -136,11 +136,10 @@ const HtmlTooltip = styled(({
 }));
 
 export default function HomeMainContent({
-  containers, areas, containerSelected, setContainerSelected, setContainersToRender, cleanFilters
+  containers, areas, containerSelected, setContainerSelected, setContainersToRender, cleanFilters, optimalRouteSelected, setOptimalRouteSelected
 }) {
 
   const [openGenerateOptimalRouteModal, setOpenGenerateOptimalRouteModal] = useState(false)
-  const [optimalRouteSelected, setOptimalRouteSelected] = useState(null)
   const [openGenerateOptimalRouteRightSideInfo, setOpenGenerateOptimalRouteRightSideInfo] = useState(false)
   const [containersFormatted, setContainersFormatted] = useState(null)
   const [thresholdInformation, setThresholdInformation] = useState(null)
@@ -311,7 +310,7 @@ export default function HomeMainContent({
 
   const getAreaNameById = (id) => {
     const area = areas.find((area) => area.id === id)
-    return area.name
+    return area?.name || ''
   }
   const areaName = containerSelected ? getAreaNameById(containerSelected.areaId) : '';
 

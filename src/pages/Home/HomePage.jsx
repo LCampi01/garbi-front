@@ -72,6 +72,7 @@ export default function HomePage() {
   const [containers, setContainers] = useState([]);
   const [containersToRender, setContainersToRender] = useState([])
   const [containerSelected, setContainerSelected] = useState(null);
+  const [optimalRouteSelected, setOptimalRouteSelected] = useState(null)
 
   const {
     control, handleSubmit, setValue, formState: {
@@ -138,14 +139,19 @@ export default function HomePage() {
 
       const realContainer = containersFormated.find(c => c.id === '298731')
 
-      if(realContainer) {
+      if (realContainer) {
         console.log('🚀 ~ retrieveContainers ~ realContainer:', realContainer)
       }
 
       setContainers(containersFormated);
       // Aplica filtros después de obtener los contenedores
       const filters = getFormValues();
-      whenFiltersSubmit(filters);
+      whenFiltersSubmitWithContainers({
+        ...filters,
+        areas,
+        containers: containersFormated,
+        containerSelected 
+      });
     } catch (e) {
       console.log(e);
     }
@@ -154,7 +160,7 @@ export default function HomePage() {
   // Función para obtener los valores actuales del formulario
   const getFormValues = () => {
     const {
-      areaId, minLlenado, maxLlenado, minBateria, maxBateria 
+      areaId, minLlenado, maxLlenado, minBateria, maxBateria
     } = getValues();
     const formatValues = getValues();
 
@@ -179,11 +185,46 @@ export default function HomePage() {
     // Configurar el intervalo de 30 segundos para recargar el mapa
     const intervalId = setInterval(() => {
       retrieveContainers();
-    }, 30000);
+    }, 10000);
 
     // Limpiar el intervalo cuando el componente se desmonte
     return () => clearInterval(intervalId);
-  }, [areas, containers]);
+  }, [areas, containers, optimalRouteSelected, containerSelected]);
+
+  const whenFiltersSubmitWithContainers = ({
+    areaId, minLlenado, areas, maxLlenado, minBateria, maxBateria, containers, containerSelected
+  }) => {
+    const containersCondition = []
+    const areasCondition = []
+
+    const areaIdSelected = areaId !== '' ? areaId : null;
+    const minLlenadoValue = minLlenado !== null ? Number(minLlenado) : 0;
+    const maxLlenadoValue = maxLlenado !== null ? Number(maxLlenado) : 100;
+    const minBateriaValue = minBateria !== null ? Number(minBateria) : 0;
+    const maxBateriaValue = maxBateria !== null ? Number(maxBateria) : 100;
+
+    if (areaId) {
+      containersCondition.push(container => container.areaId == areaId)
+      areasCondition.push(area => area.id == areaId)
+    }
+
+    containersCondition.push(container => container.capacity >= minLlenadoValue && container.capacity <= maxLlenadoValue);
+    containersCondition.push(container => container.battery >= minBateriaValue && container.battery <= maxBateriaValue);
+
+    const filteredContainers = containers.filter(container =>
+      containersCondition.every(condition => condition(container))
+    );
+
+    const filteredAreas = areas.filter(area =>
+      areasCondition.every(condition => condition(area))
+    )
+    setAreasToRender(filteredAreas)
+    setContainersToRender(filteredContainers)
+
+    if(containerSelected) {
+      setContainerSelected(containers.find(c => c.id === containerSelected.id))
+    }
+  }
 
   const whenFiltersSubmit = ({
     areaId, minLlenado, maxLlenado, minBateria, maxBateria
@@ -242,6 +283,8 @@ export default function HomePage() {
           containerSelected={containerSelected}
           cleanFilters={cleanFilters}
           setContainersToRender={setContainersToRender}
+          optimalRouteSelected = {optimalRouteSelected}
+          setOptimalRouteSelected={setOptimalRouteSelected}
         />
     }
     renderFilters={() => <HomeFilters
